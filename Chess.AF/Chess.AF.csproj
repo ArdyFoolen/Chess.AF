@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="KingMoves.cs" />
     <Compile Include="QueenMoves.cs" />
+    <Compile Include="PawnMoves.cs" />
     <Compile Include="RookMoves.cs" />
     <Compile Include="BishopMoves.cs" />
     <Compile Include="Board.cs" />

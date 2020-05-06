@@ -30,6 +30,8 @@ namespace Chess.AF
                     return QueenMoves.Get();
                 case PieceEnum.King:
                     return KingMoves.Get();
+                case PieceEnum.Pawn:
+                    return PawnMoves.Get();
             }
             return null;
         }

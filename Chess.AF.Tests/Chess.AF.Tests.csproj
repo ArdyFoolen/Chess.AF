@@ -51,6 +51,7 @@
     <Compile Include="Helpers\AssertMovesHelper.cs" />
     <Compile Include="Helpers\FenString.cs" />
     <Compile Include="UnitTests\KingMovesTests.cs" />
+    <Compile Include="UnitTests\PawnMovesTests.cs" />
     <Compile Include="UnitTests\QueenMovesTests.cs" />
     <Compile Include="UnitTests\RookMovesTests.cs" />
     <Compile Include="UnitTests\BoardTests.cs" />

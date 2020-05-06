@@ -159,15 +159,60 @@ namespace Chess.AF
         public ulong ExcludeOwnPieces(ulong map)
             => IsWhiteToMove ? map & ~Maps[(int)PositionEnum.WhitePieces] : map & ~Maps[(int)PositionEnum.BlackPieces];
 
+        internal ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
+        {
+            if (IsWhiteToMove)
+                return GetWhitePawnMapFor(square, mvMap, tkMap);
+            else
+                return GetBlackPawnMapFor(square, mvMap, tkMap);
+        }
+
+        private ulong GetWhitePawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
+        {
+            mvMap &= square.DownBitsOff();
+            tkMap &= square.DownBitsOff();
+
+            bool succesWhite = TryGetLowestSquare(Maps[(int)PositionEnum.WhitePieces] & mvMap, out SquareEnum whitePiece);
+            bool succesBlack = TryGetLowestSquare(Maps[(int)PositionEnum.BlackPieces] & mvMap, out SquareEnum blackPiece);
+
+            if (succesWhite || succesBlack)
+                if (succesWhite && !succesBlack || succesWhite && succesBlack && whitePiece > blackPiece)
+                    mvMap &= whitePiece.UpBitsOff(1);
+                else
+                    mvMap &= blackPiece.UpBitsOff(1);
+
+            tkMap &= Maps[(int)PositionEnum.BlackPieces];
+
+            // ToDo EP
+
+            return mvMap | tkMap;
+        }
+
+        private ulong GetBlackPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
+        {
+            mvMap &= square.UpBitsOff();
+            tkMap &= square.UpBitsOff();
+
+            bool succesWhite = TryGetHighestSquare(Maps[(int)PositionEnum.WhitePieces] & mvMap, out SquareEnum whitePiece);
+            bool succesBlack = TryGetHighestSquare(Maps[(int)PositionEnum.BlackPieces] & mvMap, out SquareEnum blackPiece);
+
+            if (succesWhite || succesBlack)
+                if (succesWhite && !succesBlack || succesWhite && succesBlack && whitePiece < blackPiece)
+                    mvMap &= whitePiece.DownBitsOff(1);
+                else
+                    mvMap &= blackPiece.DownBitsOff(1);
+
+            tkMap &= Maps[(int)PositionEnum.WhitePieces];
+
+            // ToDo EP
+
+            return mvMap | tkMap;
+        }
+
         public ulong GetMinMap(ulong map)
         {
-            SquareEnum whitePiece;
-            SquareEnum blackPiece;
-            ulong whiteMap = Maps[(int)PositionEnum.WhitePieces] & map;
-            ulong blackMap = Maps[(int)PositionEnum.BlackPieces] & map;
-
-            bool succesWhite = TryGetLowestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out whitePiece);
-            bool succesBlack = TryGetLowestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out blackPiece);
+            bool succesWhite = TryGetLowestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out SquareEnum whitePiece);
+            bool succesBlack = TryGetLowestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out SquareEnum blackPiece);
 
             if (!succesWhite && !succesBlack)
                 return map;
@@ -180,13 +225,8 @@ namespace Chess.AF
 
         public ulong GetMaxMap(ulong map)
         {
-            SquareEnum whitePiece;
-            SquareEnum blackPiece;
-            ulong whiteMap = Maps[(int)PositionEnum.WhitePieces] & map;
-            ulong blackMap = Maps[(int)PositionEnum.BlackPieces] & map;
-
-            bool succesWhite = TryGetHighestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out whitePiece);
-            bool succesBlack = TryGetHighestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out blackPiece);
+            bool succesWhite = TryGetHighestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out SquareEnum whitePiece);
+            bool succesBlack = TryGetHighestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out SquareEnum blackPiece);
 
             if (!succesWhite && !succesBlack)
                 return map;
