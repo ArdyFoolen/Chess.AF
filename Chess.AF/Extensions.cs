@@ -30,6 +30,12 @@ namespace Chess.AF
         public static bool IsEqual(this PieceEnum pieceEnum, PiecesEnum piecesEnum)
             => piecesEnum.IsEqual(pieceEnum);
 
+        public static bool Is(this PieceEnum pieceEnum, PieceEnum compare)
+            => pieceEnum == compare;
+
+        public static bool Is(this PiecesEnum pieceEnum, PiecesEnum compare)
+            => pieceEnum == compare;
+
         // A8: 0 / 8 = 0
         // H8: 7 / 8 = 0;
         // A1: 56 / 8 = 7;

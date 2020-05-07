@@ -21,9 +21,9 @@ namespace Chess.AF
                 foreach (PiecesIterator<T> iterator in iterators)
                     this.Maps.AddRange(iterator.Maps);
             }
-            public IEnumerable<(T Piece, SquareEnum Square, bool IsSelected)> Iterate()
+            public virtual IEnumerable<(T Piece, SquareEnum Square, bool IsSelected)> Iterate()
                 => Iterate((p, s) => false);
-            public IEnumerable<(T Piece, SquareEnum Square, bool IsSelected)> Iterate(Func<T, SquareEnum, bool> isSelected)
+            public virtual IEnumerable<(T Piece, SquareEnum Square, bool IsSelected)> Iterate(Func<T, SquareEnum, bool> isSelected)
             {
                 for (int m = 0; m < Maps.Count(); m++)
                     foreach (int i in Enumerable.Range(0, 64))

@@ -101,6 +101,7 @@ namespace Chess.AF
         public RokadeEnum WhiteRokade { get; }
         public RokadeEnum BlackRokade { get; }
         public Option<SquareEnum> EpSquare { get; }
+
         private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
         {
             this.Maps = maps;
@@ -183,9 +184,24 @@ namespace Chess.AF
 
             tkMap &= Maps[(int)PositionEnum.BlackPieces];
 
-            // ToDo EP
+            tkMap |= GetEPMap(square);
 
             return mvMap | tkMap;
+        }
+
+        private ulong GetEPMap(SquareEnum square)
+            => EpSquare.Match(
+                None: () => 0x0ul,
+                Some: s => CanTakeEP(s, square) ? 0x0ul.SetBit((int)s) : 0x0ul
+                );
+
+        private bool CanTakeEP(SquareEnum epSquare, SquareEnum square)
+        {
+            if (IsWhiteToMove && square.Row() == 3 ||
+                !IsWhiteToMove && square.Row() == 4)
+                if (Math.Abs(square.File() - epSquare.File()) == 1)
+                    return true;
+            return false;
         }
 
         private ulong GetBlackPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
@@ -204,7 +220,7 @@ namespace Chess.AF
 
             tkMap &= Maps[(int)PositionEnum.WhitePieces];
 
-            // ToDo EP
+            tkMap |= GetEPMap(square);
 
             return mvMap | tkMap;
         }

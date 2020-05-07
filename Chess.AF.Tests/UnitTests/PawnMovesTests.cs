@@ -49,6 +49,15 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("8/8/8/3pp3/3PP3/8/8/8 b KQkq - 0 1", new SquareEnum[] { SquareEnum.d4, SquareEnum.e4 })]
         [TestCase("8/8/8/3p1p2/4P3/8/8/8 w KQkq - 0 1", new SquareEnum[] { SquareEnum.d5, SquareEnum.e5, SquareEnum.f5 })]
         [TestCase("8/8/8/4p3/3P1P2/8/8/8 b KQkq - 0 1", new SquareEnum[] { SquareEnum.d4, SquareEnum.e4, SquareEnum.f4 })]
+        [TestCase("8/8/8/4p3/4P3/8/8/8 w KQkq e6 0 1", new SquareEnum[] { })]
+        [TestCase("8/8/8/4p3/4P3/8/8/8 b KQkq e3 0 1", new SquareEnum[] { })]
+        [TestCase("8/8/8/3pP3/8/8/8/8 w KQkq d6 0 1", new SquareEnum[] { SquareEnum.d6, SquareEnum.e6 })]
+        [TestCase("8/8/8/8/3pP3/8/8/8 b KQkq e3 0 1", new SquareEnum[] { SquareEnum.e3, SquareEnum.d3 })]
+        [TestCase("8/8/8/4Pp2/8/8/8/8 w KQkq f6 0 1", new SquareEnum[] { SquareEnum.f6, SquareEnum.e6 })]
+        [TestCase("8/8/8/8/2Pp4/8/8/8 b KQkq c3 0 1", new SquareEnum[] { SquareEnum.c3, SquareEnum.d3 })]
+        [TestCase("8/4P3/8/8/8/8/8/8 w KQkq - 0 1", new SquareEnum[] { SquareEnum.e8, SquareEnum.e8, SquareEnum.e8, SquareEnum.e8 })]
+        [TestCase("8/8/8/8/8/8/4p3/8 b KQkq - 0 1", new SquareEnum[] { SquareEnum.e1, SquareEnum.e1, SquareEnum.e1, SquareEnum.e1 })]
+
         public void PawnMoves_AreValid(string fenString, SquareEnum[] expected)
         {
             AssertMovesHelper helper = new AssertMovesHelper();
