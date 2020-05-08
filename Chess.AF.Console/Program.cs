@@ -53,10 +53,10 @@ namespace Chess.AF.Console
             //};
             //WriteBoard(fields);
 
-//#if DEBUG
-//            WriteLine("Press any key to continue . . .");
-//            ReadKey();
-//#endif
+            //#if DEBUG
+            //            WriteLine("Press any key to continue . . .");
+            //            ReadKey();
+            //#endif
         }
 
         //private static Unit ShowKnights(Position position)
@@ -80,6 +80,15 @@ namespace Chess.AF.Console
         {
             WriteLine($"Moves for {selected.Piece.ToString()}");
             foreach (var sq in selected.Moves(Position))
+                Write($"{sq.ToString()} ");
+            WriteLine();
+            return Unit();
+        }
+
+        private static Unit ShowMoves(PieceEnum piece, SquareEnum square, SquareEnum[] moveSquares)
+        {
+            WriteLine($"Moves for {piece.ToString()} on {square.ToString()}");
+            foreach (var sq in moveSquares)
                 Write($"{sq.ToString()} ");
             WriteLine();
             return Unit();
@@ -151,8 +160,26 @@ namespace Chess.AF.Console
         public static void Moves()
         {
             SelectOpt.Match(
-                None: () => { WriteLine("-- No piece selected to move --"); return Unit(); },
+                None: () => { AllMoves(Position); return Unit(); },
                 Some: ShowMoves);
+        }
+        private static Unit AllMoves(Option<Position> position)
+        {
+            foreach (PieceEnum piece in Enum.GetValues(typeof(PieceEnum)))
+                position.Map(p => p.GetIteratorFor(piece)).Map(f => f.Iterate()).ForEach(IterateAllMoves);
+            return Unit();
+        }
+
+        private static void IterateAllMoves(IEnumerable<(PieceEnum Piece, SquareEnum Square, bool IsSelected)> iterator)
+        {
+            foreach (var t in iterator)
+            {
+                List<SquareEnum> moveSquares = new List<SquareEnum>();
+                foreach (var s in MovesFactory.Create(t.Piece, t.Square, Position))
+                    moveSquares.Add(s);
+                if (moveSquares.Count() > 0)
+                    ShowMoves(t.Piece, t.Square, moveSquares.ToArray());
+            }
         }
 
         private static Either<string, Option<Command>> RunCommand()

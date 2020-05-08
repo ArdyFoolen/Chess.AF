@@ -20,7 +20,7 @@ namespace Chess.AF.Console
             { "exit", ("Exit program", (parms) => WriteLine("Exit the Program")) },
             { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => CreatePositionFromFen()) },
             { "help", ("Show this Help", (parms) => ShowHelp(CmdDictionary)) },
-            { "moves", ("Moves by selected piece", (parms) => Moves())},
+            { "moves", ("Moves by selected piece, or all if no piece is selected", (parms) => Moves())},
             { "select", ("Select a piece", (parms) => SelectPiece(parms))},
             { "show", ("Show the Chess board, if available", (parms) => ShowBoard()) }
         };
