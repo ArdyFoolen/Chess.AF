@@ -165,8 +165,7 @@ namespace Chess.AF.Console
         }
         private static Unit AllMoves(Option<Position> position)
         {
-            foreach (PieceEnum piece in Enum.GetValues(typeof(PieceEnum)))
-                position.Map(p => p.GetIteratorFor(piece)).Map(f => f.Iterate()).ForEach(IterateAllMoves);
+            position.Map(p => p.GetIteratorForAll<PieceEnum>()).Map(f => f.Iterate()).ForEach(IterateAllMoves);
             return Unit();
         }
 
