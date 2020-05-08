@@ -85,11 +85,16 @@ namespace Chess.AF.Console
             return Unit();
         }
 
-        private static Unit ShowMoves(PieceEnum piece, SquareEnum square, SquareEnum[] moveSquares)
+        private static Unit ShowMoves(PieceEnum piece, SquareEnum square, (PieceEnum Promoted, SquareEnum Square)[] moveSquares)
         {
             WriteLine($"Moves for {piece.ToString()} on {square.ToString()}");
             foreach (var sq in moveSquares)
-                Write($"{sq.ToString()} ");
+            {
+                Write($"{sq.Square.ToString()}");
+                if (sq.Promoted != piece)
+                    Write($"={Char.ToUpperInvariant(ChessConsole.ConvertPieceToChar((int)sq.Promoted))}");
+                Write(" ");
+            }
             WriteLine();
             return Unit();
         }
@@ -169,14 +174,14 @@ namespace Chess.AF.Console
             return Unit();
         }
 
-        private static void IterateAllMoves(IEnumerable<(PieceEnum Piece, SquareEnum Square, SquareEnum MoveSquasre)> iterator)
+        private static void IterateAllMoves(IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iterator)
         {
             var group = iterator.GroupBy(t => (t.Piece, t.Square)).Select(g => new { g.Key, Items = g.ToList() });
             foreach (var item in group)
             {
-                List<SquareEnum> moveSquares = new List<SquareEnum>();
+                List<(PieceEnum Promoted, SquareEnum Square)> moveSquares = new List<(PieceEnum Promoted, SquareEnum Square)>();
                 foreach (var value in item.Items)
-                    moveSquares.Add(value.MoveSquasre);
+                    moveSquares.Add((value.Promoted, value.MoveSquare));
                 if (moveSquares.Count() > 0)
                     ShowMoves(item.Key.Piece, item.Key.Square, moveSquares.ToArray());
             }

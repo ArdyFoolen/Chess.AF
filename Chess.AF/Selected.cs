@@ -36,8 +36,8 @@ namespace Chess.AF
         public IEnumerable<SquareEnum> Moves(Option<Position> position)
         {
             foreach (var pc in Iterator.Iterate())
-                foreach (var sq in MovesFactory.Create(Piece, pc.Square, position))
-                    yield return sq;
+                foreach (var tuple in MovesFactory.Create(Piece, pc.Square, position))
+                    yield return tuple.Square;
         }
     }
 }

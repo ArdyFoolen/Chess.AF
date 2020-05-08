@@ -222,7 +222,7 @@ namespace Chess.AF.Console
             => dictionary.ContainsKey(square) ? dictionary[square].IsSelected : false;
         private static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
             => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
-        private static char ConvertPieceToChar(int index)
+        public static char ConvertPieceToChar(int index)
             => PiecesCharEnum[index];
     }
 }
