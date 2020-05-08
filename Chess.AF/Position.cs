@@ -132,6 +132,13 @@ namespace Chess.AF
                 .ToArray());
         }
 
+        public IEnumerable<(PieceEnum Piece, SquareEnum Square, SquareEnum MoveSquare)> IterateForAllMoves()
+        {
+            foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
+                foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Some(this)))
+                    yield return (pieceTuple.Piece, pieceTuple.Square, move);
+        }
+
         private ulong GetMapFor<T>(T piece)
             where T : Enum
         {

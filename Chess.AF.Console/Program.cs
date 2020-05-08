@@ -165,19 +165,20 @@ namespace Chess.AF.Console
         }
         private static Unit AllMoves(Option<Position> position)
         {
-            position.Map(p => p.GetIteratorForAll<PieceEnum>()).Map(f => f.Iterate()).ForEach(IterateAllMoves);
+            position.Map(p => p.IterateForAllMoves()).ForEach(IterateAllMoves);
             return Unit();
         }
 
-        private static void IterateAllMoves(IEnumerable<(PieceEnum Piece, SquareEnum Square, bool IsSelected)> iterator)
+        private static void IterateAllMoves(IEnumerable<(PieceEnum Piece, SquareEnum Square, SquareEnum MoveSquasre)> iterator)
         {
-            foreach (var t in iterator)
+            var group = iterator.GroupBy(t => (t.Piece, t.Square)).Select(g => new { g.Key, Items = g.ToList() });
+            foreach (var item in group)
             {
                 List<SquareEnum> moveSquares = new List<SquareEnum>();
-                foreach (var s in MovesFactory.Create(t.Piece, t.Square, Position))
-                    moveSquares.Add(s);
+                foreach (var value in item.Items)
+                    moveSquares.Add(value.MoveSquasre);
                 if (moveSquares.Count() > 0)
-                    ShowMoves(t.Piece, t.Square, moveSquares.ToArray());
+                    ShowMoves(item.Key.Piece, item.Key.Square, moveSquares.ToArray());
             }
         }
 
