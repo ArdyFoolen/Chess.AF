@@ -29,6 +29,8 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("8/8/8/8/8/8/8/k7 b KQkq - 0 1", new SquareEnum[] { SquareEnum.a2, SquareEnum.b1, SquareEnum.b2 })]
         [TestCase("8/8/8/8/8/8/8/7K w KQkq - 0 1", new SquareEnum[] { SquareEnum.g1, SquareEnum.g2, SquareEnum.h2 })]
         [TestCase("8/8/8/8/8/8/8/7k b KQkq - 0 1", new SquareEnum[] { SquareEnum.g1, SquareEnum.g2, SquareEnum.h2 })]
+        [TestCase("8/8/8/4k3/8/4K3/8/8 w KQkq - 0 1", new SquareEnum[] { SquareEnum.d3, SquareEnum.f3, SquareEnum.d2, SquareEnum.e2, SquareEnum.f2 })]
+        [TestCase("8/8/8/4k3/8/4K3/8/8 b KQkq - 0 1", new SquareEnum[] { SquareEnum.d5, SquareEnum.f5, SquareEnum.d6, SquareEnum.e6, SquareEnum.f6 })]
         public void KingMoves_AreValid(string fenString, SquareEnum[] expected)
         {
             AssertMovesHelper helper = new AssertMovesHelper();

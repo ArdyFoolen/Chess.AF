@@ -158,6 +158,45 @@ namespace Chess.AF
             return position;
         }
 
+        public bool IsInCheck
+        {
+            get
+            {
+                PiecesEnum king = PieceEnum.King.ToPieces(IsWhiteToMove);
+                ulong kingMap = Maps[(int)king];
+                SquareEnum kingSquare = kingMap.GetSquareFrom();
+
+                PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
+                ulong opponentKnightMap = Maps[(int)opponentKnight];
+
+                bool knightChecks = (MovesDictionaries.KnightMovesDictionary[kingSquare] & opponentKnightMap) != 0x0ul;
+
+                PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!IsWhiteToMove);
+                ulong opponentBishopMap = Maps[(int)opponentBishop];
+                PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!IsWhiteToMove);
+                ulong opponentQueenMap = Maps[(int)opponentQueen];
+
+                bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, kingSquare) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, kingSquare) & opponentQueenMap) != 0x0ul;
+
+                PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!IsWhiteToMove);
+                ulong opponentRookMap = Maps[(int)opponentRook];
+
+                bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentQueenMap) != 0x0ul;
+
+                return knightChecks || bishopChecks || rookChecks;
+            }
+        }
+
+        public bool OpponentIsInCheck
+        {
+            get
+            {
+                Position position = new Position(this);
+                position.IsWhiteToMove = !IsWhiteToMove;
+                return position.IsInCheck;
+            }
+        }
+
         public static Option<Position> Of(Option<Fen> fen)
             => fen.Bind(WhenValid);
 
@@ -213,6 +252,15 @@ namespace Chess.AF
 
         public ulong ExcludeOwnPieces(ulong map)
             => IsWhiteToMove ? map & ~Maps[(int)PositionEnum.WhitePieces] : map & ~Maps[(int)PositionEnum.BlackPieces];
+
+        public ulong ExcludeOpponentKing(ulong map)
+        {
+            PiecesEnum king = PieceEnum.King.ToPieces(!IsWhiteToMove);
+            ulong kingMap = Maps[(int)king];
+            SquareEnum kingSquare = kingMap.GetSquareFrom();
+
+            return ~MovesDictionaries.KingMovesDictionary[kingSquare] & map;
+        }
 
         internal ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
         {

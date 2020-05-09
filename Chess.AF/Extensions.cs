@@ -132,7 +132,7 @@ namespace Chess.AF
             }
         }
 
-        public static SquareEnum GetSquareFrom(ulong map)
+        public static SquareEnum GetSquareFrom(this ulong map)
             => MapToSquare.ContainsKey(map) ? MapToSquare[map] : throw new MapNotFoundException();
     }
 }

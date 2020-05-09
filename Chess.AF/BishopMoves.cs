@@ -23,33 +23,7 @@ namespace Chess.AF
         public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Bishop)
             => position.Match(
                 None: () => new PiecesIterator<PieceEnum>((pieceEnum, 0ul)),
-                Some: p => new PiecesIterator<PieceEnum>((pieceEnum, GetMapFor(p, square)))
+                Some: p => new PiecesIterator<PieceEnum>((pieceEnum, MovesDictionaries.GetBishopMovesMapFor(p, square)))
                 );
-
-        private ulong GetMapFor(Position position, SquareEnum square)
-        {
-            var maps = MovesDictionaries.BishopMovesDictionary[square];
-            ulong upMap = square.UpBitsOn();
-            ulong dwMap = square.DownBitsOn();
-
-            // 1
-            ulong upR = maps.a1h8Map & upMap;
-            upR = position.GetMinMap(upR);
-
-            // 2
-            ulong dwL = maps.a1h8Map & dwMap;
-            dwL = position.GetMaxMap(dwL);
-
-            // 3
-            ulong upL = maps.a8h1Map & upMap;
-            upL = position.GetMinMap(upL);
-
-            // 4
-            ulong dwR = maps.a8h1Map & dwMap;
-            dwR = position.GetMaxMap(dwR);
-
-            // 5
-            return upR | upL | dwL | dwR;
-        }
     }
 }
