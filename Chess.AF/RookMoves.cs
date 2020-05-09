@@ -10,31 +10,14 @@ namespace Chess.AF
 {
     public class RookMoves : Moves
     {
-        private static readonly ulong r8Map = 0xff00000000000000;
-        private static readonly ulong faMap = 0x8080808080808080;
-        private IDictionary<SquareEnum, (ulong r8Map, ulong faMap)> MovesDictionary = new Dictionary<SquareEnum, (ulong r8Map, ulong faMap)>();
-
         private static RookMoves instance = null;
-        private RookMoves()
-        {
-            CreateMovesMap();
-        }
+        private RookMoves() { }
 
         public static RookMoves Get()
         {
             if (instance == null)
                 instance = new RookMoves();
             return instance;
-        }
-
-        private void CreateMovesMap()
-        {
-            foreach (SquareEnum square in Enum.GetValues(typeof(SquareEnum)))
-            {
-                ulong cpR8Map = r8Map >> square.Row() * 8;
-                ulong cpFaMap = faMap >> square.File();
-                MovesDictionary[square] = (cpR8Map, cpFaMap);
-            }
         }
 
         public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Rook)
@@ -45,7 +28,7 @@ namespace Chess.AF
 
         private ulong GetMapFor(Position position, SquareEnum square)
         {
-            var maps = MovesDictionary[square];
+            var maps = MovesDictionaries.RookMovesDictionary[square];
             ulong upMap = square.UpBitsOn();
             ulong dwMap = square.DownBitsOn();
 

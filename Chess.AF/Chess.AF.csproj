@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KingMoves.cs" />
+    <Compile Include="MapNotFoundException.cs" />
+    <Compile Include="MovesDictionaries.cs" />
     <Compile Include="QueenMoves.cs" />
     <Compile Include="PawnMoves.cs" />
     <Compile Include="RookMoves.cs" />

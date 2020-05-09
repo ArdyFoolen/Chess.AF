@@ -11,38 +11,14 @@ namespace Chess.AF
 {
     public class PawnMoves : Moves
     {
-        private static readonly ulong b7Map = 0xa000a00000000000;
-        private IDictionary<int, ulong> MovesDictionary = new Dictionary<int, ulong>();
-
         private static PawnMoves instance = null;
-        private PawnMoves()
-        {
-            CreateMovesMap();
-        }
+        private PawnMoves() { }
 
         public static PawnMoves Get()
         {
             if (instance == null)
                 instance = new PawnMoves();
             return instance;
-        }
-
-        private void CreateMovesMap()
-        {
-            for (int file = 0; file < 8; file++)
-            {
-                ulong cpTakeMap = b7Map;
-
-                if (file == 0 || file == 7)
-                    cpTakeMap = cpTakeMap.BitOffForFile(file);
-
-                if (file == 0)
-                    cpTakeMap <<= 1;
-                else
-                    cpTakeMap >>= file - 1;
-
-                MovesDictionary[file] = cpTakeMap;
-            }
         }
 
         public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Pawn)
@@ -65,11 +41,7 @@ namespace Chess.AF
             if (square.Row() == 6)
                 mvMap = mvMap.SetBit((int)square - 16);
 
-            var tkMap = MovesDictionary[square.File()];
-            if (square.Row() < 1)
-                tkMap <<= 8;
-            else
-                tkMap >>= 8 * (square.Row() - 1);
+            ulong tkMap = MovesDictionaries.GetTakeMap(square);
 
             return position.GetPawnMapFor(square, mvMap, tkMap);
         }

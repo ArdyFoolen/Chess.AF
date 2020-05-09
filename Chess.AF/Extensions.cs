@@ -33,6 +33,9 @@ namespace Chess.AF
         public static bool IsEqual(this PieceEnum pieceEnum, PieceEnum piecesEnum)
             => piecesEnum == pieceEnum;
 
+        public static PiecesEnum ToPieces(this PieceEnum pieceEnum, bool isWhiteToMove)
+            => (PiecesEnum)(isWhiteToMove ? ((int)pieceEnum + 7) : (int)pieceEnum);
+
         public static bool Is(this PieceEnum pieceEnum, PieceEnum compare)
             => pieceEnum == compare;
 
@@ -62,6 +65,12 @@ namespace Chess.AF
             ul |= im;
             return ul;
         }
+
+        public static ulong SetBitOff(this ulong ul, int index)
+            => ul &= ~SetBit(0x0ul, index);
+
+        public static bool IsBitOn(this ulong ul, int index)
+            => (0x0ul.SetBit(index) & ul) != 0x0ul; 
 
         private static readonly ulong f1Map = 0x7f7f7f7f7f7f7f7f;
         private static readonly ulong r1Map = 0x00ffffffffffffff;
@@ -111,5 +120,19 @@ namespace Chess.AF
 
         public static int PieceIndex(this char piece)
             => directory[piece].Value();
+
+        private static readonly Dictionary<ulong, SquareEnum> MapToSquare = new Dictionary<ulong, SquareEnum>();
+        static Extensions()
+        {
+            ulong map = 0x1ul;
+            foreach (int i in Enumerable.Range(0, 64))
+            {
+                MapToSquare.Add(map, (SquareEnum)(63 - i));
+                map *= 2;
+            }
+        }
+
+        public static SquareEnum GetSquareFrom(ulong map)
+            => MapToSquare.ContainsKey(map) ? MapToSquare[map] : throw new MapNotFoundException();
     }
 }

@@ -96,11 +96,11 @@ namespace Chess.AF
 
     public partial class Position
     {
-        private ulong[] Maps = new ulong[14];
-        public bool IsWhiteToMove { get; }
+        internal ulong[] Maps = new ulong[14];
+        public bool IsWhiteToMove { get; internal set; }
         public RokadeEnum WhiteRokade { get; }
         public RokadeEnum BlackRokade { get; }
-        public Option<SquareEnum> EpSquare { get; }
+        public Option<SquareEnum> EpSquare { get; internal set; }
 
         private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
         {
@@ -109,6 +109,53 @@ namespace Chess.AF
             this.WhiteRokade = whiteRokade;
             this.BlackRokade = blackRokade;
             this.EpSquare = ep;
+        }
+
+        private Position(Position position)
+        {
+            this.Maps = position.Maps;
+            this.IsWhiteToMove = position.IsWhiteToMove;
+            this.WhiteRokade = position.WhiteRokade;
+            this.BlackRokade = position.BlackRokade;
+            this.EpSquare = position.EpSquare;
+        }
+
+        public Position Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo)
+        {
+            Position position = new Position(this);
+            var pieces = moveTo.Piece.ToPieces(position.IsWhiteToMove);
+            var promoted = moveTo.Promoted.ToPieces(position.IsWhiteToMove);
+
+            position.Maps[(int)pieces] = position.Maps[(int)pieces].SetBitOff((int)moveTo.Square);
+            if (moveTo.Piece == moveTo.Promoted)
+                position.Maps[(int)pieces] = position.Maps[(int)pieces].SetBit((int)moveTo.MoveSquare);
+            else
+                position.Maps[(int)promoted] = position.Maps[(int)promoted].SetBit((int)moveTo.MoveSquare);
+
+            int piecesIndex = (int)(position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
+            position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)moveTo.Square);
+            position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)moveTo.MoveSquare);
+
+            int otherIndex = (int)(!position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
+            if (position.Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
+            {
+                foreach (var i in Enumerable.Range(otherIndex, 7))
+                    position.Maps[i] = position.Maps[i].SetBitOff((int)moveTo.Square);
+            }
+
+            position.EpSquare = None;
+            if (PieceEnum.Pawn.Equals(moveTo.Piece) && Math.Abs((int)moveTo.MoveSquare - (int)moveTo.Square) == 16)
+            {
+                int ep = (int)moveTo.MoveSquare;
+                if (IsWhiteToMove)
+                    ep += 8;
+                else
+                    ep -= 8;
+                position.EpSquare = Some((SquareEnum)ep);
+            }
+            position.IsWhiteToMove = !position.IsWhiteToMove;
+
+            return position;
         }
 
         public static Option<Position> Of(Option<Fen> fen)
