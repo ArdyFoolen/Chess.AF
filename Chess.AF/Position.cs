@@ -183,7 +183,15 @@ namespace Chess.AF
 
                 bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentQueenMap) != 0x0ul;
 
-                return knightChecks || bishopChecks || rookChecks;
+                PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!IsWhiteToMove);
+                ulong opponentPawnMap = Maps[(int)opponentPawn];
+
+                ulong takeMap = MovesDictionaries.GetTakeMap(kingSquare);
+                takeMap &= IsWhiteToMove ? kingSquare.DownBitsOff() : kingSquare.UpBitsOff();
+
+                bool pawnChecks = (takeMap & opponentPawnMap) != 0x0ul;
+
+                return knightChecks || bishopChecks || rookChecks || pawnChecks;
             }
         }
 
@@ -257,6 +265,10 @@ namespace Chess.AF
         {
             PiecesEnum king = PieceEnum.King.ToPieces(!IsWhiteToMove);
             ulong kingMap = Maps[(int)king];
+
+            if (kingMap == 0x0ul)
+                return map;
+
             SquareEnum kingSquare = kingMap.GetSquareFrom();
 
             return ~MovesDictionaries.KingMovesDictionary[kingSquare] & map;

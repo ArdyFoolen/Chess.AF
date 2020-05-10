@@ -29,7 +29,9 @@ namespace Chess.AF.Tests.UnitTests
             new FenString(@"4k3/8/8/8/7q/8/8/4K3 w KQkq - 0 1", true),
             new FenString(@"4k3/8/8/7Q/8/8/8/4K3 b KQkq - 0 1", true),
             new FenString(@"4q3/8/8/8/8/8/8/4K3 w KQkq - 0 1", true),
-            new FenString(@"4k3/8/8/8/8/8/8/4Q3 b KQkq - 0 1", true)
+            new FenString(@"4k3/8/8/8/8/8/8/4Q3 b KQkq - 0 1", true),
+            new FenString(@"4k3/8/8/8/8/8/3p4/4K3 w KQkq - 0 1", true),
+            new FenString(@"4k3/3P4/8/8/8/8/8/4K3 b KQkq - 0 1", true)
         };
 
         internal static readonly FenString[] FenOpponentInCheckArray = new FenString[]
@@ -43,7 +45,9 @@ namespace Chess.AF.Tests.UnitTests
             new FenString(@"4k3/8/8/7Q/8/8/8/4K3 w KQkq - 0 1", true),
             new FenString(@"4k3/8/8/8/7q/8/8/4K3 b KQkq - 0 1", true),
             new FenString(@"4k3/8/8/8/8/8/8/4Q3 w KQkq - 0 1", true),
-            new FenString(@"4q3/8/8/8/8/8/8/4K3 b KQkq - 0 1", true)
+            new FenString(@"4q3/8/8/8/8/8/8/4K3 b KQkq - 0 1", true),
+            new FenString(@"4k3/3P4/8/8/8/8/8/4K3 w KQkq - 0 1", true),
+            new FenString(@"4k3/8/8/8/8/8/3p4/4K3 b KQkq - 0 1", true)
         };
 
         [Test]
