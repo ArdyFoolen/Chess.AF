@@ -221,7 +221,7 @@ namespace Chess.AF
             get
             {
                 RokadeEnum rokade = IsWhiteToMove ? WhiteRokade : BlackRokade;
-                if (RokadeEnum.None.Equals(rokade))
+                if (RokadeEnum.None.Equals(rokade) || IsInCheck)
                     return RokadeEnum.None;
 
                 RokadeEnum queenSide = RokadeEnum.None;

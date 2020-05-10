@@ -62,6 +62,8 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("r3k2r/8/7B/8/8/7b/8/R3K2R b Qq - 0 1", RokadeEnum.QueenSide)]
         [TestCase("r3k2r/7B/8/8/8/8/7b/R3K2R w Qq - 0 1", RokadeEnum.QueenSide)]
         [TestCase("r3k2r/7B/8/8/8/8/7b/R3K2R b Qq - 0 1", RokadeEnum.QueenSide)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", RokadeEnum.None)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", RokadeEnum.None)]
         public void CanRokade(string fenString, RokadeEnum expected)
         {
             Fen.Of(fenString).CreatePosition()
