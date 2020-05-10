@@ -158,6 +158,8 @@ namespace Chess.AF
             return position;
         }
 
+        #region IsInCheck
+
         public bool IsInCheck
         {
             get
@@ -166,32 +168,7 @@ namespace Chess.AF
                 ulong kingMap = Maps[(int)king];
                 SquareEnum kingSquare = kingMap.GetSquareFrom();
 
-                PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
-                ulong opponentKnightMap = Maps[(int)opponentKnight];
-
-                bool knightChecks = (MovesDictionaries.KnightMovesDictionary[kingSquare] & opponentKnightMap) != 0x0ul;
-
-                PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!IsWhiteToMove);
-                ulong opponentBishopMap = Maps[(int)opponentBishop];
-                PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!IsWhiteToMove);
-                ulong opponentQueenMap = Maps[(int)opponentQueen];
-
-                bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, kingSquare) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, kingSquare) & opponentQueenMap) != 0x0ul;
-
-                PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!IsWhiteToMove);
-                ulong opponentRookMap = Maps[(int)opponentRook];
-
-                bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, kingSquare) & opponentQueenMap) != 0x0ul;
-
-                PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!IsWhiteToMove);
-                ulong opponentPawnMap = Maps[(int)opponentPawn];
-
-                ulong takeMap = MovesDictionaries.GetTakeMap(kingSquare);
-                takeMap &= IsWhiteToMove ? kingSquare.DownBitsOff() : kingSquare.UpBitsOff();
-
-                bool pawnChecks = (takeMap & opponentPawnMap) != 0x0ul;
-
-                return knightChecks || bishopChecks || rookChecks || pawnChecks;
+                return IsSquareAttacked(kingSquare);
             }
         }
 
@@ -204,6 +181,110 @@ namespace Chess.AF
                 return position.IsInCheck;
             }
         }
+
+        private bool IsSquareAttacked(SquareEnum square)
+        {
+            PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
+            ulong opponentKnightMap = Maps[(int)opponentKnight];
+
+            bool knightChecks = (MovesDictionaries.KnightMovesDictionary[square] & opponentKnightMap) != 0x0ul;
+
+            PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!IsWhiteToMove);
+            ulong opponentBishopMap = Maps[(int)opponentBishop];
+            PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!IsWhiteToMove);
+            ulong opponentQueenMap = Maps[(int)opponentQueen];
+
+            bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
+
+            PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!IsWhiteToMove);
+            ulong opponentRookMap = Maps[(int)opponentRook];
+
+            bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, square) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
+
+            PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!IsWhiteToMove);
+            ulong opponentPawnMap = Maps[(int)opponentPawn];
+
+            ulong takeMap = MovesDictionaries.GetTakeMap(square);
+            takeMap &= IsWhiteToMove ? square.DownBitsOff() : square.UpBitsOff();
+
+            bool pawnChecks = (takeMap & opponentPawnMap) != 0x0ul;
+
+            return knightChecks || bishopChecks || rookChecks || pawnChecks;
+        }
+
+        #endregion
+
+        #region Rokade
+
+        public RokadeEnum PossibleRokade
+        {
+            get
+            {
+                RokadeEnum rokade = IsWhiteToMove ? WhiteRokade : BlackRokade;
+                if (RokadeEnum.None.Equals(rokade))
+                    return RokadeEnum.None;
+
+                RokadeEnum queenSide = RokadeEnum.None;
+                if (RokadeEnum.KingAndQueenSide.Equals(rokade) || RokadeEnum.QueenSide.Equals(rokade))
+                    if (!QueenSideRokadeSquaresOccupied && !QueenSideRokadeSquares.Any(a => IsSquareAttacked(a)))
+                        queenSide = RokadeEnum.QueenSide;
+
+                RokadeEnum kingSide = RokadeEnum.None;
+                if (RokadeEnum.KingAndQueenSide.Equals(rokade) || RokadeEnum.KingSide.Equals(rokade))
+                    if (!KingSideRokadeSquaresOccupied && !KingSideRokadeSquares.Any(a => IsSquareAttacked(a)))
+                        kingSide = RokadeEnum.KingSide;
+
+                return queenSide | kingSide;
+            }
+        }
+
+        public RokadeEnum PossibleOpponentRokade
+        {
+            get
+            {
+                Position position = new Position(this);
+                position.IsWhiteToMove = !IsWhiteToMove;
+                return position.PossibleRokade;
+            }
+        }
+
+        private IEnumerable<SquareEnum> QueenSideRokadeSquares
+        {
+            get
+            {
+                yield return IsWhiteToMove ? SquareEnum.d1 : SquareEnum.d8;
+                yield return IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8;
+            }
+        }
+
+        private IEnumerable<SquareEnum> KingSideRokadeSquares
+        {
+            get
+            {
+                yield return IsWhiteToMove ? SquareEnum.f1 : SquareEnum.f8;
+                yield return IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8;
+            }
+        }
+
+        private bool QueenSideRokadeSquaresOccupied
+        {
+            get
+            {
+                ulong map = IsWhiteToMove ? 0x0000000000000030ul : 0x3000000000000000ul;
+                return (Maps[(int)(IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces)] & map) != 0x0ul;
+            }
+        }
+
+        private bool KingSideRokadeSquaresOccupied
+        {
+            get
+            {
+                ulong map = IsWhiteToMove ? 0x0000000000000006ul : 0x0600000000000000ul;
+                return (Maps[(int)(IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces)] & map) != 0x0ul;
+            }
+        }
+
+        #endregion
 
         public static Option<Position> Of(Option<Fen> fen)
             => fen.Bind(WhenValid);
