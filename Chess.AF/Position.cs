@@ -355,6 +355,18 @@ namespace Chess.AF
             return ~MovesDictionaries.KingMovesDictionary[kingSquare] & map;
         }
 
+        public ulong IncludeRokade(ulong map)
+        {
+            RokadeEnum rokade = PossibleRokade;
+            if (RokadeEnum.KingAndQueenSide.Equals(rokade))
+                return map | (IsWhiteToMove ? 0x0000000000000022ul : 0x2200000000000000ul);
+            if (RokadeEnum.KingSide.Equals(rokade))
+                return map | (IsWhiteToMove ? 0x0000000000000002ul : 0x0200000000000000ul);
+            if (RokadeEnum.QueenSide.Equals(rokade))
+                return map | (IsWhiteToMove ? 0x0000000000000020ul : 0x2000000000000000ul);
+            return map;
+        }
+
         internal ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
         {
             if (IsWhiteToMove)
