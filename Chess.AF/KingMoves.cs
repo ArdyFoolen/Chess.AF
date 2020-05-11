@@ -22,8 +22,8 @@ namespace Chess.AF
 
         public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.King)
             => position.Match(
-                None: () => new PiecesIterator<PieceEnum>((PieceEnum.King, 0ul)),
-                Some: p => new PiecesIterator<PieceEnum>((PieceEnum.King, p.IncludeRokade(p.ExcludeOpponentKing(p.ExcludeOwnPieces(MovesDictionaries.KingMovesDictionary[square])))))
+                None: () => new PiecesIterator<PieceEnum>((pieceEnum, 0ul)),
+                Some: p => new PiecesIterator<PieceEnum>((pieceEnum, p.IncludeRokade(p.ExcludeOpponentKing(p.ExcludeOwnPieces(MovesDictionaries.KingMovesDictionary[square])))))
                 );
     }
 }

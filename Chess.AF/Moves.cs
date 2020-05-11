@@ -10,6 +10,6 @@ namespace Chess.AF
 {
     public interface Moves
     {
-        PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Bishop);
+        PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum);
     }
 }

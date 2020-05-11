@@ -23,8 +23,8 @@ namespace Chess.AF
 
         public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Pawn)
             => position.Match(
-                None: () => new PiecesIterator<PieceEnum>((PieceEnum.Pawn, 0ul)),
-                Some: p => new PiecesIterator<PieceEnum>((PieceEnum.Pawn, GetMapFor(p, square)))
+                None: () => new PiecesIterator<PieceEnum>((pieceEnum, 0ul)),
+                Some: p => new PiecesIterator<PieceEnum>((pieceEnum, GetMapFor(p, square)))
                 );
 
         // Make a map for black/white pawns, later set bits of either below or above square
