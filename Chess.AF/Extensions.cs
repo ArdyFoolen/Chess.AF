@@ -46,14 +46,14 @@ namespace Chess.AF
         // H8: 7 / 8 = 0;
         // A1: 56 / 8 = 7;
         // H1: 63 / 8 = 7;
-        internal static int Row(this SquareEnum square)
+        public static int Row(this SquareEnum square)
             => (int)square / 8;
 
         // A8: 0 % 8 = 0
         // H8: 7 % 8 = 7;
         // A1: 56 % 8 = 0;
         // H1: 63 % 8 = 7;
-        internal static int File(this SquareEnum square)
+        public static int File(this SquareEnum square)
             => (int)square % 8;
 
         internal static void SetBit(this ulong[] maps, int position, int index)

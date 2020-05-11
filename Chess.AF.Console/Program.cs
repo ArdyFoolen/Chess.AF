@@ -90,7 +90,10 @@ namespace Chess.AF.Console
             WriteLine($"Moves for {piece.ToString()} on {square.ToString()}");
             foreach (var sq in moveSquares)
             {
-                Write($"{sq.Square.ToString()}");
+                if (IsRokadeMove(piece, square, sq.Square))
+                    ShowRokade(sq.Square);
+                else
+                    Write($"{sq.Square.ToString()}");
                 if (sq.Promoted != piece)
                     Write($"={Char.ToUpperInvariant(ChessConsole.ConvertPieceToChar((int)sq.Promoted))}");
                 Write(" ");
@@ -98,6 +101,17 @@ namespace Chess.AF.Console
             WriteLine();
             return Unit();
         }
+
+        private static void ShowRokade(SquareEnum square)
+        {
+            if (square.File() == 6)
+                Write("O-O");
+            else
+                Write("O-O-O");
+        }
+
+        private static bool IsRokadeMove(PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
+            => PieceEnum.King.Equals(piece) && Math.Abs((int)square - (int)moveSquare) == 2;
 
         //private static Unit ShowAll<T>(Position position)
         //    where T : Enum
