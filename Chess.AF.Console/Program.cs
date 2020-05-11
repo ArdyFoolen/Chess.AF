@@ -80,7 +80,13 @@ namespace Chess.AF.Console
         {
             WriteLine($"Moves for {selected.Piece.ToString()}");
             foreach (var sq in selected.Moves(Position))
-                Write($"{sq.ToString()} ");
+            {
+                if (IsRokadeMove(selected.Piece, selected.Iterator.Iterate().FirstOrDefault().Square, sq))
+                    ShowRokade(sq);
+                else
+                    Write($"{sq.ToString()}");
+                Write(" ");
+            }
             WriteLine();
             return Unit();
         }
