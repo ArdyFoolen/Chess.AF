@@ -134,5 +134,9 @@ namespace Chess.AF
 
         public static SquareEnum GetSquareFrom(this ulong map)
             => MapToSquare.ContainsKey(map) ? MapToSquare[map] : throw new MapNotFoundException();
+
+        public static bool IsRokadeMove(this PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
+            => PieceEnum.King.Equals(piece) && Math.Abs((int)square - (int)moveSquare) == 2;
+
     }
 }

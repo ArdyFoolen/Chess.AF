@@ -71,5 +71,16 @@ namespace Chess.AF.Tests.UnitTests
                 None: () => { Assert.Fail(); return true; },
                 Some: p => { Assert.AreEqual(expected, p.PossibleRokade); return true; });
         }
+
+        [TestCaseSource(typeof(TestSourceHelper), "MovesTestCases")]
+        public void Moves_AreValid((string FenString, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected) moveTo)
+        {
+            AssertMovesHelper helper = new AssertMovesHelper();
+
+            Fen.Of(moveTo.FenString).CreatePosition()
+            .Match(
+                None: () => { Assert.Fail(); return true; },
+                Some: p => { helper.AssertIterateForMoves(p, moveTo.Expected); return true; });
+        }
     }
 }

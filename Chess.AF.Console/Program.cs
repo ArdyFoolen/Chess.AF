@@ -81,7 +81,7 @@ namespace Chess.AF.Console
             WriteLine($"Moves for {selected.Piece.ToString()}");
             foreach (var sq in selected.Moves(Position))
             {
-                if (IsRokadeMove(selected.Piece, selected.Iterator.Iterate().FirstOrDefault().Square, sq))
+                if (selected.Piece.IsRokadeMove(selected.Iterator.Iterate().FirstOrDefault().Square, sq))
                     ShowRokade(sq);
                 else
                     Write($"{sq.ToString()}");
@@ -96,7 +96,7 @@ namespace Chess.AF.Console
             WriteLine($"Moves for {piece.ToString()} on {square.ToString()}");
             foreach (var sq in moveSquares)
             {
-                if (IsRokadeMove(piece, square, sq.Square))
+                if (piece.IsRokadeMove(square, sq.Square))
                     ShowRokade(sq.Square);
                 else
                     Write($"{sq.Square.ToString()}");
@@ -115,9 +115,6 @@ namespace Chess.AF.Console
             else
                 Write("O-O-O");
         }
-
-        private static bool IsRokadeMove(PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
-            => PieceEnum.King.Equals(piece) && Math.Abs((int)square - (int)moveSquare) == 2;
 
         //private static Unit ShowAll<T>(Position position)
         //    where T : Enum

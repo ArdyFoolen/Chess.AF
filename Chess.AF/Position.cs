@@ -102,6 +102,8 @@ namespace Chess.AF
         public RokadeEnum BlackRokade { get; }
         public Option<SquareEnum> EpSquare { get; internal set; }
 
+        public bool IsTake { get; internal set; } = false;
+
         private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
         {
             this.Maps = maps;
@@ -125,6 +127,20 @@ namespace Chess.AF
             Position position = new Position(this);
             var pieces = moveTo.Piece.ToPieces(position.IsWhiteToMove);
             var promoted = moveTo.Promoted.ToPieces(position.IsWhiteToMove);
+            int piecesIndex = (int)(position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
+
+            bool isRokade = moveTo.Piece.IsRokadeMove(moveTo.Square, moveTo.MoveSquare);
+            if (isRokade)
+            {
+                var rookRokadeSquares = GetRookRokadeSquares(moveTo.MoveSquare);
+                var rook = PieceEnum.Rook.ToPieces(position.IsWhiteToMove);
+
+                position.Maps[(int)rook] = position.Maps[(int)rook].SetBitOff((int)rookRokadeSquares.From);
+                position.Maps[(int)rook] = position.Maps[(int)rook].SetBitOff((int)rookRokadeSquares.To);
+
+                position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)rookRokadeSquares.From);
+                position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)rookRokadeSquares.To);
+            }
 
             position.Maps[(int)pieces] = position.Maps[(int)pieces].SetBitOff((int)moveTo.Square);
             if (moveTo.Piece == moveTo.Promoted)
@@ -132,13 +148,13 @@ namespace Chess.AF
             else
                 position.Maps[(int)promoted] = position.Maps[(int)promoted].SetBit((int)moveTo.MoveSquare);
 
-            int piecesIndex = (int)(position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
             position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)moveTo.Square);
             position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)moveTo.MoveSquare);
 
             int otherIndex = (int)(!position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
             if (position.Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
             {
+                position.IsTake = true;
                 foreach (var i in Enumerable.Range(otherIndex, 7))
                     position.Maps[i] = position.Maps[i].SetBitOff((int)moveTo.Square);
             }
@@ -156,6 +172,14 @@ namespace Chess.AF
             position.IsWhiteToMove = !position.IsWhiteToMove;
 
             return position;
+        }
+
+        private (SquareEnum From, SquareEnum To) GetRookRokadeSquares(SquareEnum kingMoveSquare)
+        {
+            if (kingMoveSquare.File() == 6)
+                return (IsWhiteToMove ? SquareEnum.h1 : SquareEnum.h8, (SquareEnum)((int)kingMoveSquare - 1));
+            else
+                return (IsWhiteToMove ? SquareEnum.a1 : SquareEnum.a8, (SquareEnum)((int)kingMoveSquare + 1));
         }
 
         #region IsInCheck
@@ -311,7 +335,8 @@ namespace Chess.AF
         {
             foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
                 foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Some(this)))
-                    yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
+                    if (!this.Move((pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square)).OpponentIsInCheck)
+                        yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
         }
 
         private ulong GetMapFor<T>(T piece)
