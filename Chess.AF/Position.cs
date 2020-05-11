@@ -115,7 +115,9 @@ namespace Chess.AF
 
         private Position(Position position)
         {
-            this.Maps = position.Maps;
+            for (int i = 0; i < position.Maps.Length; i++)
+                this.Maps[i] = position.Maps[i];
+
             this.IsWhiteToMove = position.IsWhiteToMove;
             this.WhiteRokade = position.WhiteRokade;
             this.BlackRokade = position.BlackRokade;

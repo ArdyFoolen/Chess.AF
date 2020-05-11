@@ -41,10 +41,13 @@ namespace Chess.AF.Tests.Helpers
 
         public Unit AssertIterateForMoves(Position position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
         {
+            int count = 0;
             foreach (var tuple in position.IterateForAllMoves())
             {
                 Assert.IsTrue(Expected.Any(a => tuple.Piece.Equals(a.Piece) && tuple.Square.Equals(a.Square) && tuple.Promoted.Equals(a.Promoted) && tuple.MoveSquare.Equals(a.MoveSquare)));
+                count += 1;
             }
+            Assert.AreEqual(Expected.Length, count);
 
             return Unit();
         }
