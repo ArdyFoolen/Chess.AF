@@ -124,7 +124,17 @@ namespace Chess.AF
             this.EpSquare = position.EpSquare;
         }
 
-        public Position Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo)
+        public Option<Position> Move(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
+        {
+            if (!IsValidMove(Piece, From, Promoted, To))
+                return None;
+            return Some(Move((Piece, From, Promoted, To)));
+        }
+
+        private bool IsValidMove(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
+            => IterateForAllMoves().Any(a => Piece.Equals(a.Piece) && From.Equals(a.Square) && Promoted.Equals(a.Promoted) && To.Equals(a.MoveSquare));
+
+        private Position Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo)
         {
             Position position = new Position(this);
             var pieces = moveTo.Piece.ToPieces(position.IsWhiteToMove);

@@ -19,7 +19,7 @@ namespace Chess.AF.Console
         public static string[] GetParameters(this string cmd)
             => cmd.Split(' ').Skip(1).ToArray();
 
-        public static Option<PieceEnum> TryParse(this string piece)
+        public static Option<PieceEnum> TryPieceParse(this string piece)
         {
             switch (piece.ToLowerInvariant())
             {

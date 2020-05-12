@@ -165,10 +165,21 @@ namespace Chess.AF.Console
         {
             if (parameters.Length != 1)
                 return;
-            Option<PieceEnum> pieceOpt = parameters[0].TryParse();
+            Option<PieceEnum> pieceOpt = parameters[0].TryPieceParse();
             SelectOpt = pieceOpt.Bind(piece => Position.Bind(p => Selected.Of(piece, p.GetIteratorFor(piece))));
 
             SelectOpt.Map(ShowSelected);
+        }
+
+        /// <summary>
+        /// Parameters {piece}{square}[-x]{square}{promote} or o-o, o-o-o
+        /// </summary>
+        /// <param name="parameters"></param>
+        public static void MovePiece(params string[] parameters)
+        {
+            if (parameters.Length != 1)
+                return;
+
         }
 
         public static void DeSelectPiece()
