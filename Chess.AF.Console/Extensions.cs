@@ -19,6 +19,9 @@ namespace Chess.AF.Console
         public static string[] GetParameters(this string cmd)
             => cmd.Split(' ').Skip(1).ToArray();
 
+        public static Option<PieceEnum> TryPieceParse(this char piece)
+            => piece.ToString().TryPieceParse();
+
         public static Option<PieceEnum> TryPieceParse(this string piece)
         {
             switch (piece.ToLowerInvariant())
@@ -31,6 +34,11 @@ namespace Chess.AF.Console
                 case "k": return PieceEnum.King;
                 default: return None;
             }
+        }
+
+        public static T ParseEnum<T>(this string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
         }
     }
 }
