@@ -82,5 +82,57 @@ namespace Chess.AF.Tests.UnitTests
                 None: () => { Assert.Fail(); return true; },
                 Some: p => { helper.AssertIterateForMoves(p, moveTo.Expected); return true; });
         }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", false)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", false)]
+        [TestCase("8/8/8/8/8/6k1/6q1/6K1 w KQkq - 0 1", true)]
+        [TestCase("6k1/6Q1/6K1/8/8/8/8/8 b KQkq - 0 1", true)]
+        public void IsMate_AreValid(string fenString, bool expected)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(expected, p.IsMate); return true; });
+        }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", false)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", false)]
+        [TestCase("6k1/6Q1/6K1/8/8/8/8/8 w KQkq - 0 1", true)]
+        [TestCase("8/8/8/8/8/6k1/6q1/6K1 b KQkq - 0 1", true)]
+        public void OpponentIsMate_AreValid(string fenString, bool expected)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(expected, p.OpponentIsMate); return true; });
+        }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", false)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", false)]
+        [TestCase("8/8/8/8/8/6k1/6q1/6K1 w - - 0 1", false)]
+        [TestCase("6k1/6Q1/6K1/8/8/8/8/8 b - - 0 1", false)]
+        [TestCase("8/8/8/8/8/5kq1/8/7K w - - 0 1", true)]
+        [TestCase("7k/8/5KQ1/8/8/8/8/8 b - - 0 1", true)]
+        public void IsStaleMate_AreValid(string fenString, bool expected)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(expected, p.IsStaleMate); return true; });
+        }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", false)]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", false)]
+        [TestCase("6k1/6Q1/6K1/8/8/8/8/8 w - - 0 1", false)]
+        [TestCase("8/8/8/8/8/6k1/6q1/6K1 b - - 0 1", false)]
+        [TestCase("7k/8/5KQ1/8/8/8/8/8 w - - 0 1", true)]
+        [TestCase("8/8/8/8/8/5kq1/8/7K b - - 0 1", true)]
+        public void OpponentIsStaleMate_AreValid(string fenString, bool expected)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(expected, p.OpponentIsStaleMate); return true; });
+        }
     }
 }

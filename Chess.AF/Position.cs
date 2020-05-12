@@ -312,11 +312,61 @@ namespace Chess.AF
 
         #endregion
 
+        #region IsMate
+
+        public bool IsMate
+        {
+            get
+            {
+                if (IsInCheck)
+                    return IterateForAllMoves().Count() == 0;
+                return false;
+            }
+        }
+
+        public bool OpponentIsMate
+        {
+            get
+            {
+                Position position = new Position(this);
+                position.IsWhiteToMove = !IsWhiteToMove;
+                return position.IsMate;
+            }
+        }
+
+        #endregion
+
+        #region IsStaleMate
+
+        public bool IsStaleMate
+        {
+            get
+            {
+                if (!IsInCheck)
+                    return IterateForAllMoves().Count() == 0;
+                return false;
+            }
+        }
+
+        public bool OpponentIsStaleMate
+        {
+            get
+            {
+                Position position = new Position(this);
+                position.IsWhiteToMove = !IsWhiteToMove;
+                return position.IsStaleMate;
+            }
+        }
+
+        #endregion
+
         public static Option<Position> Of(Option<Fen> fen)
             => fen.Bind(WhenValid);
 
         private static Option<Position> WhenValid(Fen fen)
             => Some(Create(fen));
+
+        #region Iterators
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
         {
@@ -340,6 +390,8 @@ namespace Chess.AF
                     if (!this.Move((pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square)).OpponentIsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
         }
+
+        #endregion
 
         private ulong GetMapFor<T>(T piece)
             where T : Enum
