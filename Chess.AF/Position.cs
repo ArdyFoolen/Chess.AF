@@ -124,6 +124,13 @@ namespace Chess.AF
             this.EpSquare = position.EpSquare;
         }
 
+        public Option<Position> Move(PieceEnum Piece, RokadeEnum Rokade)
+        {
+            if (RokadeEnum.None.Equals(Rokade) || RokadeEnum.KingAndQueenSide.Equals(Rokade) || RokadeEnum.None.Equals(PossibleRokade | Rokade) || !PieceEnum.King.Equals(Piece))
+                return None;
+            return Move(Piece, KingSquare(), PieceEnum.King, GetKingRokadeSquare(Rokade));
+        }
+
         public Option<Position> Move(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
         {
             if (!IsValidMove(Piece, From, Promoted, To))
@@ -168,7 +175,7 @@ namespace Chess.AF
             {
                 position.IsTake = true;
                 foreach (var i in Enumerable.Range(otherIndex, 7))
-                    position.Maps[i] = position.Maps[i].SetBitOff((int)moveTo.Square);
+                    position.Maps[i] = position.Maps[i].SetBitOff((int)moveTo.MoveSquare);
             }
 
             position.EpSquare = None;
@@ -184,6 +191,17 @@ namespace Chess.AF
             position.IsWhiteToMove = !position.IsWhiteToMove;
 
             return position;
+        }
+
+        private SquareEnum KingSquare()
+            => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom();
+
+        private SquareEnum GetKingRokadeSquare(RokadeEnum rokade)
+        {
+            if (RokadeEnum.KingSide.Equals(rokade))
+                return IsWhiteToMove ? SquareEnum.g1: SquareEnum.g8;
+            else
+                return IsWhiteToMove ? SquareEnum.c1: SquareEnum.c8;
         }
 
         private (SquareEnum From, SquareEnum To) GetRookRokadeSquares(SquareEnum kingMoveSquare)

@@ -180,45 +180,51 @@ namespace Chess.AF.Console
             if (parameters.Length != 1)
                 return;
 
-            Option<PieceEnum> pieceOpt;
-            Option<SquareEnum> from;
-            Option<SquareEnum> to;
-            Option<PieceEnum> promoted;
-            if ("o-o".Equals(parameters[0]))
-            {
-                pieceOpt = Some(PieceEnum.King);
-                from = Position.Map(p => p.IsWhiteToMove ? SquareEnum.e1 : SquareEnum.e8);
-                to = Position.Map(p => p.IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8);
-                promoted = pieceOpt;
-            }
-            else if ("o-o-o".Equals(parameters[0]))
-            {
-                pieceOpt = Some(PieceEnum.King);
-                from = Position.Map(p => p.IsWhiteToMove ? SquareEnum.e1 : SquareEnum.e8);
-                to = Position.Map(p => p.IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8);
-                promoted = pieceOpt;
-            }
-            else
-            {
-                var splits = parameters[0].Split(new char[] { '-', 'x' });
-                if (splits[0].Length == 2)
-                {
-                    pieceOpt = Some(PieceEnum.Pawn);
-                    from = splits[0].Substring(0, 2).ParseEnum<SquareEnum>();
-                }
-                else
-                {
-                    pieceOpt = splits[0].Substring(0, 1).TryPieceParse();
-                    from = splits[0].Substring(1, 2).ParseEnum<SquareEnum>();
-                }
-                to = splits[1].Substring(0, 2).ParseEnum<SquareEnum>();
-                promoted = pieceOpt;
-                if (PieceEnum.Pawn.Equals(pieceOpt.AsEnumerable().First()) && splits[1].Length == 3)
-                    promoted = splits[1].Substring(2, 1).TryPieceParse();
-            }
-
-            Position = Position.Bind(p => pieceOpt.Bind(piece => from.Bind(f => promoted.Bind(promote => to.Bind(t => p.Move(piece, f, promote, t))))));
+            Option<(PieceEnum Piece, SquareEnum From, PieceEnum Promote, SquareEnum To, RokadeEnum Rokade)> ToMove = parameters[0].ToMove();
+            ToMove.Match(
+                None: () => WriteLine($"Invalid Move: {parameters[0]}"),
+                Some: m => Position = Position.Bind(p => RokadeEnum.None.Equals(m.Rokade) ? p.Move(m.Piece, m.From, m.Promote, m.To) : p.Move(m.Piece, m.Rokade))
+                );
             ShowBoard();
+            //Option<PieceEnum> pieceOpt;
+            //Option<SquareEnum> from;
+            //Option<SquareEnum> to;
+            //Option<PieceEnum> promoted;
+            //if ("o-o".Equals(parameters[0]))
+            //{
+            //    pieceOpt = Some(PieceEnum.King);
+            //    from = Position.Map(p => p.IsWhiteToMove ? SquareEnum.e1 : SquareEnum.e8);
+            //    to = Position.Map(p => p.IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8);
+            //    promoted = pieceOpt;
+            //}
+            //else if ("o-o-o".Equals(parameters[0]))
+            //{
+            //    pieceOpt = Some(PieceEnum.King);
+            //    from = Position.Map(p => p.IsWhiteToMove ? SquareEnum.e1 : SquareEnum.e8);
+            //    to = Position.Map(p => p.IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8);
+            //    promoted = pieceOpt;
+            //}
+            //else
+            //{
+            //    var splits = parameters[0].Split(new char[] { '-', 'x' });
+            //    if (splits[0].Length == 2)
+            //    {
+            //        pieceOpt = Some(PieceEnum.Pawn);
+            //        from = splits[0].Substring(0, 2).ParseEnum<SquareEnum>();
+            //    }
+            //    else
+            //    {
+            //        pieceOpt = splits[0].Substring(0, 1).TryPieceParse();
+            //        from = splits[0].Substring(1, 2).ParseEnum<SquareEnum>();
+            //    }
+            //    to = splits[1].Substring(0, 2).ParseEnum<SquareEnum>();
+            //    promoted = pieceOpt;
+            //    if (PieceEnum.Pawn.Equals(pieceOpt.AsEnumerable().First()) && splits[1].Length == 3)
+            //        promoted = splits[1].Substring(2, 1).TryPieceParse();
+            //}
+
+            //Position = Position.Bind(p => pieceOpt.Bind(piece => from.Bind(f => promoted.Bind(promote => to.Bind(t => p.Move(piece, f, promote, t))))));
+            //ShowBoard();
         }
 
         public static void DeSelectPiece()
