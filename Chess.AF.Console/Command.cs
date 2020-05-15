@@ -14,8 +14,10 @@ namespace Chess.AF.Console
 {
     public class Command
     {
+        private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         private static IDictionary<string, (string Description, Action<string[]> Action)> CmdDictionary = new Dictionary<string, (string Description, Action<string[]> Action)>()
         {
+            { "default", ("Setup default initial Chess position", (parms) => DefaultPosition(DefaultFen)) },
             { "deselect", ("De-Select what is selected", (parms) => DeSelectPiece())},
             { "exit", ("Exit program", (parms) => WriteLine("Exit the Program")) },
             { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => CreatePositionFromFen()) },

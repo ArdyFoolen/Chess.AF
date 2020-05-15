@@ -136,7 +136,7 @@ namespace Chess.AF.Console
             foreach (var square in iterator.Iterate(IsSelected))
                 list.Add(square);
             var dictionary = list.ToDictionary(d => d.Square);
-            WriteBoard(dictionary);
+            WriteBoard(dictionary, position);
             return Unit();
         }
 
@@ -156,9 +156,10 @@ namespace Chess.AF.Console
 
         public static Option<Position> Position;
         public static void CreatePositionFromFen()
-        {
-            Position = Prompt("Enter FEN: ").CreateFen().CreatePosition();
-        }
+            => Position = Prompt("Enter FEN: ").CreateFen().CreatePosition();
+
+        public static void DefaultPosition(string fenString)
+            => Position = fenString.CreateFen().CreatePosition();
 
         private static Option<Selected> SelectOpt = None;
         public static void SelectPiece(params string[] parameters)
@@ -184,6 +185,8 @@ namespace Chess.AF.Console
             ToMove.Match(
                 None: () => WriteLine($"Invalid Move: {parameters[0]}"),
                 Some: m => Position = Position.Bind(p => RokadeEnum.None.Equals(m.Rokade) ? p.Move(m.Piece, m.From, m.Promote, m.To) : p.Move(m.Piece, m.Rokade))
+                .Match(None: () => Position,
+                    Some: s => s)
                 );
             ShowBoard();
             //Option<PieceEnum> pieceOpt;

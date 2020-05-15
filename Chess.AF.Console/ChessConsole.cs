@@ -151,7 +151,7 @@ namespace Chess.AF.Console
                 WriteLine($"{key}: {cmds[key].Description}");
         }
 
-        public static void WriteBoard(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary)
+        public static void WriteBoard(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, Position position)
         {
             WriteFrame(ucodesTop);
             for (int i = 0; i < 64; i++)
@@ -161,12 +161,37 @@ namespace Chess.AF.Console
                 if (i % 8 == 7)
                 {
                     whiteBackground = !whiteBackground;
-                    WriteLine(ucodeVertical);
+                    Write(ucodeVertical);
+
+                    if (((SquareEnum)i).Row() == 0)
+                        WriteWhoToMove(position);
+                    if (((SquareEnum)i).Row() == 1)
+                        WriteCheckInfo(position);
+
+                    WriteLine();
                     if (i != 63)
                         WriteFrame(ucodesMiddle);
                 }
             }
             WriteFrame(ucodesBottom);
+        }
+
+        private static void WriteWhoToMove(Position position)
+        {
+            if (position.IsWhiteToMove)
+                Write("\tWhite to move");
+            else
+                Write("\tBlack to move");
+        }
+
+        private static void WriteCheckInfo(Position position)
+        {
+            if (position.IsMate)
+                Write("\tCheck Mate");
+            else if (position.IsInCheck)
+                Write("\tCheck");
+            else if (position.IsStaleMate)
+                Write("\tStale Mate");
         }
 
         //public static void WriteBoard(char[] fields)
