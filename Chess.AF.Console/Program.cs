@@ -131,12 +131,13 @@ namespace Chess.AF.Console
 
         private static Unit ShowBoard(Position position)
         {
+            ChessConsole.WriteInfo = WriteInfo(position);
             PiecesIterator<PiecesEnum> iterator = position.GetIteratorForAll<PiecesEnum>();
             List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> list = new List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
             foreach (var square in iterator.Iterate(IsSelected))
                 list.Add(square);
             var dictionary = list.ToDictionary(d => d.Square);
-            WriteBoard(dictionary, position);
+            WriteBoard(dictionary);
             return Unit();
         }
 
@@ -147,6 +148,35 @@ namespace Chess.AF.Console
 
         //private static Either<string, Option<Fen>> ReadFen()
         //    => Prompt("Enter FEN: ").AbortIf(s => "q".Equals(s.ToLowerInvariant())).CreateFen();
+
+        private static Action<SquareEnum> WriteInfo(Position position)
+            => (s) => WriteInfo(position, s);
+
+        private static void WriteInfo(Position position, SquareEnum square)
+        {
+            if (square.Row() == 0)
+                WriteWhoToMove(position);
+            if (square.Row() == 1)
+                WriteCheckInfo(position);
+
+        }
+        private static void WriteWhoToMove(Position position)
+        {
+            if (position.IsWhiteToMove)
+                Write("\tWhite to move");
+            else
+                Write("\tBlack to move");
+        }
+
+        private static void WriteCheckInfo(Position position)
+        {
+            if (position.IsMate)
+                Write("\tCheck Mate");
+            else if (position.IsInCheck)
+                Write("\tCheck");
+            else if (position.IsStaleMate)
+                Write("\tStale Mate");
+        }
 
         private static string Prompt(string prompt)
         {

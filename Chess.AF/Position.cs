@@ -155,7 +155,7 @@ namespace Chess.AF
                 var rook = PieceEnum.Rook.ToPieces(position.IsWhiteToMove);
 
                 position.Maps[(int)rook] = position.Maps[(int)rook].SetBitOff((int)rookRokadeSquares.From);
-                position.Maps[(int)rook] = position.Maps[(int)rook].SetBitOff((int)rookRokadeSquares.To);
+                position.Maps[(int)rook] = position.Maps[(int)rook].SetBit((int)rookRokadeSquares.To);
 
                 position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)rookRokadeSquares.From);
                 position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)rookRokadeSquares.To);
