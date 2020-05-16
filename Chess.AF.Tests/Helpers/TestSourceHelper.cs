@@ -42,5 +42,42 @@ namespace Chess.AF.Tests.Helpers
                     });
             }
         }
+
+        public static IEnumerable<(string FenString, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) MoveTo, RokadeEnum Expected)> RokadeTestCases
+        {
+            get
+            {
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+                    (PieceEnum.King, SquareEnum.e1, PieceEnum.King, SquareEnum.e2),
+                    RokadeEnum.None);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+                    (PieceEnum.King, SquareEnum.e8, PieceEnum.King, SquareEnum.e7),
+                    RokadeEnum.None);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.a1, PieceEnum.Rook, SquareEnum.a2),
+                    RokadeEnum.KingSide);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.a8, PieceEnum.Rook, SquareEnum.a7),
+                    RokadeEnum.KingSide);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.h1, PieceEnum.Rook, SquareEnum.h2),
+                    RokadeEnum.QueenSide);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.h8, PieceEnum.Rook, SquareEnum.h7),
+                    RokadeEnum.QueenSide);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R w Qq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.a1, PieceEnum.Rook, SquareEnum.a2),
+                    RokadeEnum.None);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R b Qq - 0 1",
+                    (PieceEnum.Rook, SquareEnum.a8, PieceEnum.Rook, SquareEnum.a7),
+                    RokadeEnum.None);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R w Kk - 0 1",
+                    (PieceEnum.Rook, SquareEnum.h1, PieceEnum.Rook, SquareEnum.h2),
+                    RokadeEnum.None);
+                yield return ("r3k2r/8/8/8/8/8/8/R3K2R b Kk - 0 1",
+                    (PieceEnum.Rook, SquareEnum.h8, PieceEnum.Rook, SquareEnum.h7),
+                    RokadeEnum.None);
+            }
+        }
     }
 }

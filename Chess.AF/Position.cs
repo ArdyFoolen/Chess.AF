@@ -98,8 +98,8 @@ namespace Chess.AF
     {
         internal ulong[] Maps = new ulong[14];
         public bool IsWhiteToMove { get; internal set; }
-        public RokadeEnum WhiteRokade { get; }
-        public RokadeEnum BlackRokade { get; }
+        public RokadeEnum WhiteRokade { get; internal set; }
+        public RokadeEnum BlackRokade { get; internal set; }
         public Option<SquareEnum> EpSquare { get; internal set; }
 
         public bool IsTake { get; internal set; } = false;
@@ -188,10 +188,44 @@ namespace Chess.AF
                     ep -= 8;
                 position.EpSquare = Some((SquareEnum)ep);
             }
+
+            position.UpdateRokadePossibilities(moveTo.Piece, moveTo.Square);
             position.IsWhiteToMove = !position.IsWhiteToMove;
 
             return position;
         }
+
+        internal void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
+        {
+            if (!PieceEnum.King.Equals(piece) && !PieceEnum.Rook.Equals(piece))
+                return;
+            if (PieceEnum.King.Equals(piece))
+                SetColorRokade(RokadeEnum.None);
+            if (PieceEnum.Rook.Equals(piece))
+            {
+                if (from.File() == 0)
+                    SetColorRokade(GetColorRokade() & RokadeEnum.KingSide);
+                if (from.File() == 7)
+                    SetColorRokade(GetColorRokade() & RokadeEnum.QueenSide);
+            }
+        }
+
+        private RokadeEnum GetColorRokade()
+            => IsWhiteToMove ? WhiteRokade : BlackRokade;
+
+        private void SetColorRokade(RokadeEnum rokade)
+        {
+            if (IsWhiteToMove)
+                SetWhiteRokade(rokade);
+            else
+                SetBlackRokade(rokade);
+        }
+
+        private void SetWhiteRokade(RokadeEnum rokade)
+            => WhiteRokade = rokade;
+
+        private void SetBlackRokade(RokadeEnum rokade)
+            => BlackRokade = rokade;
 
         private SquareEnum KingSquare()
             => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom();
@@ -199,9 +233,9 @@ namespace Chess.AF
         private SquareEnum GetKingRokadeSquare(RokadeEnum rokade)
         {
             if (RokadeEnum.KingSide.Equals(rokade))
-                return IsWhiteToMove ? SquareEnum.g1: SquareEnum.g8;
+                return IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8;
             else
-                return IsWhiteToMove ? SquareEnum.c1: SquareEnum.c8;
+                return IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8;
         }
 
         private (SquareEnum From, SquareEnum To) GetRookRokadeSquares(SquareEnum kingMoveSquare)

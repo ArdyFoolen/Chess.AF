@@ -134,5 +134,16 @@ namespace Chess.AF.Tests.UnitTests
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, p.OpponentIsStaleMate); return true; });
         }
+
+        [TestCaseSource(typeof(TestSourceHelper), "RokadeTestCases")]
+        public void AfterKingOrRookMove_CanNotRokade((string fenString, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo, RokadeEnum expected) tuple)
+        {
+            AssertMovesHelper helper = new AssertMovesHelper();
+
+            Fen.Of(tuple.fenString).CreatePosition()
+            .Match(
+                None: () => { Assert.Fail(); return true; },
+                Some: p => { helper.AssertRokadeAfterMove(p, tuple.moveTo, tuple.expected); return true; });
+        }
     }
 }

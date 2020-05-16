@@ -52,5 +52,12 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
+        public Unit AssertRokadeAfterMove(Position position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo, RokadeEnum expected)
+            => position.Move(moveTo.Piece, moveTo.Square, moveTo.Promoted, moveTo.MoveSquare).Match(
+                None: () => Assert.Fail(),
+                Some: s => Assert.AreEqual(GetOpponentColorRokade(s), expected));
+
+        private RokadeEnum GetOpponentColorRokade(Position position)
+            => position.IsWhiteToMove ? position.BlackRokade : position.WhiteRokade;
     }
 }
