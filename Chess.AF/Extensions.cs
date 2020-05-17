@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
+using Microsoft.SqlServer.Server;
 
 namespace Chess.AF
 {
@@ -117,6 +118,46 @@ namespace Chess.AF
             { 'Q', PositionEnum.WhiteQueens },
             { 'K', PositionEnum.WhiteKing },
         };
+
+        public static char[] PiecesCharEnum = new char[]
+        {
+            ' ', 'p', 'n', 'b', 'r', 'q', 'k',
+            ' ', 'P', 'N', 'B', 'R', 'Q', 'K'
+        };
+
+        public static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
+            => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
+        public static char ConvertPieceToChar(int index)
+            => PiecesCharEnum[index];
+
+        public static char ConvertWhiteToMoveToChar(bool IsWhiteToMove)
+            => IsWhiteToMove ? 'w' : 'b';
+
+        public static string ConvertRokadeToString(RokadeEnum whiteRokade, RokadeEnum blackRokade)
+        {
+            string rokadeString = ConvertRokadeToString(whiteRokade, true) + ConvertRokadeToString(blackRokade, false);
+            return "".Equals(rokadeString) ? "-" : rokadeString;
+        }
+
+        public static string ConvertRokadeToString(RokadeEnum rokade, bool IsWhite)
+        {
+            if (RokadeEnum.None.Equals(rokade))
+                return "";
+            string rokadeString = "";
+            if (RokadeEnum.KingSide.Equals(RokadeEnum.KingSide & rokade))
+                rokadeString = "k";
+            if (RokadeEnum.QueenSide.Equals(RokadeEnum.QueenSide & rokade))
+                rokadeString += "q";
+
+            if (IsWhite)
+                rokadeString = rokadeString.ToUpperInvariant();
+            return rokadeString;
+        }
+
+        public static string ConvertEPToString(Option<SquareEnum> epSquare)
+            => epSquare.Match(
+                None: () => "-",
+                Some: s => s.ToString());
 
         public static int PieceIndex(this char piece)
             => directory[piece].Value();

@@ -145,5 +145,17 @@ namespace Chess.AF.Tests.UnitTests
                 None: () => { Assert.Fail(); return true; },
                 Some: p => { helper.AssertRokadeAfterMove(p, tuple.moveTo, tuple.expected); return true; });
         }
+
+        [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+        [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1")]
+        [TestCase("7k/8/5KQ1/8/8/8/8/8 w - - 0 1")]
+        [TestCase("8/8/8/8/8/5kq1/8/7K b - - 0 1")]
+        public void ToFenString_AreValid(string fenString)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(fenString, p.ToFenString()); return true; });
+        }
     }
 }

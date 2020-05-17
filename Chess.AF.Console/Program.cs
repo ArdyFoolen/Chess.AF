@@ -101,7 +101,7 @@ namespace Chess.AF.Console
                 else
                     Write($"{sq.Square.ToString()}");
                 if (sq.Promoted != piece)
-                    Write($"={Char.ToUpperInvariant(ChessConsole.ConvertPieceToChar((int)sq.Promoted))}");
+                    Write($"={Char.ToUpperInvariant(AF.Extensions.ConvertPieceToChar((int)sq.Promoted))}");
                 Write(" ");
             }
             WriteLine();
@@ -187,6 +187,9 @@ namespace Chess.AF.Console
         public static Option<Position> Position;
         public static void CreatePositionFromFen()
             => Position = Prompt("Enter FEN: ").CreateFen().CreatePosition();
+
+        public static void CreateFenFromPosition()
+            => Position.Map(p => { WriteLine(p.ToFenString()); return Unit(); });
 
         public static void DefaultPosition(string fenString)
             => Position = fenString.CreateFen().CreatePosition();

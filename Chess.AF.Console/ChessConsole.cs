@@ -123,12 +123,6 @@ namespace Chess.AF.Console
 
         #endregion
 
-        public static char[] PiecesCharEnum = new char[]
-        {
-            ' ', 'p', 'n', 'b', 'r', 'q', 'k',
-            ' ', 'P', 'N', 'B', 'R', 'Q', 'K'
-        };
-
         private static void WriteFrame(char[] frame)
         {
             foreach (char c in frame)
@@ -159,7 +153,7 @@ namespace Chess.AF.Console
             for (int i = 0; i < 64; i++)
             {
                 Write($"{ucodeVertical}");
-                WritePiece(ConvertPieceToChar(dictionary, (SquareEnum)i), IsSelected(dictionary, (SquareEnum)i));
+                WritePiece(AF.Extensions.ConvertPieceToChar(dictionary, (SquareEnum)i), IsSelected(dictionary, (SquareEnum)i));
                 if (i % 8 == 7)
                 {
                     whiteBackground = !whiteBackground;
@@ -226,9 +220,5 @@ namespace Chess.AF.Console
 
         private static bool IsSelected(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
             => dictionary.ContainsKey(square) ? dictionary[square].IsSelected : false;
-        private static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
-            => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
-        public static char ConvertPieceToChar(int index)
-            => PiecesCharEnum[index];
     }
 }

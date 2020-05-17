@@ -455,6 +455,8 @@ namespace Chess.AF
 
         #endregion
 
+        #region Map methods
+
         private ulong GetMapFor<T>(T piece)
             where T : Enum
         {
@@ -601,7 +603,7 @@ namespace Chess.AF
                 return blackPiece.DownBitsOff(IsWhiteToMove ? 0 : 1) & map;
         }
 
-        public bool TryGetLowestSquare(ulong map, out SquareEnum piece)
+        private bool TryGetLowestSquare(ulong map, out SquareEnum piece)
         {
             int i = 63;
             ulong test = 0x0000000000000001;
@@ -611,7 +613,7 @@ namespace Chess.AF
             return !((test & map) == 0);
         }
 
-        public bool TryGetHighestSquare(ulong map, out SquareEnum piece)
+        private bool TryGetHighestSquare(ulong map, out SquareEnum piece)
         {
             int i = 0;
             ulong test = 0x8000000000000000;
@@ -620,5 +622,102 @@ namespace Chess.AF
             piece = (SquareEnum)i;
             return !((test & map) == 0);
         }
+
+        #endregion
+
+        #region ToStrings
+
+        public string ToFenString()
+        {
+            PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
+            //List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> list = new List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
+            StringBuilder sb = new StringBuilder();
+            int prevIndex = 0;
+            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+            {
+                int index = (int)square.Square;
+                int rowLeft = 8 - prevIndex % 8;
+                int diff = index - prevIndex;
+
+                if (diff == 1)
+                {
+                    sb.Append(Extensions.ConvertPieceToChar((int)square.Piece));
+                    if (rowLeft == 1)
+                        sb.Append('/');
+                }
+                else
+                {
+                    if (rowLeft < diff)
+                    {
+                        sb.Append($"{rowLeft}/");
+                        diff -= rowLeft;
+                        while (diff > 8)
+                        {
+                            sb.Append("8/");
+                            diff -= 8;
+                        }
+                        if (diff > 1)
+                            sb.Append($"{diff}{Extensions.ConvertPieceToChar((int)square.Piece)}");
+                        else
+                            sb.Append($"{Extensions.ConvertPieceToChar((int)square.Piece)}");
+                    }
+                    else
+                    {
+                        if (rowLeft == diff)
+                            sb.Append($"{diff}/{Extensions.ConvertPieceToChar((int)square.Piece)}");
+                        else
+                            sb.Append($"{diff}{Extensions.ConvertPieceToChar((int)square.Piece)}");
+                        rowLeft -= diff;
+                    }
+                    if (rowLeft == 1)
+                        sb.Append('/');
+                }
+
+                prevIndex = (int)square.Square;
+            }
+            //list.Add(square);
+            //var dictionary = list.ToDictionary(d => d.Square);
+
+            //StringBuilder sb = new StringBuilder();
+            ////int empty = 0;
+            //int lastIndex = 0;
+            //for (int i = 0; i < 64; i++)
+            //{
+            //    char piece = Extensions.ConvertPieceToChar(dictionary, (SquareEnum)i);
+            //    if (piece != ' ')
+            //        lastIndex = i + 1;
+
+            //    int diff = i - lastIndex;
+            //    if (diff == -1)
+            //        sb.Append(piece);
+            //    else
+            //    {
+            //        if (piece != ' ')
+            //        {
+            //            var rowLeft = 8 - lastIndex % 8;
+
+            //        }
+            //    }
+            //if (piece == ' ')
+            //    empty += 1;
+            //else
+            //{
+            //    if (empty != 0)
+            //    {
+            //        while (empty > 8)
+            //        {
+            //            sb.Append("8/");
+            //            empty -= 8;
+            //        }
+            //    }
+            //}
+            //}
+
+            string fenString = $"{sb.ToString().Remove(sb.Length - 1)} {Extensions.ConvertWhiteToMoveToChar(IsWhiteToMove)} {Extensions.ConvertRokadeToString(WhiteRokade, BlackRokade)} {Extensions.ConvertEPToString(EpSquare)} 0 1";
+
+            return fenString;
+        }
+
+        #endregion
     }
 }

@@ -21,6 +21,7 @@ namespace Chess.AF.Console
             { "deselect", ("De-Select what is selected", (parms) => DeSelectPiece())},
             { "exit", ("Exit program", (parms) => WriteLine("Exit the Program")) },
             { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => CreatePositionFromFen()) },
+            { "fenstring", ("Create fen string from chess position", (parms) => CreateFenFromPosition()) },
             { "help", ("Show this Help", (parms) => ShowHelp(CmdDictionary)) },
             { "move", ("Move {piece}{square}[-x]{square}{promote} or o-o, o-o-o", (parms) => MovePiece(parms)) },
             { "moves", ("Moves by selected piece, or all if no piece is selected", (parms) => Moves())},
