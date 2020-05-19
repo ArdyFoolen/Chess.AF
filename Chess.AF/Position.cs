@@ -682,6 +682,36 @@ namespace Chess.AF
             return lastIndex;
         }
 
+        public string ToUniqueString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (PiecesEnum piece in Enum.GetValues(typeof(PiecesEnum)))
+            {
+                int index = (int)piece;
+                string[] split = $"{Maps[index]:X16}".Split(new char[] { '0' });
+                zeroCount = 0;
+                sb.Append(split.Aggregate(string.Empty, Reductor, acc => string.IsNullOrWhiteSpace(acc) ? "016-" : zeroCount > 0 ? acc + $"0{zeroCount}-" : acc));
+            }
+            return sb.ToString().Substring(0, sb.Length - 1);
+        }
+
+        private int zeroCount;
+        private string Reductor(string acc, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                zeroCount += 1;
+            else
+            {
+                if (zeroCount > 0)
+                {
+                    acc += $"0{zeroCount}-";
+                    zeroCount = 0;
+                }
+                acc += $"{value}-";
+            }
+            return acc;
+        }
+
         #endregion
     }
 }

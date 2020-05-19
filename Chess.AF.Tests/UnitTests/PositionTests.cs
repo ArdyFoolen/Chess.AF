@@ -150,7 +150,6 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1")]
         [TestCase("7k/8/5KQ1/8/8/8/8/8 w - - 0 1")]
         [TestCase("8/8/8/8/8/5kq1/8/7K b - - 0 1")]
-
         [TestCase("4k3/8/8/8/7b/8/8/4K1B1 w - - 0 1")]
         [TestCase("4k1b1/8/8/7B/8/8/8/4K3 b - - 0 1")]
         [TestCase("rnb1kbnr/pppp1ppp/8/4p3/5P1q/8/PPPPP1PP/RNBQKBNR w KQkq - 0 1")]
@@ -203,6 +202,16 @@ namespace Chess.AF.Tests.UnitTests
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(fenString, p.ToFenString()); return true; });
+        }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R w KQkq - 0 1", "016-016-06-8-09-81-014-016-01-8-014-016-016-08-8-07-014-81-016-015-8")]
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", "016-016-06-8-09-81-014-016-01-8-014-016-016-08-8-07-014-81-016-015-8")]
+        public void ToUniqueString_areValid(string fenString, string expected)
+        {
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { Assert.AreEqual(expected, p.ToUniqueString()); return true; });
         }
     }
 }
