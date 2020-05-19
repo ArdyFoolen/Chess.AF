@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
@@ -630,92 +631,53 @@ namespace Chess.AF
         public string ToFenString()
         {
             PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
-            //List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> list = new List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
             StringBuilder sb = new StringBuilder();
-            int prevIndex = 0;
+            int prevIndex = -1;
+            int lastIndex = 0;
             foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
             {
-                int index = (int)square.Square;
-                int rowLeft = 8 - prevIndex % 8;
-                int diff = index - prevIndex;
+                lastIndex = EmptyFenSquares(sb, prevIndex, lastIndex, square.Square);
 
-                if (diff == 1)
-                {
-                    sb.Append(Extensions.ConvertPieceToChar((int)square.Piece));
-                    if (rowLeft == 1)
-                        sb.Append('/');
-                }
-                else
-                {
-                    if (rowLeft < diff)
-                    {
-                        sb.Append($"{rowLeft}/");
-                        diff -= rowLeft;
-                        while (diff > 8)
-                        {
-                            sb.Append("8/");
-                            diff -= 8;
-                        }
-                        if (diff > 1)
-                            sb.Append($"{diff}{Extensions.ConvertPieceToChar((int)square.Piece)}");
-                        else
-                            sb.Append($"{Extensions.ConvertPieceToChar((int)square.Piece)}");
-                    }
-                    else
-                    {
-                        if (rowLeft == diff)
-                            sb.Append($"{diff}/{Extensions.ConvertPieceToChar((int)square.Piece)}");
-                        else
-                            sb.Append($"{diff}{Extensions.ConvertPieceToChar((int)square.Piece)}");
-                        rowLeft -= diff;
-                    }
-                    if (rowLeft == 1)
-                        sb.Append('/');
-                }
-
+                sb.Append(Extensions.ConvertPieceToChar((int)square.Piece));
                 prevIndex = (int)square.Square;
+                lastIndex += 1;
+
+                int remainFile = 8 - lastIndex % 8;
+                if (remainFile == 8 && lastIndex < 63)
+                    sb.Append("/");
+
             }
-            //list.Add(square);
-            //var dictionary = list.ToDictionary(d => d.Square);
 
-            //StringBuilder sb = new StringBuilder();
-            ////int empty = 0;
-            //int lastIndex = 0;
-            //for (int i = 0; i < 64; i++)
-            //{
-            //    char piece = Extensions.ConvertPieceToChar(dictionary, (SquareEnum)i);
-            //    if (piece != ' ')
-            //        lastIndex = i + 1;
-
-            //    int diff = i - lastIndex;
-            //    if (diff == -1)
-            //        sb.Append(piece);
-            //    else
-            //    {
-            //        if (piece != ' ')
-            //        {
-            //            var rowLeft = 8 - lastIndex % 8;
-
-            //        }
-            //    }
-            //if (piece == ' ')
-            //    empty += 1;
-            //else
-            //{
-            //    if (empty != 0)
-            //    {
-            //        while (empty > 8)
-            //        {
-            //            sb.Append("8/");
-            //            empty -= 8;
-            //        }
-            //    }
-            //}
-            //}
-
-            string fenString = $"{sb.ToString().Remove(sb.Length - 1)} {Extensions.ConvertWhiteToMoveToChar(IsWhiteToMove)} {Extensions.ConvertRokadeToString(WhiteRokade, BlackRokade)} {Extensions.ConvertEPToString(EpSquare)} 0 1";
+            lastIndex = EmptyFenSquares(sb, prevIndex, lastIndex);
+            string fenString = $"{sb.ToString()} {Extensions.ConvertWhiteToMoveToChar(IsWhiteToMove)} {Extensions.ConvertRokadeToString(WhiteRokade, BlackRokade)} {Extensions.ConvertEPToString(EpSquare)} 0 1";
 
             return fenString;
+        }
+
+        private static int EmptyFenSquares(StringBuilder sb, int prevIndex, int lastIndex, SquareEnum? square = null)
+        {
+            int diff = 64 - prevIndex - 1;
+            if (square.HasValue)
+                diff = (int)square.Value - prevIndex - 1;
+            int remainFile = 8 - lastIndex % 8;
+
+            while (diff > 8)
+            {
+                if (lastIndex < 63)
+                    sb.Append($"{remainFile}/");
+                else
+                    sb.Append($"{remainFile}");
+                lastIndex += remainFile;
+                diff -= remainFile;
+                remainFile = 8 - lastIndex % 8;
+            }
+            if (diff > 1)
+            {
+                sb.Append($"{diff}");
+                lastIndex += diff;
+            }
+
+            return lastIndex;
         }
 
         #endregion
