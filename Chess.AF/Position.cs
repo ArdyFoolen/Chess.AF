@@ -661,7 +661,7 @@ namespace Chess.AF
                 diff = (int)square.Value - prevIndex - 1;
             int remainFile = 8 - lastIndex % 8;
 
-            while (diff > 8)
+            while (diff > remainFile)
             {
                 if (lastIndex < 63)
                     sb.Append($"{remainFile}/");
@@ -671,10 +671,12 @@ namespace Chess.AF
                 diff -= remainFile;
                 remainFile = 8 - lastIndex % 8;
             }
-            if (diff > 1)
+            if (diff > 0)
             {
                 sb.Append($"{diff}");
                 lastIndex += diff;
+                if (diff == 8 && lastIndex < 63 || lastIndex % 8 == 0 && lastIndex < 63)
+                    sb.Append("/");
             }
 
             return lastIndex;
