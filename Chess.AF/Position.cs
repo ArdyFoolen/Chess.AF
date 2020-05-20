@@ -462,7 +462,7 @@ namespace Chess.AF
         {
             foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
                 foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Some(this)))
-                    if (!this.Move((pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square)).OpponentIsInCheck)
+                    if (!(new Position(this)).Move((pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square)).OpponentIsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
         }
 
