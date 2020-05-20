@@ -98,6 +98,8 @@ namespace Chess.AF
 
     public partial class Position
     {
+        #region Properties
+
         private ulong[] Maps = new ulong[14];
         public bool IsWhiteToMove { get; private set; }
         public RokadeEnum WhiteRokade { get; private set; }
@@ -105,6 +107,20 @@ namespace Chess.AF
         public Option<SquareEnum> EpSquare { get; private set; }
 
         public bool IsTake { get; private set; } = false;
+
+        #endregion
+
+        #region static methods
+
+        public static Option<Position> Of(Option<Fen> fen)
+            => fen.Bind(WhenValid);
+
+        private static Option<Position> WhenValid(Fen fen)
+            => Some(Create(fen));
+
+        #endregion
+
+        #region ctors
 
         private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
         {
@@ -125,6 +141,10 @@ namespace Chess.AF
             this.BlackRokade = position.BlackRokade;
             this.EpSquare = position.EpSquare;
         }
+
+        #endregion
+
+        #region Move
 
         public Option<Position> Move(PieceEnum Piece, RokadeEnum Rokade)
         {
@@ -192,56 +212,7 @@ namespace Chess.AF
             return this;
         }
 
-        private void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
-        {
-            if (!PieceEnum.King.Equals(piece) && !PieceEnum.Rook.Equals(piece))
-                return;
-            if (PieceEnum.King.Equals(piece))
-                SetColorRokade(RokadeEnum.None);
-            if (PieceEnum.Rook.Equals(piece))
-            {
-                if (from.File() == 0)
-                    SetColorRokade(GetColorRokade() & RokadeEnum.KingSide);
-                if (from.File() == 7)
-                    SetColorRokade(GetColorRokade() & RokadeEnum.QueenSide);
-            }
-        }
-
-        private RokadeEnum GetColorRokade()
-            => IsWhiteToMove ? WhiteRokade : BlackRokade;
-
-        private void SetColorRokade(RokadeEnum rokade)
-        {
-            if (IsWhiteToMove)
-                SetWhiteRokade(rokade);
-            else
-                SetBlackRokade(rokade);
-        }
-
-        private void SetWhiteRokade(RokadeEnum rokade)
-            => WhiteRokade = rokade;
-
-        private void SetBlackRokade(RokadeEnum rokade)
-            => BlackRokade = rokade;
-
-        private SquareEnum KingSquare()
-            => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom();
-
-        private SquareEnum GetKingRokadeSquare(RokadeEnum rokade)
-        {
-            if (RokadeEnum.KingSide.Equals(rokade))
-                return IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8;
-            else
-                return IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8;
-        }
-
-        private (SquareEnum From, SquareEnum To) GetRookRokadeSquares(SquareEnum kingMoveSquare)
-        {
-            if (kingMoveSquare.File() == 6)
-                return (IsWhiteToMove ? SquareEnum.h1 : SquareEnum.h8, (SquareEnum)((int)kingMoveSquare - 1));
-            else
-                return (IsWhiteToMove ? SquareEnum.a1 : SquareEnum.a8, (SquareEnum)((int)kingMoveSquare + 1));
-        }
+        #endregion
 
         #region IsInCheck
 
@@ -369,6 +340,57 @@ namespace Chess.AF
             }
         }
 
+        private void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
+        {
+            if (!PieceEnum.King.Equals(piece) && !PieceEnum.Rook.Equals(piece))
+                return;
+            if (PieceEnum.King.Equals(piece))
+                SetColorRokade(RokadeEnum.None);
+            if (PieceEnum.Rook.Equals(piece))
+            {
+                if (from.File() == 0)
+                    SetColorRokade(GetColorRokade() & RokadeEnum.KingSide);
+                if (from.File() == 7)
+                    SetColorRokade(GetColorRokade() & RokadeEnum.QueenSide);
+            }
+        }
+
+        private RokadeEnum GetColorRokade()
+            => IsWhiteToMove ? WhiteRokade : BlackRokade;
+
+        private void SetColorRokade(RokadeEnum rokade)
+        {
+            if (IsWhiteToMove)
+                SetWhiteRokade(rokade);
+            else
+                SetBlackRokade(rokade);
+        }
+
+        private void SetWhiteRokade(RokadeEnum rokade)
+            => WhiteRokade = rokade;
+
+        private void SetBlackRokade(RokadeEnum rokade)
+            => BlackRokade = rokade;
+
+        private SquareEnum KingSquare()
+            => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom();
+
+        private SquareEnum GetKingRokadeSquare(RokadeEnum rokade)
+        {
+            if (RokadeEnum.KingSide.Equals(rokade))
+                return IsWhiteToMove ? SquareEnum.g1 : SquareEnum.g8;
+            else
+                return IsWhiteToMove ? SquareEnum.c1 : SquareEnum.c8;
+        }
+
+        private (SquareEnum From, SquareEnum To) GetRookRokadeSquares(SquareEnum kingMoveSquare)
+        {
+            if (kingMoveSquare.File() == 6)
+                return (IsWhiteToMove ? SquareEnum.h1 : SquareEnum.h8, (SquareEnum)((int)kingMoveSquare - 1));
+            else
+                return (IsWhiteToMove ? SquareEnum.a1 : SquareEnum.a8, (SquareEnum)((int)kingMoveSquare + 1));
+        }
+
         #endregion
 
         #region IsMate
@@ -418,12 +440,6 @@ namespace Chess.AF
         }
 
         #endregion
-
-        public static Option<Position> Of(Option<Fen> fen)
-            => fen.Bind(WhenValid);
-
-        private static Option<Position> WhenValid(Fen fen)
-            => Some(Create(fen));
 
         #region Iterators
 
