@@ -12,8 +12,8 @@ At this point it is possible to play chess against another person or yourself in
     Heart of the engine is this class, it knows everything about a chess position.
     Internally it uses bitmaps (ulong) to represent where all the pieces are.
     
-        When you look at a ulong in hexadecomal format 0x0102030405060708 it contains 8 bytes of 8 bits, our 64 squares on a board.
-        From left to right, the first byte is row a8 - h8, second byte is a7 - h7, etc ...
+        When you look at a ulong in hexadecomal format 0x0102030405060708 it contains 8 bytes of 8 bits, our 64 squares
+        on a board. From left to right, the first byte is row a8 - h8, second byte is a7 - h7, etc ...
         
         If you look at the enum SquareEnum, this enum can be directly cast to an int representing the correct index into
         a bitmap (ulong). Example a8 = 0, b8 = 1, h8 = 7, a7 = 8, etc ...
