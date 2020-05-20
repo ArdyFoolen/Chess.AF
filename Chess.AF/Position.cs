@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
@@ -97,13 +98,13 @@ namespace Chess.AF
 
     public partial class Position
     {
-        internal ulong[] Maps = new ulong[14];
-        public bool IsWhiteToMove { get; internal set; }
-        public RokadeEnum WhiteRokade { get; internal set; }
-        public RokadeEnum BlackRokade { get; internal set; }
-        public Option<SquareEnum> EpSquare { get; internal set; }
+        private ulong[] Maps = new ulong[14];
+        public bool IsWhiteToMove { get; private set; }
+        public RokadeEnum WhiteRokade { get; private set; }
+        public RokadeEnum BlackRokade { get; private set; }
+        public Option<SquareEnum> EpSquare { get; private set; }
 
-        public bool IsTake { get; internal set; } = false;
+        public bool IsTake { get; private set; } = false;
 
         private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
         {
@@ -133,53 +134,48 @@ namespace Chess.AF
         }
 
         public Option<Position> Move(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
-        {
-            if (!IsValidMove(Piece, From, Promoted, To))
-                return None;
-            return Some(Move((Piece, From, Promoted, To)));
-        }
+            => ValidateMove(Piece, From, Promoted, To).Map(p => p.Move((Piece, From, Promoted, To)));
 
-        private bool IsValidMove(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
-            => IterateForAllMoves().Any(a => Piece.Equals(a.Piece) && From.Equals(a.Square) && Promoted.Equals(a.Promoted) && To.Equals(a.MoveSquare));
+        private Option<Position> ValidateMove(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
+            => IterateForAllMoves().Any(a => Piece.Equals(a.Piece) && From.Equals(a.Square) && Promoted.Equals(a.Promoted) && To.Equals(a.MoveSquare)) ? Some(new Position(this)) : None;
 
         private Position Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo)
         {
-            Position position = new Position(this);
-            var pieces = moveTo.Piece.ToPieces(position.IsWhiteToMove);
-            var promoted = moveTo.Promoted.ToPieces(position.IsWhiteToMove);
-            int piecesIndex = (int)(position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
+            var pieces = moveTo.Piece.ToPieces(IsWhiteToMove);
+            var promoted = moveTo.Promoted.ToPieces(IsWhiteToMove);
+            int piecesIndex = (int)(IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
 
             bool isRokade = moveTo.Piece.IsRokadeMove(moveTo.Square, moveTo.MoveSquare);
             if (isRokade)
             {
                 var rookRokadeSquares = GetRookRokadeSquares(moveTo.MoveSquare);
-                var rook = PieceEnum.Rook.ToPieces(position.IsWhiteToMove);
+                var rook = PieceEnum.Rook.ToPieces(IsWhiteToMove);
 
-                position.Maps[(int)rook] = position.Maps[(int)rook].SetBitOff((int)rookRokadeSquares.From);
-                position.Maps[(int)rook] = position.Maps[(int)rook].SetBit((int)rookRokadeSquares.To);
+                Maps[(int)rook] = Maps[(int)rook].SetBitOff((int)rookRokadeSquares.From);
+                Maps[(int)rook] = Maps[(int)rook].SetBit((int)rookRokadeSquares.To);
 
-                position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)rookRokadeSquares.From);
-                position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)rookRokadeSquares.To);
+                Maps[piecesIndex] = Maps[piecesIndex].SetBitOff((int)rookRokadeSquares.From);
+                Maps[piecesIndex] = Maps[piecesIndex].SetBit((int)rookRokadeSquares.To);
             }
 
-            position.Maps[(int)pieces] = position.Maps[(int)pieces].SetBitOff((int)moveTo.Square);
+            Maps[(int)pieces] = Maps[(int)pieces].SetBitOff((int)moveTo.Square);
             if (moveTo.Piece == moveTo.Promoted)
-                position.Maps[(int)pieces] = position.Maps[(int)pieces].SetBit((int)moveTo.MoveSquare);
+                Maps[(int)pieces] = Maps[(int)pieces].SetBit((int)moveTo.MoveSquare);
             else
-                position.Maps[(int)promoted] = position.Maps[(int)promoted].SetBit((int)moveTo.MoveSquare);
+                Maps[(int)promoted] = Maps[(int)promoted].SetBit((int)moveTo.MoveSquare);
 
-            position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBitOff((int)moveTo.Square);
-            position.Maps[piecesIndex] = position.Maps[piecesIndex].SetBit((int)moveTo.MoveSquare);
+            Maps[piecesIndex] = Maps[piecesIndex].SetBitOff((int)moveTo.Square);
+            Maps[piecesIndex] = Maps[piecesIndex].SetBit((int)moveTo.MoveSquare);
 
-            int otherIndex = (int)(!position.IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
-            if (position.Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
+            int otherIndex = (int)(!IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
+            if (Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
             {
-                position.IsTake = true;
+                IsTake = true;
                 foreach (var i in Enumerable.Range(otherIndex, 7))
-                    position.Maps[i] = position.Maps[i].SetBitOff((int)moveTo.MoveSquare);
+                    Maps[i] = Maps[i].SetBitOff((int)moveTo.MoveSquare);
             }
 
-            position.EpSquare = None;
+            EpSquare = None;
             if (PieceEnum.Pawn.Equals(moveTo.Piece) && Math.Abs((int)moveTo.MoveSquare - (int)moveTo.Square) == 16)
             {
                 int ep = (int)moveTo.MoveSquare;
@@ -187,16 +183,16 @@ namespace Chess.AF
                     ep += 8;
                 else
                     ep -= 8;
-                position.EpSquare = Some((SquareEnum)ep);
+                EpSquare = Some((SquareEnum)ep);
             }
 
-            position.UpdateRokadePossibilities(moveTo.Piece, moveTo.Square);
-            position.IsWhiteToMove = !position.IsWhiteToMove;
+            UpdateRokadePossibilities(moveTo.Piece, moveTo.Square);
+            IsWhiteToMove = !IsWhiteToMove;
 
-            return position;
+            return this;
         }
 
-        internal void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
+        private void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
         {
             if (!PieceEnum.King.Equals(piece) && !PieceEnum.Rook.Equals(piece))
                 return;
