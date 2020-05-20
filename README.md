@@ -20,7 +20,7 @@ At this point it is possible to play chess against another person or yourself in
         
     **Note:** I do not allow state changes on a Position, If you look at the private Move method, it is used after the copy ctor.
     
-2. PiecesIterator<T>
+2. PiecesIterator
 
     Generic iterator where T is either a PieceEnum or PiecesEnum. PieceEnum can be converted to a PiecesEnum, dependent on who's
     turn it is to move, and select only the pieces for either black or white. This iterator also accomodates iteration over
