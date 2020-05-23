@@ -136,7 +136,7 @@ namespace Chess.AF.Tests.UnitTests
         }
 
         [TestCaseSource(typeof(TestSourceHelper), "RokadeTestCases")]
-        public void AfterKingOrRookMove_CanNotRokade((string fenString, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo, RokadeEnum expected) tuple)
+        public void AfterKingOrRookMove_CanNotRokade((string fenString, RokadeEnum expected, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo) tuple)
         {
             AssertMovesHelper helper = new AssertMovesHelper();
 
