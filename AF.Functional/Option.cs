@@ -4,6 +4,7 @@ using Unit = System.ValueTuple;
 
 namespace AF.Functional
 {
+    using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using static F;
 
@@ -13,9 +14,12 @@ namespace AF.Functional
         public static Option.None None => Option.None.Default;  // the None value
     }
 
+    [DataContract]
     public struct Option<T> : IEquatable<Option.None>, IEquatable<Option<T>>
     {
+        [DataMember]
         readonly T value;
+        [DataMember]
         readonly bool isSome;
         bool isNone => !isSome;
 
@@ -51,6 +55,21 @@ namespace AF.Functional
         public static bool operator !=(Option<T> @this, Option<T> other) => !(@this == other);
 
         public override string ToString() => isSome ? $"Some({value})" : "None";
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Option<T>))
+                return false;
+            Option<T> other = (Option<T>)obj;
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            if (isNone)
+                return -1;
+            return value.GetHashCode();
+        }
     }
 
     namespace Option

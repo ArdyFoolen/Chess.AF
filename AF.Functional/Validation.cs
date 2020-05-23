@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using Unit = System.ValueTuple;
 
 namespace AF.Functional
@@ -71,6 +72,17 @@ namespace AF.Functional
               : $"Invalid([{string.Join(", ", Errors)}])";
 
         public override bool Equals(object obj) => this.ToString() == obj.ToString(); // hack
+
+        public override int GetHashCode()
+        {
+            var hash = 0;
+            if (!IsValid)
+                foreach (var error in Errors)
+                    hash += error.GetHashCode();
+            else
+                hash = Value.GetHashCode();
+            return hash;
+        }
     }
 
     public static class Validation

@@ -9,6 +9,9 @@ using static AF.Functional.F;
 using static Chess.AF.Position;
 using Unit = System.ValueTuple;
 using static Chess.AF.Console.ChessConsole;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace Chess.AF.Console
 {
@@ -126,11 +129,29 @@ namespace Chess.AF.Console
         //    return Unit();
         //}
 
+        /// <summary>
+        /// Calculates the lenght in bytes of an object 
+        /// and returns the size 
+        /// </summary>
+        /// <param name="TestObject"></param>
+        /// <returns></returns>
+        private static int GetObjectSize(object TestObject)
+        {
+            var bf = new DataContractSerializer(typeof(Position));
+            MemoryStream ms = new MemoryStream();
+            byte[] Array;
+            bf.WriteObject(ms, TestObject);
+            Array = ms.ToArray();
+            return Array.Length;
+        }
+
         public static void ShowBoard()
             => Position.Map(ShowBoard);
 
         private static Unit ShowBoard(Position position)
         {
+            //int objSize = GetObjectSize(position);
+
             ChessConsole.WriteInfo = WriteInfo(position);
             PiecesIterator<PiecesEnum> iterator = position.GetIteratorForAll<PiecesEnum>();
             List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> list = new List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();

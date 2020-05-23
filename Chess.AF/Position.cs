@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
@@ -96,16 +97,23 @@ namespace Chess.AF
         a1, b1, c1, d1, e1, f1, g1, h1
     }
 
+    [DataContract]
     public partial class Position
     {
         #region Properties
 
+        [DataMember]
         private ulong[] Maps = new ulong[14];
+        [DataMember]
         public bool IsWhiteToMove { get; private set; }
+        [DataMember]
         public RokadeEnum WhiteRokade { get; private set; }
+        [DataMember]
         public RokadeEnum BlackRokade { get; private set; }
+        [DataMember]
         public Option<SquareEnum> EpSquare { get; private set; }
 
+        [DataMember]
         public bool IsTake { get; private set; } = false;
 
         #endregion
