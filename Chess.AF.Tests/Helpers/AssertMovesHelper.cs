@@ -17,20 +17,20 @@ namespace Chess.AF.Tests.Helpers
             Option<Fen> fen = Fen.Of(fenString);
             Option<Position> position = Position.Of(fen);
             Option<PieceEnum> pieceOpt = pieceEnum;
-            Option<Selected> selected = pieceOpt.Bind(piece => position.Bind(p => Selected.Of(piece, p.GetIteratorFor(piece))));
+            Option<Selected> selected = pieceOpt.Bind(piece => position.Bind(p => Selected.Of(piece, p.GetIteratorFor(piece), p)));
 
             selected.Match(
                 None: () => Assert.Fail(),
                 Some: s => position.Match(
                     None: () => Assert.Fail(),
-                    Some: p => AssertSelected(s, p, expected.ToList())
+                    Some: p => AssertSelected(s, expected.ToList())
                 ));
         }
 
-        private Unit AssertSelected(Selected selected, Position position, List<SquareEnum> expected)
+        private Unit AssertSelected(Selected selected, List<SquareEnum> expected)
         {
             int count = 0;
-            foreach (var square in selected.Moves(position))
+            foreach (var square in selected.Moves())
             {
                 Assert.That(expected.Contains(square));
                 count += 1;

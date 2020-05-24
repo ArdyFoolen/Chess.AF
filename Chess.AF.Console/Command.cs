@@ -14,19 +14,19 @@ namespace Chess.AF.Console
 {
     public class Command
     {
-        private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        private static readonly Game game = new Game();
         private static IDictionary<string, (string Description, Action<string[]> Action)> CmdDictionary = new Dictionary<string, (string Description, Action<string[]> Action)>()
         {
-            { "default", ("Setup default initial Chess position", (parms) => DefaultPosition(DefaultFen)) },
+            { "default", ("Setup default initial Chess position", (parms) => game.Load()) },
             { "deselect", ("De-Select what is selected", (parms) => DeSelectPiece())},
             { "exit", ("Exit program", (parms) => WriteLine("Exit the Program")) },
-            { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => CreatePositionFromFen()) },
-            { "fenstring", ("Create fen string from chess position", (parms) => CreateFenFromPosition()) },
+            { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => game.Load(Prompt("Enter FEN: "))) },
+            { "fenstring", ("Create fen string from chess position", (parms) => WriteLine(game.ToFenString())) },
             { "help", ("Show this Help", (parms) => ShowHelp(CmdDictionary)) },
-            { "move", ("Move {piece}{square}[-x]{square}{promote} or o-o, o-o-o", (parms) => MovePiece(parms)) },
-            { "moves", ("Moves by selected piece, or all if no piece is selected", (parms) => Moves())},
-            { "select", ("Select {piece} where piece is pnbrqk", (parms) => SelectPiece(parms))},
-            { "show", ("Show the Chess board, if available", (parms) => ShowBoard()) }
+            { "move", ("Move {piece}{square}[-x]{square}{promote} or o-o, o-o-o", (parms) => MovePiece(game, parms)) },
+            { "moves", ("Moves by selected piece, or all if no piece is selected", (parms) => Moves(game))},
+            { "select", ("Select {piece} where piece is pnbrqk", (parms) => SelectPiece(game, parms))},
+            { "show", ("Show the Chess board, if available", (parms) => ShowBoard(game)) }
         };
 
         public string Cmd { get; }

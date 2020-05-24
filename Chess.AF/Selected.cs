@@ -14,15 +14,17 @@ namespace Chess.AF
     {
         public PieceEnum Piece { get; }
         public PiecesIterator<PieceEnum> Iterator { get; }
+        public Option<Position> Position { get; }
 
-        private Selected(PieceEnum piece, PiecesIterator<PieceEnum> iterator)
+        private Selected(PieceEnum piece, PiecesIterator<PieceEnum> iterator, Option<Position> position)
         {
             this.Piece = piece;
             this.Iterator = iterator;
+            this.Position = position;
         }
 
-        public static Option<Selected> Of(PieceEnum piece, PiecesIterator<PieceEnum> iterator)
-            => Some(new Selected(piece, iterator));
+        public static Option<Selected> Of(PieceEnum piece, PiecesIterator<PieceEnum> iterator, Option<Position> position)
+            => Some(new Selected(piece, iterator, position));
 
         public bool Contains(PiecesEnum piece, SquareEnum square)
         {
@@ -33,10 +35,10 @@ namespace Chess.AF
             return false;
         }
 
-        public IEnumerable<SquareEnum> Moves(Option<Position> position)
+        public IEnumerable<SquareEnum> Moves()
         {
             foreach (var pc in Iterator.Iterate())
-                foreach (var tuple in MovesFactory.Create(Piece, pc.Square, position))
+                foreach (var tuple in MovesFactory.Create(Piece, pc.Square, Position))
                     yield return tuple.Square;
         }
     }
