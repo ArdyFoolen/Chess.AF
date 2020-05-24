@@ -117,8 +117,17 @@ namespace Chess.AF.Console
                 WriteWhoToMove(position);
             if (square.Row() == 1)
                 WriteCheckInfo(position);
+            if (square.Row() == 2)
+                WriteMoveInfo(position);
 
         }
+
+        private static void WriteMoveInfo(Position position)
+        {
+            Write($"\tply: {position.PlyCount}");
+            Write($"\tmove: {position.MoveNumber}");
+        }
+
         private static void WriteWhoToMove(Position position)
         {
             if (position.IsWhiteToMove)

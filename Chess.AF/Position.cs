@@ -116,6 +116,12 @@ namespace Chess.AF
         [DataMember]
         public bool IsTake { get; private set; } = false;
 
+        [DataMember]
+        public int PlyCount { get; private set; }
+
+        [DataMember]
+        public int MoveNumber { get; private set; }
+
         #endregion
 
         #region static methods
@@ -130,13 +136,15 @@ namespace Chess.AF
 
         #region ctors
 
-        private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep)
+        private Position(ulong[] maps, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade, Option<SquareEnum> ep, int plyCount, int moveNumber)
         {
             this.Maps = maps;
             this.IsWhiteToMove = isWhiteToMove;
             this.WhiteRokade = whiteRokade;
             this.BlackRokade = blackRokade;
             this.EpSquare = ep;
+            this.PlyCount = plyCount;
+            this.MoveNumber = moveNumber;
         }
 
         private Position(Position position)
@@ -148,6 +156,8 @@ namespace Chess.AF
             this.WhiteRokade = position.WhiteRokade;
             this.BlackRokade = position.BlackRokade;
             this.EpSquare = position.EpSquare;
+            this.PlyCount = position.PlyCount;
+            this.MoveNumber = position.MoveNumber;
         }
 
         #endregion
@@ -217,7 +227,20 @@ namespace Chess.AF
             UpdateRokadePossibilities(moveTo.Piece, moveTo.Square);
             IsWhiteToMove = !IsWhiteToMove;
 
+            UpdatePlyCount(moveTo.Piece);
+
+            if (IsWhiteToMove)
+                MoveNumber += 1;
+
             return this;
+        }
+
+        private void UpdatePlyCount(PieceEnum piece)
+        {
+            if (PieceEnum.Pawn.Equals(piece) || IsTake)
+                PlyCount = 0;
+            else
+                PlyCount += 1;
         }
 
         #endregion

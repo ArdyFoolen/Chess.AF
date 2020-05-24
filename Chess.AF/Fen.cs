@@ -44,5 +44,25 @@ namespace Chess.AF
             return r;
 
         }
+
+        public int PlyCount
+        {
+            get
+            {
+                if (int.TryParse(FenString.Split(' ')[4], out int plyCount))
+                    return plyCount;
+                return 0;
+            }
+        }
+
+        public int MoveNumber
+        {
+            get
+            {
+                if (int.TryParse(FenString.Split(' ')[5], out int moveNumber))
+                    return moveNumber;
+                return 0;
+            }
+        }
     }
 }

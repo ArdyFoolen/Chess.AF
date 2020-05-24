@@ -23,7 +23,7 @@ namespace Chess.AF.Console
             { "fen", ("Enter a valid Fen string, from which a chess Position gets created", (parms) => game.Load(Prompt("Enter FEN: "))) },
             { "fenstring", ("Create fen string from chess position", (parms) => WriteLine(game.ToFenString())) },
             { "help", ("Show this Help", (parms) => ShowHelp(CmdDictionary)) },
-            { "move", ("Move {piece}{square}[-x]{square}{promote} or o-o, o-o-o", (parms) => MovePiece(game, parms)) },
+            { "move", ("Move {piece}{square}[-x]{square}{promote} or o-o, o-o-o; (Piece and Promote are case sensistive)", (parms) => MovePiece(game, parms)) },
             { "moves", ("Moves by selected piece, or all if no piece is selected", (parms) => Moves(game))},
             { "select", ("Select {piece} where piece is pnbrqk", (parms) => SelectPiece(game, parms))},
             { "show", ("Show the Chess board, if available", (parms) => ShowBoard(game)) }

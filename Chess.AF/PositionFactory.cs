@@ -21,7 +21,7 @@ namespace Chess.AF
                     .Where(ic => !char.IsDigit(ic.piece))
                     .ForEach(ic => ic.piece.SetToMaps(maps, ic.index - 1));
 
-                Position position = new Position(maps, fen.IsWhiteToMove, fen.WhiteRokade, fen.BlackRokade, fen.EnPassant);
+                Position position = new Position(maps, fen.IsWhiteToMove, fen.WhiteRokade, fen.BlackRokade, fen.EnPassant, fen.PlyCount, fen.MoveNumber);
                 return position;
             }
         }

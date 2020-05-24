@@ -11,7 +11,7 @@ namespace Chess.AF.Console
 {
     internal static class RegexUtil
     {
-        private static readonly string regexExpression = @"((?<KingRokade>^o-o$)|(?<QueenRokade>^o-o-o$)|^(?<Piece>[NBRQK]?)(?<From>[a-h]{1}[1-8]{1})(?<To>[a-h]{1}[1-8]{1})(?<Promote>[NBRQ]?)$)";
+        private static readonly string regexExpression = @"((?<KingRokade>^o-o$)|(?<QueenRokade>^o-o-o$)|^(?<Piece>[NBRQK]?)(?<From>[a-h]{1}[1-8]{1})(?<Take>[-x]?)(?<To>[a-h]{1}[1-8]{1})(?<Promote>[NBRQ]?)$)";
         private static readonly Regex regex = new Regex(regexExpression, RegexOptions.Compiled);
 
         internal static Option<(PieceEnum Piece, SquareEnum From, PieceEnum Promote, SquareEnum To, RokadeEnum Rokade)> ToMove(this string parameter)
