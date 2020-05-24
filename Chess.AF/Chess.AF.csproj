@@ -45,6 +45,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="KingMoves.cs" />
     <Compile Include="MapNotFoundException.cs" />
+    <Compile Include="Move.cs" />
     <Compile Include="MovesDictionaries.cs" />
     <Compile Include="QueenMoves.cs" />
     <Compile Include="PawnMoves.cs" />
