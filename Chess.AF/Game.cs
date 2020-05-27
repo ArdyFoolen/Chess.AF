@@ -19,10 +19,8 @@ namespace Chess.AF
         public void Load(string fenString)
             => Position = fenString.CreateFen().CreatePosition();
 
-        public void Move((PieceEnum Piece, SquareEnum From, PieceEnum Promote, SquareEnum To, RokadeEnum Rokade) Move)
-            => Position = Position.Bind(p => RokadeEnum.None.Equals(Move.Rokade) ?
-                                            p.Move(Move.Piece, Move.From, Move.Promote, Move.To) :
-                                            p.Move(Move.Piece, Move.Rokade))
+        public void Move(Move move)
+            => Position = Position.Bind(p => p.Move(move))
             .Match(None: () => Position,
                     Some: s => s);
 

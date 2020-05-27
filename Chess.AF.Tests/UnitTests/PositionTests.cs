@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chess.AF;
+using AF.Functional;
 
 namespace Chess.AF.Tests.UnitTests
 {
@@ -136,14 +137,17 @@ namespace Chess.AF.Tests.UnitTests
         }
 
         [TestCaseSource(typeof(TestSourceHelper), "RokadeTestCases")]
-        public void AfterKingOrRookMove_CanNotRokade((string fenString, RokadeEnum expected, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo) tuple)
+        public void AfterKingOrRookMove_CanNotRokade((string fenString, RokadeEnum expected, Option<Move> moveTo) tuple)
         {
             AssertMovesHelper helper = new AssertMovesHelper();
 
             Fen.Of(tuple.fenString).CreatePosition()
             .Match(
                 None: () => { Assert.Fail(); return true; },
-                Some: p => { helper.AssertRokadeAfterMove(p, tuple.moveTo, tuple.expected); return true; });
+                Some: p => tuple.moveTo.Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: m => { helper.AssertRokadeAfterMove(p, m, tuple.expected); return true; }
+                    ));
         }
 
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]

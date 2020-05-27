@@ -14,7 +14,7 @@ namespace Chess.AF.Console
         private static readonly string regexExpression = @"((?<KingRokade>^o-o$)|(?<QueenRokade>^o-o-o$)|^(?<Piece>[NBRQK]?)(?<From>[a-h]{1}[1-8]{1})(?<Take>[-x]?)(?<To>[a-h]{1}[1-8]{1})(?<Promote>[NBRQ]?)$)";
         private static readonly Regex regex = new Regex(regexExpression, RegexOptions.Compiled);
 
-        internal static Option<(PieceEnum Piece, SquareEnum From, PieceEnum Promote, SquareEnum To, RokadeEnum Rokade)> ToMove(this string parameter)
+        internal static Option<Move> ToMove(this string parameter)
         {
             Match match = regex.Match(parameter);
             if (match.Success)
@@ -63,7 +63,7 @@ namespace Chess.AF.Console
                     to = value.ParseEnum<SquareEnum>();
                 }
 
-                return (piece, from, promote, to, rokade);
+                return Move.Of(piece, from, to, promote, rokade);
             }
             else
                 return None;

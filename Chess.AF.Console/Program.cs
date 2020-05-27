@@ -172,7 +172,7 @@ namespace Chess.AF.Console
             if (parameters.Length != 1)
                 return;
 
-            Option<(PieceEnum Piece, SquareEnum From, PieceEnum Promote, SquareEnum To, RokadeEnum Rokade)> ToMove = parameters[0].ToMove();
+            Option<Move> ToMove = parameters[0].ToMove();
             ToMove.Match(
                 None: () => WriteLine($"Invalid Move: {parameters[0]}"),
                 Some: m => game.Move(m));

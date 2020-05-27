@@ -164,14 +164,19 @@ namespace Chess.AF
 
         #region Move
 
-        public Option<Position> Move(PieceEnum Piece, RokadeEnum Rokade)
+        public Option<Position> Move(Move move)
+            => RokadeEnum.None.Equals(move.Rokade) ?
+                    Move(move.Piece, move.From, move.Promote, move.To) :
+                    Move(move.Piece, move.Rokade);
+
+        private Option<Position> Move(PieceEnum Piece, RokadeEnum Rokade)
         {
             if (RokadeEnum.None.Equals(Rokade) || RokadeEnum.KingAndQueenSide.Equals(Rokade) || RokadeEnum.None.Equals(PossibleRokade | Rokade) || !PieceEnum.King.Equals(Piece))
                 return None;
             return Move(Piece, KingSquare(), PieceEnum.King, GetKingRokadeSquare(Rokade));
         }
 
-        public Option<Position> Move(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
+        private Option<Position> Move(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)
             => ValidateMove(Piece, From, Promoted, To).Map(p => p.Move((Piece, From, Promoted, To)));
 
         private Option<Position> ValidateMove(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To)

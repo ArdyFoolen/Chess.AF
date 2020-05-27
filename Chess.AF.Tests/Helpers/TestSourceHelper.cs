@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AF.Functional;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,40 +44,40 @@ namespace Chess.AF.Tests.Helpers
             }
         }
 
-        public static IEnumerable<(string FenString, RokadeEnum Expected, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) MoveTo)> RokadeTestCases
+        public static IEnumerable<(string FenString, RokadeEnum Expected, Option<Move> MoveTo)> RokadeTestCases
         {
             get
             {
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.King, SquareEnum.e1, PieceEnum.King, SquareEnum.e2));
+                    Move.Of(PieceEnum.King, SquareEnum.e1, SquareEnum.e2, PieceEnum.King));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.King, SquareEnum.e8, PieceEnum.King, SquareEnum.e7));
+                    Move.Of(PieceEnum.King, SquareEnum.e8, SquareEnum.e7, PieceEnum.King));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
                     RokadeEnum.KingSide,
-                    (PieceEnum.Rook, SquareEnum.a1, PieceEnum.Rook, SquareEnum.a2));
+                    Move.Of(PieceEnum.Rook, SquareEnum.a1, SquareEnum.a2, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
                     RokadeEnum.KingSide,
-                    (PieceEnum.Rook, SquareEnum.a8, PieceEnum.Rook, SquareEnum.a7));
+                    Move.Of(PieceEnum.Rook, SquareEnum.a8, SquareEnum.a7, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
                     RokadeEnum.QueenSide,
-                    (PieceEnum.Rook, SquareEnum.h1, PieceEnum.Rook, SquareEnum.h2));
+                    Move.Of(PieceEnum.Rook, SquareEnum.h1, SquareEnum.h2, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
                     RokadeEnum.QueenSide,
-                    (PieceEnum.Rook, SquareEnum.h8, PieceEnum.Rook, SquareEnum.h7));
+                    Move.Of(PieceEnum.Rook, SquareEnum.h8, SquareEnum.h7, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R w Qq - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.Rook, SquareEnum.a1, PieceEnum.Rook, SquareEnum.a2));
+                    Move.Of(PieceEnum.Rook, SquareEnum.a1, SquareEnum.a2, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R b Qq - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.Rook, SquareEnum.a8, PieceEnum.Rook, SquareEnum.a7));
+                    Move.Of(PieceEnum.Rook, SquareEnum.a8, SquareEnum.a7, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R w Kk - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.Rook, SquareEnum.h1, PieceEnum.Rook, SquareEnum.h2));
+                    Move.Of(PieceEnum.Rook, SquareEnum.h1, SquareEnum.h2, PieceEnum.Rook));
                 yield return ("r3k2r/8/8/8/8/8/8/R3K2R b Kk - 0 1",
                     RokadeEnum.None,
-                    (PieceEnum.Rook, SquareEnum.h8, PieceEnum.Rook, SquareEnum.h7));
+                    Move.Of(PieceEnum.Rook, SquareEnum.h8, SquareEnum.h7, PieceEnum.Rook));
             }
         }
     }
