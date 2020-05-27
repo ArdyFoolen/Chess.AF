@@ -47,13 +47,20 @@ namespace Chess.AF
         WhiteKing
     }
 
+    [DataContract(Name = "MoveCondition")]
     public enum PieceEnum
     {
+        [EnumMember]
         Pawn = 1,      // 1 8
+        [EnumMember]
         Knight,        // 2 9
+        [EnumMember]
         Bishop,        // 3 10
+        [EnumMember]
         Rook,          // 4 11
+        [EnumMember]
         Queen,         // 5 12
+        [EnumMember]
         King            // 6 13
     }
 
@@ -77,11 +84,16 @@ namespace Chess.AF
         WhiteKing
     }
 
+    [DataContract(Name = "MoveCondition")]
     public enum RokadeEnum : byte
     {
+        [EnumMember]
         None,
+        [EnumMember]
         KingSide,
+        [EnumMember]
         QueenSide,
+        [EnumMember]
         KingAndQueenSide
     }
 

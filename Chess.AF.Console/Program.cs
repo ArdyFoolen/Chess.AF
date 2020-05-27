@@ -12,6 +12,7 @@ using static Chess.AF.Console.ChessConsole;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace Chess.AF.Console
 {
@@ -76,9 +77,9 @@ namespace Chess.AF.Console
         /// </summary>
         /// <param name="TestObject"></param>
         /// <returns></returns>
-        private static int GetObjectSize(object TestObject)
+        private static int GetObjectSize(object TestObject, Type type)
         {
-            var bf = new DataContractSerializer(typeof(Position));
+            var bf = new DataContractSerializer(type);
             MemoryStream ms = new MemoryStream();
             byte[] Array;
             bf.WriteObject(ms, TestObject);
@@ -175,6 +176,7 @@ namespace Chess.AF.Console
             Option<Move> ToMove = parameters[0].ToMove();
             ToMove.Match(
                 None: () => WriteLine($"Invalid Move: {parameters[0]}"),
+                //Some: m => { int objSize = GetObjectSize(m, typeof(Move)); game.Move(m); });
                 Some: m => game.Move(m));
             ShowBoard(game);
         }
@@ -221,4 +223,34 @@ namespace Chess.AF.Console
                 NoneF: () => None,
                 SomeF: c => { c.Run(); return c; });
     }
+
+    //public class MyCustomerResolver : DataContractResolver
+    //{
+    //    public override bool TryResolveType(Type dataContractType, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
+    //    {
+    //        if (dataContractType == typeof(SquareEnum))
+    //        {
+    //            XmlDictionary dictionary = new XmlDictionary();
+    //            typeName = dictionary.Add("SquareEnum");
+    //            typeNamespace = dictionary.Add("Chess.AF");
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return knownTypeResolver.TryResolveType(dataContractType, declaredType, null, out typeName, out typeNamespace);
+    //        }
+    //    }
+
+    //    public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
+    //    {
+    //        if (typeName == "SquareEnum" && typeNamespace == "Chess.AF")
+    //        {
+    //            return typeof(SquareEnum);
+    //        }
+    //        else
+    //        {
+    //            return knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, null);
+    //        }
+    //    }
+    //}
 }

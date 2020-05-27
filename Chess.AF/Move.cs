@@ -2,20 +2,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
 
 namespace Chess.AF
 {
+    [DataContract]
     public class Move
     {
         #region Properties
 
+        [DataMember]
         public PieceEnum Piece { get; private set; }
+        [DataMember]
         public SquareEnum From { get; private set; }
+        [DataMember]
         public SquareEnum To { get; private set; }
+        [DataMember]
         public PieceEnum Promote { get; private set; }
+        [DataMember]
         public RokadeEnum Rokade { get; private set; }
 
         #endregion
