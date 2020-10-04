@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using static System.Console;
 using AF.Functional;
 using static AF.Functional.F;
+using AF.Classes.Agent;
 
 namespace Chess.AF.UCIEngine
 {
@@ -21,6 +22,9 @@ namespace Chess.AF.UCIEngine
 
             Using(new StreamWriter("ArenaCommands.log", true), MainLoop);
         }
+
+        static Game game = new Game();
+        static IAgent<Action<Game>> GameAgent;
 
         private static void MainLoop(StreamWriter writer)
         {
@@ -36,6 +40,9 @@ namespace Chess.AF.UCIEngine
             Send($"id author Ardy Foolen");
             Send("uciok");
 
+            GameAgent = Agent.Start<Action<Game>>(run => run(game));
+            GameAgent.Tell(g => g.Load());
+
             while (!"quit".IsEqual(command))
             {
                 command = Read();
@@ -48,7 +55,9 @@ namespace Chess.AF.UCIEngine
                 }
 
                 if (command.StartsWith("position startpos moves"))
-                        bestMove = CreateBestMoves(command);
+                {
+                    bestMove = CreateBestMoves(command);
+                }
 
                 if (command.StartsWith("go"))
                 {
@@ -59,12 +68,58 @@ namespace Chess.AF.UCIEngine
             }
         }
 
-        private static string GetMovesFrom(string command)
+        //private static void AllMoves(Game game)
+        //    => game.ForEachMove(IterateAllMoves);
+
+        private static Option<Move> FindMove(Game game, string command)
+        {
+            var move = CreateMoveFrom(command);
+            return Move.Of(PieceEnum.Pawn, SquareEnum.e2, SquareEnum.e4, PieceEnum.Pawn, RokadeEnum.None);
+        }
+
+        //private static void FindMove(IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iterator, (Option<SquareEnum> From, Option<SquareEnum> To, RokadeEnum Rokade) move)
+        //{
+        //    iterator.FirstOrDefault(m => m.Piece.IsQueensideRokadeMove(m.Square, m.MoveSquare) && RokadeEnum.QueenSide.Equals(move.Rokade) ||
+        //                                    m.Piece.IsKingsideRokadeMove(m.Square, m.MoveSquare) && RokadeEnum.KingSide.Equals(move.Rokade) ||
+        //                                    move.From.Map())
+        //    //var group = iterator.GroupBy(t => (t.Piece, t.Square)).Select(g => new { g.Key, Items = g.ToList() });
+        //    //foreach (var item in group)
+        //    //{
+        //    //    List<(PieceEnum Promoted, SquareEnum Square)> moveSquares = new List<(PieceEnum Promoted, SquareEnum Square)>();
+        //    //    foreach (var value in item.Items)
+        //    //        moveSquares.Add((value.Promoted, value.MoveSquare));
+        //    //    if (moveSquares.Count() > 0)
+        //    //        ShowMoves(item.Key.Piece, item.Key.Square, moveSquares.ToArray());
+        //    //}
+        //}
+
+        private static (Option<SquareEnum> From, Option<SquareEnum> To, RokadeEnum Rokade) CreateMoveFrom(string command)
+        {
+            var move = GetMoveFrom(command);
+            switch(move)
+            {
+                case "o-o":
+                    return (None, None, RokadeEnum.KingSide);
+                case "o-o=o":
+                    return (None, None, RokadeEnum.QueenSide);
+                default:
+                    var split = SplitMove(move);
+                    return (split.From.ToSquare(), split.To.ToSquare(), RokadeEnum.None);
+            }
+        }
+
+        private static (string From, string To) SplitMoveFrom(string command)
+            => SplitMoveFrom(GetMoveFrom(command));
+
+        private static (string From, string To) SplitMove(string move)
+            => (move.Substring(0, 2), move.Substring(2));
+
+        private static string GetMoveFrom(string command)
             => command.Split(' ').Last();
 
         private static string CreateBestMoves(string command)
         {
-            var moves = GetMovesFrom(command);
+            var moves = GetMoveFrom(command);
             switch (moves)
             {
                 case "e2e4":

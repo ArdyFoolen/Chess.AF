@@ -179,5 +179,18 @@ namespace Chess.AF
         public static bool IsRokadeMove(this PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
             => PieceEnum.King.Equals(piece) && Math.Abs((int)square - (int)moveSquare) == 2;
 
+        public static bool IsQueensideRokadeMove(this PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
+            => piece.IsRokadeMove(square, moveSquare) && moveSquare.File() == 2;
+
+        public static bool IsKingsideRokadeMove(this PieceEnum piece, SquareEnum square, SquareEnum moveSquare)
+            => piece.IsRokadeMove(square, moveSquare) && moveSquare.File() == 6;
+
+        public static Option<SquareEnum> ToSquare(this string square)
+        {
+            if (Enum.TryParse(square, out SquareEnum newSquare))
+                return newSquare;
+            return None;
+        }
+
     }
 }

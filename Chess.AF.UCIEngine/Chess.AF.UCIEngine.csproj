@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{72C92E06-D4CB-4E48-99ED-4A2C1FBDC650}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Chess.AF.Console.UCIEngine</RootNamespace>
-    <AssemblyName>Chess.AF.Console.UCIEngine</AssemblyName>
+    <RootNamespace>Chess.AF.UCIEngine</RootNamespace>
+    <AssemblyName>Chess.AF.UCIEngine</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,6 +35,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.11.1\lib\net461\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,11 +53,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AF.Classes\AF.Classes.csproj">
+      <Project>{3855ec94-f9a9-4eba-8be8-6e2b74284e57}</Project>
+      <Name>AF.Classes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AF.Functional\AF.Functional.csproj">
       <Project>{dff3bc61-323f-40c4-9097-06fc546ef15c}</Project>
       <Name>AF.Functional</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chess.AF\Chess.AF.csproj">
+      <Project>{89b6c4b2-5b7e-40bb-afbe-8e367d890171}</Project>
+      <Name>Chess.AF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
