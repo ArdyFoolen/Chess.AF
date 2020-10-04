@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.Console.UCIEngine
+namespace Chess.AF.UCIEngine
 {
     public static class ProcessExtensions
     {

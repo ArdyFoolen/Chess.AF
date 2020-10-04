@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TestConsoleGui")]
+[assembly: AssemblyTitle("Chess.AF.UCIEngine")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HP Inc.")]
-[assembly: AssemblyProduct("TestConsoleGui")]
+[assembly: AssemblyProduct("Chess.AF.UCIEngine")]
 [assembly: AssemblyCopyright("Copyright © HP Inc. 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ee911480-2222-4916-9106-2dc87d73071f")]
+[assembly: Guid("72c92e06-d4cb-4e48-99ed-4a2c1fbdc650")]
 
 // Version information for an assembly consists of the following four values:
 //

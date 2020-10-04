@@ -9,7 +9,7 @@ using static System.Console;
 using AF.Functional;
 using static AF.Functional.F;
 
-namespace Chess.AF.Console.UCIEngine
+namespace Chess.AF.UCIEngine
 {
     // Link UCI protocol: https://gist.github.com/aliostad/f4470274f39d29b788c1b09519e67372
 
