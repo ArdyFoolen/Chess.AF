@@ -14,10 +14,18 @@ namespace Chess.AF
         private Option<Position> Position;
 
         public void Load()
-            => Load(DefaultFen);
+        {
+            Load(DefaultFen);
+            IsLoaded = true;
+        }
 
         public void Load(string fenString)
-            => Position = fenString.CreateFen().CreatePosition();
+        {
+            Position = fenString.CreateFen().CreatePosition();
+            IsLoaded = true;
+        }
+
+        public bool IsLoaded { get; private set; } = false;
 
         public void Move(Move move)
             => Position = Position.Bind(p => p.Move(move))
@@ -32,8 +40,19 @@ namespace Chess.AF
                 None: () => "No Game loaded or Invalid Game",
                 Some: p => p.ToFenString());
 
+        public Option<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> FindMove(
+            Func<IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>,
+                Option<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>> findIn)
+            => Position.Map(p => p.IterateForAllMoves()).Bind(it => findIn(it));
+
         public void ForEachMove(Action<IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>> iterator)
             => Position.Map(p => p.IterateForAllMoves()).ForEach(iterator);
+
+        public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> AllMoves()
+            => Position.Map(p => p.IterateForAllMoves()).Match(
+                None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
+                Some: s => s
+                );
 
         public void Map(Func<Position, Position> func)
             => Position = Position.Map(func);

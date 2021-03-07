@@ -144,6 +144,12 @@ namespace AF.Functional
               () => None,
               (t) => Some(f(t)));
 
+        public static Option<Unit> Map<T, R>
+           (this Option<T> optT, Action<T> f)
+           => optT.Match(
+              () => None,
+              (t) => Some(f.ToFunc()(t)));
+
         public static Option<Func<T2, R>> Map<T1, T2, R>
            (this Option<T1> @this, Func<T1, T2, R> func)
             => @this.Map(func.Curry());

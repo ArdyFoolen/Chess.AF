@@ -43,6 +43,17 @@ namespace Chess.AF
         public static bool Is(this PiecesEnum pieceEnum, PiecesEnum compare)
             => pieceEnum == compare;
 
+        private static readonly Dictionary<string, PieceEnum> promoteDict = new Dictionary<string, PieceEnum>()
+        {
+            { "N", PieceEnum.Knight },
+            { "B", PieceEnum.Bishop },
+            { "R", PieceEnum.Rook },
+            { "Q", PieceEnum.Queen }
+        };
+
+        public static Option<PieceEnum> ToPiece(this string piece)
+            => promoteDict.ContainsKey(piece) ? Some(promoteDict[piece]) : None;
+
         // A8: 0 / 8 = 0
         // H8: 7 / 8 = 0;
         // A1: 56 / 8 = 7;
