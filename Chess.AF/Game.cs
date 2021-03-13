@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AF.Functional.F;
 
 namespace Chess.AF
 {
@@ -11,21 +12,15 @@ namespace Chess.AF
     {
         private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-        private Option<Position> Position;
+        private Option<Position> Position = None;
 
         public void Load()
-        {
-            Load(DefaultFen);
-            IsLoaded = true;
-        }
+            => Load(DefaultFen);
 
         public void Load(string fenString)
-        {
-            Position = fenString.CreateFen().CreatePosition();
-            IsLoaded = true;
-        }
+            => Position = fenString.CreateFen().CreatePosition();
 
-        public bool IsLoaded { get; private set; } = false;
+        public bool IsLoaded { get { return !Position.Equals(None); } }
 
         public void Move(Move move)
             => Position = Position.Bind(p => p.Move(move))

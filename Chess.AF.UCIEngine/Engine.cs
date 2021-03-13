@@ -142,10 +142,11 @@ namespace Chess.AF.UCIEngine
             if (!tuple.Promoted.Is(PieceEnum.Pawn))
                 promote = tuple.Promoted;
 
-            // ToDo Rokade
             RokadeEnum rokade = RokadeEnum.None;
-            //if (tuple.Piece.IsRokadeMove(tuple.Square, tuple.MoveSquare))
-
+            if (tuple.Piece.IsQueensideRokadeMove(tuple.Square, tuple.MoveSquare))
+                rokade = RokadeEnum.QueenSide;
+            if (tuple.Piece.IsKingsideRokadeMove(tuple.Square, tuple.MoveSquare))
+                rokade = RokadeEnum.KingSide;
 
             return Move.Of(tuple.Piece, tuple.Square, tuple.MoveSquare, promote, rokade);
         }
