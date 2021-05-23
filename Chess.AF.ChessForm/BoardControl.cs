@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.AF.ChessForm.Controllers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,10 +15,13 @@ namespace Chess.AF.ChessForm
     public partial class BoardControl : UserControl
     {
         private IEnumerable<SquareControl> squares;
-        public BoardControl()
+        private IBoardController boardController;
+
+        public BoardControl(IBoardController boardController)
         {
             InitializeComponent();
 
+            this.boardController = boardController;
             this.squares = GetSquares();
 
             this.Controls.AddRange(this.squares.ToArray());
@@ -31,7 +35,7 @@ namespace Chess.AF.ChessForm
 
         private SquareControl CreateSquareControl(int id)
         {
-            var control = new SquareControl(id);
+            var control = new SquareControl(id, boardController);
             control.BackColor = GetSquareBackColor(id);
             control.Location = new Point(id % 8 * SquareWidth, id / 8 * SquareWidth);
             control.Margin = new Padding(0);

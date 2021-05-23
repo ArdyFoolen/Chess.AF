@@ -714,6 +714,17 @@ namespace Chess.AF
             return fenString;
         }
 
+        public Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary()
+        {
+            Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dict = new Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
+            PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
+            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+            {
+                dict.Add((int)square.Square, square);
+            }
+            return dict;
+        }
+
         private static int EmptyFenSquares(StringBuilder sb, int prevIndex, int lastIndex, SquareEnum? square = null)
         {
             int diff = 64 - prevIndex - 1;

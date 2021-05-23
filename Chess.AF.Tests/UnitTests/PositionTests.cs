@@ -217,5 +217,31 @@ namespace Chess.AF.Tests.UnitTests
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, p.ToUniqueString()); return true; });
         }
+
+        [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1")]
+        public void ToDictionary_IsValid(string fenString)
+        {
+            Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dict = null;
+            Fen.Of(fenString).CreatePosition()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { dict = p.ToDictionary(); return true; });
+
+            AssertSquare(dict[0], PiecesEnum.BlackRook, SquareEnum.a8);
+            AssertSquare(dict[4], PiecesEnum.BlackKing, SquareEnum.e8);
+            AssertSquare(dict[7], PiecesEnum.BlackRook, SquareEnum.h8);
+            AssertSquare(dict[24], PiecesEnum.BlackBishop, SquareEnum.a5);
+            AssertSquare(dict[32], PiecesEnum.WhiteBishop, SquareEnum.a4);
+            AssertSquare(dict[56], PiecesEnum.WhiteRook, SquareEnum.a1);
+            AssertSquare(dict[60], PiecesEnum.WhiteKing, SquareEnum.e1);
+            AssertSquare(dict[63], PiecesEnum.WhiteRook, SquareEnum.h1);
+        }
+
+        private static void AssertSquare((PiecesEnum Piece, SquareEnum Square, bool IsSelected) item,
+            PiecesEnum expectedPiece, SquareEnum expectedSquare)
+        {
+            Assert.AreEqual(expectedPiece, item.Piece);
+            Assert.AreEqual(expectedSquare, item.Square);
+        }
     }
 }

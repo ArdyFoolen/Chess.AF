@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.AF.ChessForm.Controllers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,7 +22,7 @@ namespace Chess.AF.ChessForm
 
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            this.boardControl = new BoardControl();
+            this.boardControl = new BoardControl(new BoardController());
             this.boardControl.BackColor = Color.SaddleBrown;
             this.boardControl.Size = new Size(BoardWidth, BoardWidth);
             this.boardControl.Margin = new Padding(0);

@@ -16,11 +16,29 @@ namespace Chess.AF.ChessForm
     public static class ImageHelper
     {
         private static readonly Image ChessPieces;
+        private static readonly Image FenImage;
 
         static ImageHelper()
         {
             ChessPieces = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.ChessPieces500x181.png");
+            FenImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Fen301x156.png");
         }
+
+        public static readonly Dictionary<int, Func<Image>> GetPieceDict = new Dictionary<int, Func<Image>>()
+        {
+            { 1, BlackPawn },
+            { 2, BlackKnight },
+            { 3, BlackBishop },
+            { 4, BlackRook },
+            { 5, BlackQueen },
+            { 6, BlackKing },
+            { 8, WhitePawn },
+            { 9, WhiteKnight },
+            { 10, WhiteBishop },
+            { 11, WhiteRook },
+            { 12, WhiteQueen },
+            { 13, WhiteKing }
+        };
 
         public static Image WhiteKing()
             => GetPiece(0, false);
@@ -48,10 +66,7 @@ namespace Chess.AF.ChessForm
             => GetPiece(5, true, 9);
 
         public static Image Fen()
-        {
-            var fen = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Fen301x156.png");
-            return fen;
-        }
+            => FenImage;
 
         private static Dictionary<int, Image> PiecesDict = new Dictionary<int, Image>();
         /// <summary>

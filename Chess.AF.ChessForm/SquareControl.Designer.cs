@@ -29,19 +29,37 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnImage = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // btnImage
+            // 
+            this.btnImage.BackColor = System.Drawing.Color.Transparent;
+            this.btnImage.FlatAppearance.BorderSize = 0;
+            this.btnImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImage.Location = new System.Drawing.Point(0, 0);
+            this.btnImage.Margin = new System.Windows.Forms.Padding(0);
+            this.btnImage.Name = "btnImage";
+            this.btnImage.Size = new System.Drawing.Size(70, 70);
+            this.btnImage.TabIndex = 0;
+            this.btnImage.UseVisualStyleBackColor = false;
+            this.btnImage.MouseEnter += new System.EventHandler(this.btnImage_MouseEnter);
+            this.btnImage.MouseLeave += new System.EventHandler(this.btnImage_MouseLeave);
             // 
             // SquareControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnImage);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "SquareControl";
-            this.Size = new System.Drawing.Size(80, 80);
+            this.Size = new System.Drawing.Size(62, 60);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btnImage;
     }
 }

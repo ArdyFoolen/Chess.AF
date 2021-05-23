@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AF.Functional\AF.Functional.csproj" />
+    <ProjectReference Include="..\Chess.AF\Chess.AF.csproj" />
   </ItemGroup>
 
 </Project>
