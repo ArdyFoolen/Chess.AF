@@ -36,18 +36,11 @@ namespace Chess.AF.ChessForm
         private SquareControl CreateSquareControl(int id)
         {
             var control = new SquareControl(id, boardController);
-            control.BackColor = GetSquareBackColor(id);
             control.Location = new Point(id % 8 * SquareWidth, id / 8 * SquareWidth);
             control.Margin = new Padding(0);
             control.Size = new Size(SquareWidth, SquareWidth);
             return control;
         }
 
-        private static Color GetSquareBackColor(int id)
-        {
-            return (id % 2 == 0 && (id / 8) % 2 == 0 ||
-                    id % 2 == 1 && (id / 8) % 2 == 1)
-                   ? Color.White : Color.Brown;
-        }
     }
 }

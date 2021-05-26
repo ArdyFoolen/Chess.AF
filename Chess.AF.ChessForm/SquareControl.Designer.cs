@@ -43,6 +43,8 @@ namespace Chess.AF.ChessForm
             this.btnImage.Size = new System.Drawing.Size(70, 70);
             this.btnImage.TabIndex = 0;
             this.btnImage.UseVisualStyleBackColor = false;
+            this.btnImage.Paint += new System.Windows.Forms.PaintEventHandler(this.btnImage_Paint);
+            this.btnImage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnImage_MouseClick);
             this.btnImage.MouseEnter += new System.EventHandler(this.btnImage_MouseEnter);
             this.btnImage.MouseLeave += new System.EventHandler(this.btnImage_MouseLeave);
             // 

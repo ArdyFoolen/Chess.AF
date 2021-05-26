@@ -1,48 +1,95 @@
-﻿using Chess.AF.ChessForm.Controllers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static Chess.AF.ChessForm.ImageHelper;
-using static AF.Functional.F;
-using AF.Functional;
-using static Chess.AF.ChessForm.ChessConstants;
+﻿using AF.Functional;
+using Chess.AF.ChessForm.Controllers;
 using Chess.AF.ChessForm.Extensions;
+using Chess.AF.ChessForm.Views;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using static Chess.AF.ChessForm.ChessConstants;
+using static Chess.AF.ChessForm.ImageHelper;
+using System.Linq;
 
 namespace Chess.AF.ChessForm
 {
-    public partial class SquareControl : UserControl
+    public partial class SquareControl : UserControl, IBoardView
     {
         private IBoardController boardController;
+        private bool isSelected;
 
         public int Id { get; private set; }
+        public bool AbleToMoveTo
+        {
+            get
+            {
+                return boardController.SelectedMoves.Any(a => (int)a.MoveSquare == Id);
+            }
+        }
+
         public SquareControl(int id, IBoardController boardController)
         {
             InitializeComponent();
 
+            this.Id = id;
+            this.boardController = boardController;
+            this.boardController.Register(this);
+
+            SetBackColor();
+
             btnImage.Size = new Size(SquareWidth, SquareWidth);
 
-            this.boardController = boardController;
-            this.Id = id;
+            SetImage();
+        }
 
-            boardController[Id].Map(
-                s => btnImage.Image = GetPieceDict[(int)s.Piece]()
+        public void UpdateView()
+            => SetImage();
+
+        private void SetImage()
+        {
+            this.Invalidate(true);
+            boardController[Id].Match(
+                None: () => btnImage.Image = null,
+                Some: s => SetImage(s)
                 );
         }
 
-        private void btnImage_MouseLeave(object sender, EventArgs e)
+        private void SetImage((PiecesEnum Piece, SquareEnum Square, bool IsSelected) tuple)
         {
-            btnImage.BackColor = this.BackColor;
+            isSelected = tuple.IsSelected;
+            btnImage.Image = GetPieceDict[(int)tuple.Piece]();
+            SetBackColorToImage(tuple.IsSelected);
         }
 
-        private void btnImage_MouseEnter(object sender, EventArgs e)
+        private void DrawCircle(Graphics graphics)
         {
-            btnImage.BackColor = this.BackColor.ChangeColorBrightness(1.5f);
+            var brush = new SolidBrush(Color.FromArgb(150, Color.Gray));
+            graphics.FillEllipse(brush, new Rectangle(MoveSquareLeftTop, MoveSquareLeftTop, MoveSquareWidthHeight, MoveSquareWidthHeight));
+        }
+
+        private void btnImage_MouseLeave(object sender, EventArgs e)
+            => SetBackColorToImage(isSelected);
+
+        private void btnImage_MouseEnter(object sender, EventArgs e)
+        => SetBackColorToImage(true);
+
+        private void btnImage_MouseClick(object sender, MouseEventArgs e)
+            => boardController.Select(Id);
+
+        private void SetBackColor()
+            => this.BackColor = (Id % 2 == 0 && (Id / 8) % 2 == 0 ||
+                    Id % 2 == 1 && (Id / 8) % 2 == 1)
+                   ? Color.White : Color.Brown;
+
+        private void SetBackColorToImage(bool isSelected)
+            => btnImage.BackColor = isSelected ? this.BackColor.ChangeColorBrightness(GetBrightFactor()) : this.BackColor;
+
+        private float GetBrightFactor()
+            => this.BackColor == Color.White ? 0.8f : 1.5f;
+
+        private void btnImage_Paint(object sender, PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            if (AbleToMoveTo)
+                DrawCircle(e.Graphics);
         }
     }
 }

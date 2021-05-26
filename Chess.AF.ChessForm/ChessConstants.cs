@@ -12,5 +12,8 @@ namespace Chess.AF.ChessForm
         public static readonly int BoardWidth = SquareWidth * 8;
         public static readonly int FormHeight = BoardWidth + 73; // 633
         public static readonly int PieceWidth = SquareWidth - 10;
+
+        public static readonly int MoveSquareWidthHeight = 30;
+        public static readonly int MoveSquareLeftTop = (SquareWidth / 2) - (MoveSquareWidthHeight / 2);
     }
 }
