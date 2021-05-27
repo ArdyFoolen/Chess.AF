@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
+using Unit = System.ValueTuple;
 
 namespace Chess.AF.ChessForm.Controllers
 {
@@ -27,6 +28,9 @@ namespace Chess.AF.ChessForm.Controllers
                     return Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>();
             }
         }
+
+        private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMovesTo(int moveSquare)
+            => SelectedMoves.Where(w => (int)w.MoveSquare == moveSquare);
 
         public BoardController()
         {
@@ -66,11 +70,42 @@ namespace Chess.AF.ChessForm.Controllers
 
         public void Select(int square)
         {
+            if (IsSelected && SelectedMovesTo(square).Any())
+                if (SelectedMovesTo(square).Count() == 4)
+                    ; // ToDo Promote
+                else
+                    Move(SelectedMovesTo(square).First());
+
             positionDict.Keys.Where(w => positionDict[w].IsSelected).ForEach(f => UnSelect(f));
             selectedSquare = null;
             if (positionDict.ContainsKey(square) && IsFromMove(square))
                 SetSelectedSquare(square);
             NotifyViews();
+        }
+
+        public string ToFenString()
+            => game.ToFenString();
+
+        private void Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) move)
+        {
+            var toMove = AF.Move.Of(move.Piece, move.Square, move.MoveSquare, move.Promoted, RokadeEnum.None);
+            toMove.Map(m => Move(m));
+            SetPositionDict();
+            moves = game.AllMoves();
+        }
+
+        private Unit Move(AF.Move move)
+        {
+            game.Move(move);
+            return Unit();
+        }
+
+        private bool IsSelected
+        {
+            get
+            {
+                return selectedSquare != null;
+            }
         }
 
         private void SetSelectedSquare(int square)

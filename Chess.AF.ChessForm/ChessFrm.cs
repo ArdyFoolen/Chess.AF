@@ -45,7 +45,7 @@ namespace Chess.AF.ChessForm
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Size: {this.Size.Width}x{this.Size.Height}");
+            MessageBox.Show($"Fen: {boardControl.ToFenString()}");
         }
     }
 }

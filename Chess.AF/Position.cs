@@ -230,6 +230,14 @@ namespace Chess.AF
                     Maps[i] = Maps[i].SetBitOff((int)moveTo.MoveSquare);
             }
 
+            if (IsEpTake(otherIndex, moveTo))
+            {
+                IsTake = true;
+                int epIndex = (int)(IsWhiteToMove ? (int)moveTo.MoveSquare + 8 : (int)moveTo.MoveSquare - 8);
+                Maps[otherIndex] = Maps[otherIndex].SetBitOff(epIndex);
+                Maps[otherIndex+1] = Maps[otherIndex+1].SetBitOff(epIndex);
+            }
+
             EpSquare = None;
             if (PieceEnum.Pawn.Equals(moveTo.Piece) && Math.Abs((int)moveTo.MoveSquare - (int)moveTo.Square) == 16)
             {
@@ -259,6 +267,13 @@ namespace Chess.AF
             else
                 PlyCount += 1;
         }
+
+        #endregion
+
+        #region IsEpTake
+
+        public bool IsEpTake(int index, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) moveTo)
+            => PieceEnum.Pawn == moveTo.Piece && moveTo.Square.File() != moveTo.MoveSquare.File() && !Maps[index].IsBitOn((int)moveTo.MoveSquare);
 
         #endregion
 

@@ -42,5 +42,8 @@ namespace Chess.AF.ChessForm
             return control;
         }
 
+        public string ToFenString()
+            => boardController.ToFenString();
+
     }
 }

@@ -63,5 +63,24 @@ namespace Chess.AF.Tests.UnitTests
             AssertMovesHelper helper = new AssertMovesHelper();
             helper.AssertMovesFor(fenString, PieceEnum.Pawn, expected);
         }
+
+        [TestCaseSource(nameof(Tuples))]
+        public void PawnMoves_TakeEnPassant_AreValid((string fen, PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare, string expectedFen) tuples)
+        {
+            Game game = new Game();
+            game.Load(tuples.fen);
+            var toMove = AF.Move.Of(tuples.Piece, tuples.Square, tuples.MoveSquare, tuples.Promoted, RokadeEnum.None);
+            toMove.Map(m => { game.Move(m); return Unit(); });
+
+            Assert.AreEqual(tuples.expectedFen, game.ToFenString());
+        }
+
+        public static IEnumerable<(string fen, PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare, string expectedFen)[]> Tuples
+        {
+            get
+            {
+                yield return new[] { ("r1bqk2r/ppp2ppp/2n5/2bpP1N1/2Bp2n1/8/PPP2PPP/RNBQ1RK1 w kq d6 0 1", PieceEnum.Pawn, SquareEnum.e5, PieceEnum.Pawn, SquareEnum.d6, "r1bqk2r/ppp2ppp/2nP4/2b3N1/2Bp2n1/8/PPP2PPP/RNBQ1RK1 b kq - 0 1") };
+            }
+        }
     }
 }

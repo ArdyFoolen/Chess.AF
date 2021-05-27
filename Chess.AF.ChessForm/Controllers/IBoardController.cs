@@ -23,5 +23,6 @@ namespace Chess.AF.ChessForm.Controllers
         }
 
         void Select(int square);
+        string ToFenString();
     }
 }
