@@ -47,7 +47,7 @@ namespace Chess.AF.ChessForm
         {
             this.Invalidate(true);
             boardController[Id].Match(
-                None: () => btnImage.Image = null,
+                None: () => { btnImage.Image = null; SetBackColorToImage(false); },
                 Some: s => SetImage(s)
                 );
         }
