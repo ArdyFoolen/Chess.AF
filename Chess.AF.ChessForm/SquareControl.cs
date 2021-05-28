@@ -69,10 +69,39 @@ namespace Chess.AF.ChessForm
             => SetBackColorToImage(isSelected);
 
         private void btnImage_MouseEnter(object sender, EventArgs e)
-        => SetBackColorToImage(true);
+            => SetBackColorToImage(true);
 
         private void btnImage_MouseClick(object sender, MouseEventArgs e)
-            => boardController.Select(Id);
+        {
+            //if (PromoteControl != null)
+            //{
+            //    PromoteControl.Cl
+            //}
+            //else
+            {
+                boardController.Select(Id);
+            }
+        }
+
+        private PromoteControl PromoteControl { get; set; }
+        private DlgPromote DlgPromote { get; set; } = new DlgPromote();
+        private void EnterControl()
+        {
+            SetBackColorToImage(true);
+
+            //this.DlgPromote.StartPosition = FormStartPosition.Manual;
+            //this.DlgPromote.Location = this.PointToScreen(new Point(0, 0));
+            //this.DlgPromote.Show();
+            //this.DlgPromote.BringToFront();
+        }
+
+        private void LeaveControl()
+        {
+            SetBackColorToImage(isSelected);
+            //this.Controls.Remove(PromoteControl);
+            //PromoteControl = null;
+            DlgPromote.Hide();
+        }
 
         private void SetBackColor()
             => this.BackColor = (Id % 2 == 0 && (Id / 8) % 2 == 0 ||
@@ -89,7 +118,21 @@ namespace Chess.AF.ChessForm
         {
             base.OnPaint(e);
             if (AbleToMoveTo)
+            {
                 DrawCircle(e.Graphics);
+
+                if (boardController.IsPromoteMove(Id))
+                {
+                    this.DlgPromote.StartPosition = FormStartPosition.Manual;
+                    this.DlgPromote.Location = this.PointToScreen(new Point(0, 0));
+                    this.DlgPromote.Show();
+                    this.DlgPromote.BringToFront();
+                }
+                else
+                    this.DlgPromote.Hide();
+            }
+            else
+                this.DlgPromote.Hide();
         }
     }
 }

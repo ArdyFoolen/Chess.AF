@@ -21,6 +21,8 @@ namespace Chess.AF.ChessForm.Controllers
         {
             get;
         }
+        
+        bool IsPromoteMove(int square);
 
         void Select(int square);
         string ToFenString();

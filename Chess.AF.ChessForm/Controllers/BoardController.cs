@@ -29,13 +29,18 @@ namespace Chess.AF.ChessForm.Controllers
             }
         }
 
+        public bool IsPromoteMove(int moveSquare)
+            => (IsSelected && SelectedMovesTo(moveSquare).Count() == 4);
+
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMovesTo(int moveSquare)
             => SelectedMoves.Where(w => (int)w.MoveSquare == moveSquare);
 
         public BoardController()
         {
             game = new Game();
-            game.Load();
+            //game.Load();
+            //game.Load("7k/P7/8/8/8/8/8/6K1 w - - 0 1");
+            game.Load("7k/8/8/8/8/8/p7/6K1 b - - 0 1");
             SetPositionDict();
             moves = game.AllMoves();
         }

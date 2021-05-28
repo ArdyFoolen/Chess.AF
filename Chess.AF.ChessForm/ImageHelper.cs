@@ -48,18 +48,34 @@ namespace Chess.AF.ChessForm
             => GetPiece(1, false, 3);
         public static Image BlackQueen()
             => GetPiece(1, true, 3);
+        public static Image WhiteQueenSmall()
+            => GetPiece(1, false, 3, true);
+        public static Image BlackQueenSmall()
+            => GetPiece(1, true, 3, true);
         public static Image WhiteBishop()
             => GetPiece(2, false, 5);
         public static Image BlackBishop()
             => GetPiece(2, true, 5);
+        public static Image WhiteBishopSmall()
+            => GetPiece(2, false, 5, true);
+        public static Image BlackBishopSmall()
+            => GetPiece(2, true, 5, true);
         public static Image WhiteKnight()
             => GetPiece(3, false, 6);
         public static Image BlackKnight()
             => GetPiece(3, true, 6);
+        public static Image WhiteKnightSmall()
+            => GetPiece(3, false, 6, true);
+        public static Image BlackKnightSmall()
+            => GetPiece(3, true, 6, true);
         public static Image WhiteRook()
             => GetPiece(4, false, 8);
         public static Image BlackRook()
             => GetPiece(4, true, 8);
+        public static Image WhiteRookSmall()
+            => GetPiece(4, false, 8, true);
+        public static Image BlackRookSmall()
+            => GetPiece(4, true, 8, true);
         public static Image WhitePawn()
             => GetPiece(5, false, 9);
         public static Image BlackPawn()
@@ -81,21 +97,28 @@ namespace Chess.AF.ChessForm
         /// <param name="index"></param>
         /// <param name="blackPiece"></param>
         /// <returns></returns>
-        private static Image GetPiece(int index, bool blackPiece, int correct = 0)
+        private static Image GetPiece(int index, bool blackPiece, int correct = 0, bool halfSize = false)
         {
+            int width = PieceWidth;
             int key = index + (blackPiece ? 6 : 0);
+            if (halfSize)
+            {
+                key += 12;
+                width /= 2;
+            }
             if (!PiecesDict.ContainsKey(key))
-                PiecesDict.Add(key, LoadPieceImage(index, blackPiece, correct));
+                PiecesDict.Add(key, LoadPieceImage(index, blackPiece, correct, width));
 
             return PiecesDict[key];
         }
 
-        private static Image LoadPieceImage(int index, bool blackPiece, int correct)
+        private static Image LoadPieceImage(int index, bool blackPiece, int correct, int? width = null)
         {
+            width = width ?? PieceWidth;
             int y = blackPiece ? 90 : 0;
             int x = (500 / 6) * index + correct;
             Rectangle source = new Rectangle(new Point(x, y), new Size(500 / 6, 90));
-            return ResizeImage(CropImage(ChessPieces, source), PieceWidth, PieceWidth);
+            return ResizeImage(CropImage(ChessPieces, source), width.Value, width.Value);
         }
 
         private static Bitmap CropImage(Image orgImg, Rectangle source)
