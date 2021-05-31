@@ -24,6 +24,7 @@ namespace Chess.AF.ChessForm.Controllers
 
         bool IsPromoteMove(int square);
 
+        void LoadFen(string fen);
         void Select(int square);
         void Promote(int moveSquare, int piece);
         string ToFenString();

@@ -42,6 +42,9 @@ namespace Chess.AF.ChessForm
             return control;
         }
 
+        public void LoadFen(string fen)
+            => boardController.LoadFen(fen);
+
         public string ToFenString()
             => boardController.ToFenString();
 

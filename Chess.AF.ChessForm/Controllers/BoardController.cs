@@ -73,6 +73,15 @@ namespace Chess.AF.ChessForm.Controllers
             }
         }
 
+        public void LoadFen(string fen)
+        {
+            selectedSquare = null;
+            game.Load(fen);
+            SetPositionDict();
+            moves = game.AllMoves();
+            NotifyViews();
+        }
+
         public void Select(int square)
         {
             if (IsSelected && SelectedMovesTo(square).Any())
