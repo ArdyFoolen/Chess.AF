@@ -1,4 +1,5 @@
-﻿using Chess.AF.ChessForm.Extensions;
+﻿using Chess.AF.ChessForm.Controllers;
+using Chess.AF.ChessForm.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,15 +15,20 @@ namespace Chess.AF.ChessForm
 {
     public partial class PromoteControl : Panel
     {
-        public PromoteControl(bool isBlackToMove)
+        public int Id { get; private set; }
+        private IBoardController boardController;
+
+        public PromoteControl(int id, IBoardController boardController, bool isBlackToMove)
         {
             InitializeComponent();
 
+            this.Id = id;
+            this.boardController = boardController;
             IsBlackToMove = isBlackToMove;
             AddPromoteButtons();
 
             this.DoubleBuffered = true;
-            this.BackColor = Color.White;
+            this.BackColor = Color.Transparent;
         }
 
         public bool IsBlackToMove { get; private set; }
@@ -72,9 +78,8 @@ namespace Chess.AF.ChessForm
 
         protected void promote_Click(object sender, EventArgs e)
         {
-            //Display Message
             PromoteButton panel = (PromoteButton)sender;
-            MessageBox.Show($"Id: {(PiecesEnum)panel.Id}");
+            boardController.Promote(Id, panel.Id);
         }
     }
 }

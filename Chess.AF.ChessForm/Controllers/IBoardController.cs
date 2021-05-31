@@ -21,10 +21,11 @@ namespace Chess.AF.ChessForm.Controllers
         {
             get;
         }
-        
+
         bool IsPromoteMove(int square);
 
         void Select(int square);
+        void Promote(int moveSquare, int piece);
         string ToFenString();
     }
 }

@@ -38,9 +38,9 @@ namespace Chess.AF.ChessForm.Controllers
         public BoardController()
         {
             game = new Game();
-            //game.Load();
-            //game.Load("7k/P7/8/8/8/8/8/6K1 w - - 0 1");
-            game.Load("7k/8/8/8/8/8/p7/6K1 b - - 0 1");
+            game.Load();
+            //game.Load("1q5k/P7/8/8/8/8/8/6K1 w - - 0 1");
+            //game.Load("7k/8/8/8/8/8/p7/1Q4K1 b - - 0 1");
             SetPositionDict();
             moves = game.AllMoves();
         }
@@ -77,7 +77,7 @@ namespace Chess.AF.ChessForm.Controllers
         {
             if (IsSelected && SelectedMovesTo(square).Any())
                 if (SelectedMovesTo(square).Count() == 4)
-                    ; // ToDo Promote
+                    throw new Exception("Promotion happens throught Promote method");
                 else
                     Move(SelectedMovesTo(square).First());
 
@@ -85,6 +85,15 @@ namespace Chess.AF.ChessForm.Controllers
             selectedSquare = null;
             if (positionDict.ContainsKey(square) && IsFromMove(square))
                 SetSelectedSquare(square);
+            NotifyViews();
+        }
+
+        public void Promote(int moveSquare, int piece)
+        {
+            if (IsSelected && SelectedMovesTo(moveSquare).Count() == 4)
+                Move(SelectedMovesTo(moveSquare).Single(s => s.Promoted == (PieceEnum)(piece % 7)));
+
+            positionDict.Keys.Where(w => positionDict[w].IsSelected).ForEach(f => UnSelect(f));
             NotifyViews();
         }
 

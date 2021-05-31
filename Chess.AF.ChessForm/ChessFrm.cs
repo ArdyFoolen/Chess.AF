@@ -46,18 +46,18 @@ namespace Chess.AF.ChessForm
             //ptToScreen.Text = $"Form location: {loc.X}:{loc.Y}";
             this.Controls.Add(ptToScreen);
 
-            PromoteControl promoteBlack = new PromoteControl(true);
-            promoteBlack.Location = new Point(600, 100);
-            promoteBlack.Size = new Size(70, 80);
+            //PromoteControl promoteBlack = new PromoteControl(true);
+            //promoteBlack.Location = new Point(600, 100);
+            //promoteBlack.Size = new Size(70, 80);
 
-            PromoteControl promoteWhite = new PromoteControl(false);
-            promoteWhite.Location = new Point(600, 200);
-            promoteWhite.Size = new Size(70, 80);
+            //PromoteControl promoteWhite = new PromoteControl(false);
+            //promoteWhite.Location = new Point(600, 200);
+            //promoteWhite.Size = new Size(70, 80);
 
             this.Controls.Add(this.boardControl);
             //this.Controls.Add(button);
-            this.Controls.Add(promoteBlack);
-            this.Controls.Add(promoteWhite);
+            //this.Controls.Add(promoteBlack);
+            //this.Controls.Add(promoteWhite);
 
             this.btnLoadFen.Image = Fen();
         }

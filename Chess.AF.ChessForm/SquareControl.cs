@@ -15,6 +15,7 @@ namespace Chess.AF.ChessForm
     {
         private IBoardController boardController;
         private bool isSelected;
+        private PromoteControl promoteControl;
 
         public int Id { get; private set; }
         public bool AbleToMoveTo
@@ -37,7 +38,22 @@ namespace Chess.AF.ChessForm
 
             btnImage.Size = new Size(SquareWidth, SquareWidth);
 
+            CreatePromoteControl();
+
             SetImage();
+        }
+
+        private void CreatePromoteControl()
+        {
+            int r = ((SquareEnum)Id).Row();
+            if (r == 0 || r == 7)
+            {
+                promoteControl = new PromoteControl(Id, boardController, r == 7);
+                promoteControl.Location = new Point(0, 0);
+                promoteControl.Size = new Size(70, 70);
+                this.Controls.Add(promoteControl);
+                promoteControl.Enabled = promoteControl.Visible = false;
+            }
         }
 
         public void UpdateView()
@@ -72,36 +88,7 @@ namespace Chess.AF.ChessForm
             => SetBackColorToImage(true);
 
         private void btnImage_MouseClick(object sender, MouseEventArgs e)
-        {
-            //if (PromoteControl != null)
-            //{
-            //    PromoteControl.Cl
-            //}
-            //else
-            {
-                boardController.Select(Id);
-            }
-        }
-
-        private PromoteControl PromoteControl { get; set; }
-        private DlgPromote DlgPromote { get; set; } = new DlgPromote();
-        private void EnterControl()
-        {
-            SetBackColorToImage(true);
-
-            //this.DlgPromote.StartPosition = FormStartPosition.Manual;
-            //this.DlgPromote.Location = this.PointToScreen(new Point(0, 0));
-            //this.DlgPromote.Show();
-            //this.DlgPromote.BringToFront();
-        }
-
-        private void LeaveControl()
-        {
-            SetBackColorToImage(isSelected);
-            //this.Controls.Remove(PromoteControl);
-            //PromoteControl = null;
-            DlgPromote.Hide();
-        }
+            => boardController.Select(Id);
 
         private void SetBackColor()
             => this.BackColor = (Id % 2 == 0 && (Id / 8) % 2 == 0 ||
@@ -123,16 +110,20 @@ namespace Chess.AF.ChessForm
 
                 if (boardController.IsPromoteMove(Id))
                 {
-                    this.DlgPromote.StartPosition = FormStartPosition.Manual;
-                    this.DlgPromote.Location = this.PointToScreen(new Point(0, 0));
-                    this.DlgPromote.Show();
-                    this.DlgPromote.BringToFront();
+                    SetEnableVisible(true);
+                    promoteControl?.BringToFront();
                 }
                 else
-                    this.DlgPromote.Hide();
+                    SetEnableVisible(false);
             }
             else
-                this.DlgPromote.Hide();
+                SetEnableVisible(false);
+        }
+
+        private void SetEnableVisible(bool value)
+        {
+            if (promoteControl != null)
+                promoteControl.Enabled = promoteControl.Visible = value;
         }
     }
 }
