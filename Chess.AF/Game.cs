@@ -51,5 +51,33 @@ namespace Chess.AF
 
         public void Map(Func<Position, Position> func)
             => Position = Position.Map(func);
+
+        public bool IsWhiteToMove
+        {
+            get => Position.Match(
+                None: () => false,
+                Some: s => s.IsWhiteToMove);
+        }
+
+        public bool IsMate
+        {
+            get => Position.Match(
+                None: () => false,
+                Some: s => s.IsMate);
+        }
+
+        public bool IsInCheck
+        {
+            get => Position.Match(
+                None: () => false,
+                Some: s => s.IsInCheck);
+        }
+
+        public bool IsStaleMate
+        {
+            get => Position.Match(
+                None: () => false,
+                Some: s => s.IsStaleMate);
+        }
     }
 }

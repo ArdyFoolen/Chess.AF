@@ -18,6 +18,11 @@ namespace Chess.AF.ChessForm.Controllers
         private List<IBoardView> views = new List<IBoardView>();
         private int? selectedSquare;
 
+        public bool IsWhiteToMove { get => game.IsWhiteToMove; }
+        public bool IsMate { get => game.IsMate; }
+        public bool IsInCheck { get => game.IsInCheck; }
+        public bool IsStaleMate { get => game.IsStaleMate; }
+
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMoves
         {
             get

@@ -22,6 +22,11 @@ namespace Chess.AF.ChessForm.Controllers
             get;
         }
 
+        public bool IsWhiteToMove { get; }
+        public bool IsMate { get; }
+        public bool IsInCheck { get; }
+        public bool IsStaleMate { get; }
+
         bool IsPromoteMove(int square);
 
         void LoadFen();

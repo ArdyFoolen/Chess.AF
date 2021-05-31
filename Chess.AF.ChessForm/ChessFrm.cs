@@ -1,4 +1,5 @@
 ﻿using Chess.AF.ChessForm.Controllers;
+using Chess.AF.ChessForm.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +14,10 @@ using static Chess.AF.ChessForm.ImageHelper;
 
 namespace Chess.AF.ChessForm
 {
-    public partial class ChessFrm : Form
+    public partial class ChessFrm : Form, IBoardView
     {
         private BoardControl boardControl;
+        private IBoardController boardController;
         public ChessFrm()
         {
             InitializeComponent();
@@ -23,7 +25,10 @@ namespace Chess.AF.ChessForm
             this.loadFen.Hide();
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            this.boardControl = new BoardControl(new BoardController());
+            this.boardController = new BoardController();
+            this.boardController.Register(this);
+
+            this.boardControl = new BoardControl(this.boardController);
             this.boardControl.BackColor = Color.SaddleBrown;
             this.boardControl.Size = new Size(BoardWidth, BoardWidth);
             this.boardControl.Margin = new Padding(0);
@@ -31,6 +36,13 @@ namespace Chess.AF.ChessForm
             this.boardControl.BorderStyle = BorderStyle.FixedSingle;
 
             this.BackColor = Color.Wheat;
+
+            lblResult.Text = string.Empty;
+            //lblResult.Text = "Test Mate";
+            lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblResult.Location = new Point(600, 50);
+            lblResult.Size = new Size(200, 23);
+
             //Button button = new Button();
             //button.Image = BlackKing();
             //button.Image = BlackKing();
@@ -56,15 +68,18 @@ namespace Chess.AF.ChessForm
             //promoteWhite.Size = new Size(70, 80);
 
             this.Controls.Add(this.boardControl);
+            this.Controls.Add(lblResult);
             //this.Controls.Add(button);
             //this.Controls.Add(promoteBlack);
             //this.Controls.Add(promoteWhite);
 
             this.btnLoadFen.Image = Fen();
+            UpdateView();
         }
 
         //Label frmLocation = new Label();
         //Label ptToScreen = new Label();
+        Label lblResult = new Label();
         LoadFen loadFen = new LoadFen();
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
@@ -82,6 +97,28 @@ namespace Chess.AF.ChessForm
 
             //MessageBox.Show($"Fen: {boardControl.ToFenString()}");
             //MessageBox.Show($"Size: {Size.Width}:{Size.Height}");
+        }
+
+        public void UpdateView()
+            => lblResult.Text = whoToMove() + checkInfo();
+
+        private string whoToMove()
+        {
+            if (boardController.IsWhiteToMove)
+                return "White to move";
+            else
+                return "Black to move";
+        }
+
+        private string checkInfo()
+        {
+            if (boardController.IsMate)
+                return " Check Mate";
+            if (boardController.IsInCheck)
+                return " Check";
+            if (boardController.IsStaleMate)
+                return " Stale Mate";
+            return string.Empty;
         }
     }
 }
