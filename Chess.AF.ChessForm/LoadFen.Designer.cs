@@ -33,6 +33,7 @@ namespace Chess.AF.ChessForm
             this.txtFen = new System.Windows.Forms.TextBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnDefault = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblFen
@@ -63,7 +64,7 @@ namespace Chess.AF.ChessForm
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(104, 57);
+            this.btnCancel.Location = new System.Drawing.Point(199, 57);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -71,11 +72,22 @@ namespace Chess.AF.ChessForm
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnDefault
+            // 
+            this.btnDefault.Location = new System.Drawing.Point(104, 57);
+            this.btnDefault.Name = "btnDefault";
+            this.btnDefault.Size = new System.Drawing.Size(75, 23);
+            this.btnDefault.TabIndex = 4;
+            this.btnDefault.Text = "Default";
+            this.btnDefault.UseVisualStyleBackColor = true;
+            this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
+            // 
             // LoadFen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(572, 103);
+            this.Controls.Add(this.btnDefault);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.txtFen);
@@ -96,5 +108,6 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.TextBox txtFen;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnDefault;
     }
 }

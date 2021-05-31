@@ -72,6 +72,8 @@ namespace Chess.AF.ChessForm
             var result = this.loadFen.ShowDialog();
             if (DialogResult.OK.Equals(result))
                 this.boardControl.LoadFen(this.loadFen.Fen);
+            if (DialogResult.Yes.Equals(result))
+                this.boardControl.LoadFen();
             //this.loadFen.Hide();
             //frmLocation.Text = $"Form location: {this.Location.X}:{this.Location.Y}";
 

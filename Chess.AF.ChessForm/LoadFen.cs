@@ -38,6 +38,12 @@ namespace Chess.AF.ChessForm
             MessageBox.Show($"Fen '{txtFen.Text}' NOT valid", "Invalid Fen", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        private void btnDefault_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Yes;
+            Close();
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;

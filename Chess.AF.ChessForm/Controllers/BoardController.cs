@@ -73,10 +73,21 @@ namespace Chess.AF.ChessForm.Controllers
             }
         }
 
+        public void LoadFen()
+        {
+            game.Load();
+            ResetController();
+        }
+
         public void LoadFen(string fen)
         {
-            selectedSquare = null;
             game.Load(fen);
+            ResetController();
+        }
+
+        private void ResetController()
+        {
+            selectedSquare = null;
             SetPositionDict();
             moves = game.AllMoves();
             NotifyViews();
