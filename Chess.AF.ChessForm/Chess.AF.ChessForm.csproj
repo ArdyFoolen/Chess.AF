@@ -22,6 +22,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ToolTips.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ToolTips.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +34,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
+    <EmbeddedResource Update="Resources\ToolTips.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ToolTips.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
