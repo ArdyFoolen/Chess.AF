@@ -38,18 +38,15 @@ namespace Chess.AF.ChessForm
             this.BackColor = Color.Wheat;
 
             lblResult.Text = string.Empty;
-            //lblResult.Text = "Test Mate";
             lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
             lblResult.Location = new Point(600, 50);
             lblResult.Size = new Size(200, 23);
 
             //Button button = new Button();
-            //button.Image = BlackKing();
-            //button.Image = BlackKing();
+            //button.Image = LastMove((600 / 4) / 4, (620 / 4) / 4);
+            //button.Location = new Point(600, 250);
+            //button.Size = new Size((600 / 4) / 4, (620 / 4) / 4);
 
-            //button.Location = new Point(600, 50);
-            //button.Size = new Size(500 / 6, 90);
-            
             //frmLocation.Location = new Point(600, 35);
             //frmLocation.Text = $"Form location: {this.Location.X}:{this.Location.Y}";
             //this.Controls.Add(frmLocation);
@@ -74,6 +71,10 @@ namespace Chess.AF.ChessForm
             //this.Controls.Add(promoteWhite);
 
             this.btnLoadFen.Image = Fen();
+            this.btnFirstMove.Image = FirstMove(23, 22);
+            this.btnPreviousMove.Image = PreviousMove(23, 22);
+            this.btnNextMove.Image = NextMove(23, 22);
+            this.btnLastMove.Image = LastMove(23, 22);
             UpdateView();
         }
 
@@ -98,6 +99,18 @@ namespace Chess.AF.ChessForm
             //MessageBox.Show($"Fen: {boardControl.ToFenString()}");
             //MessageBox.Show($"Size: {Size.Width}:{Size.Height}");
         }
+
+        private void BtnFirstMove_Click(object sender, EventArgs e)
+            => this.boardController.GotoFirstMove();
+
+        private void BtnPreviousMove_Click(object sender, EventArgs e)
+            => this.boardController.GotoPreviousMove();
+
+        private void BtnNextMove_Click(object sender, EventArgs e)
+            => this.boardController.GotoNextMove();
+
+        private void BtnLastMove_Click(object sender, EventArgs e)
+            => this.boardController.GotoLastMove();
 
         public void UpdateView()
             => lblResult.Text = whoToMove() + checkInfo();

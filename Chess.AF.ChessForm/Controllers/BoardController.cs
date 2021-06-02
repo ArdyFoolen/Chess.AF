@@ -147,6 +147,30 @@ namespace Chess.AF.ChessForm.Controllers
             }
         }
 
+        public void GotoFirstMove()
+        {
+            game.GotoFirstMove();
+            ResetController();
+        }
+        
+        public void GotoPreviousMove()
+        {
+            game.GotoPreviousMove();
+            ResetController();
+        }
+
+        public void GotoNextMove()
+        {
+            game.GotoNextMove();
+            ResetController();
+        }
+
+        public void GotoLastMove()
+        {
+            game.GotoLastMove();
+            ResetController();
+        }
+
         private void SetSelectedSquare(int square)
         {
             selectedSquare = square;

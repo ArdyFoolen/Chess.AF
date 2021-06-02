@@ -17,12 +17,16 @@ namespace Chess.AF.ChessForm
     {
         private static readonly Image ChessPieces;
         private static readonly Image FenImage;
+        private static readonly Image MediaPlayerIconSetImage;
 
         static ImageHelper()
         {
             ChessPieces = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.ChessPieces500x181.png");
             FenImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Fen301x156.png");
+            MediaPlayerIconSetImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.MediaPlayeIconSet600x620.png");
         }
+
+        #region public Chess Image Helpers
 
         public static readonly Dictionary<int, Func<Image>> GetPieceDict = new Dictionary<int, Func<Image>>()
         {
@@ -81,8 +85,44 @@ namespace Chess.AF.ChessForm
         public static Image BlackPawn()
             => GetPiece(5, true, 9);
 
+        #endregion
+
+        #region public Fen Image Helper
+
         public static Image Fen()
             => FenImage;
+
+        #endregion
+
+        #region public Media Player Helper Methods
+
+        public static Image FirstMove(int? width = null, int? height = null)
+            => LoadMediaPlayerImage(1, 1, width, height);
+
+        public static Image PreviousMove(int? width = null, int? height = null)
+            => LoadMediaPlayerImage(3, 1, width, height);
+
+        public static Image NextMove(int? width = null, int? height = null)
+            => LoadMediaPlayerImage(2, 1, width, height);
+
+        public static Image LastMove(int? width = null, int? height = null)
+            => LoadMediaPlayerImage(0, 1, width, height);
+
+        private static Image LoadMediaPlayerImage(int horizontal, int vertical, int? width = null, int? height = null)
+        {
+            width = width ?? MediaPlayerWidth;
+            height = height ?? MediaPlayerHeight;
+
+            int x = MediaPlayerWidth * horizontal;
+            int y = MediaPlayerHeight * vertical;
+
+            Rectangle source = new Rectangle(new Point(x, y), new Size(MediaPlayerWidth, MediaPlayerHeight));
+            return ResizeImage(CropImage(MediaPlayerIconSetImage, source), width.Value, height.Value);
+        }
+
+        #endregion
+
+        #region private Checss Image Helper Methods
 
         private static Dictionary<int, Image> PiecesDict = new Dictionary<int, Image>();
         /// <summary>
@@ -120,6 +160,10 @@ namespace Chess.AF.ChessForm
             Rectangle source = new Rectangle(new Point(x, y), new Size(500 / 6, 90));
             return ResizeImage(CropImage(ChessPieces, source), width.Value, width.Value);
         }
+
+        #endregion
+
+        #region private Image Helper Methods
 
         private static Bitmap CropImage(Image orgImg, Rectangle source)
         {
@@ -172,5 +216,7 @@ namespace Chess.AF.ChessForm
 
         private static Image ImageFromStream(Stream stream)
             => (stream != null) ? Image.FromStream(stream) : null;
+
+        #endregion
     }
 }

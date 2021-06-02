@@ -15,5 +15,8 @@ namespace Chess.AF.ChessForm
 
         public static readonly int MoveSquareWidthHeight = 30;
         public static readonly int MoveSquareLeftTop = (SquareWidth / 2) - (MoveSquareWidthHeight / 2);
+
+        public static readonly int MediaPlayerWidth = 600 / 4;
+        public static readonly int MediaPlayerHeight = 620 / 4;
     }
 }

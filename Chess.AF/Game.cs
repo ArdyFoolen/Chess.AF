@@ -55,6 +55,24 @@ namespace Chess.AF
             this.CurrentCommand += 1;
         }
 
+        public void GotoFirstMove()
+            => this.CurrentCommand = 0;
+
+        public void GotoPreviousMove()
+        {
+            if (this.CurrentCommand > 0)
+                this.CurrentCommand -= 1;
+        }
+
+        public void GotoNextMove()
+        {
+            if (this.CurrentCommand + 1 < this.Commands.Count())
+                this.CurrentCommand += 1;
+        }
+
+        public void GotoLastMove()
+            => this.CurrentCommand = this.Commands.Count() - 1;
+
         public Option<Selected> SelectPiece(Option<PieceEnum> piece)
             => piece.Bind(pc => Position.Bind(p => Selected.Of(pc, p.GetIteratorFor(pc), p)));
 

@@ -34,6 +34,10 @@ namespace Chess.AF.ChessForm
         {
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnLoadFen = new System.Windows.Forms.ToolStripButton();
+            this.btnFirstMove = new System.Windows.Forms.ToolStripButton();
+            this.btnPreviousMove = new System.Windows.Forms.ToolStripButton();
+            this.btnNextMove = new System.Windows.Forms.ToolStripButton();
+            this.btnLastMove = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +45,7 @@ namespace Chess.AF.ChessForm
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnLoadFen});
+            this.btnLoadFen, this.btnFirstMove, this.btnPreviousMove, this.btnNextMove, this.btnLastMove});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -56,6 +60,42 @@ namespace Chess.AF.ChessForm
             this.btnLoadFen.Size = new System.Drawing.Size(23, 22);
             this.btnLoadFen.Text = "Load Fen";
             this.btnLoadFen.Click += BtnLoadFen_Click;
+            // 
+            // btnFirstMove
+            // 
+            this.btnFirstMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnFirstMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFirstMove.Name = "btnFirstMove";
+            this.btnFirstMove.Size = new System.Drawing.Size(23, 22);
+            this.btnFirstMove.Text = "Goto First Move";
+            this.btnFirstMove.Click += BtnFirstMove_Click;
+            // 
+            // btnPreviousMove
+            // 
+            this.btnPreviousMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPreviousMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPreviousMove.Name = "btnPreviousMove";
+            this.btnPreviousMove.Size = new System.Drawing.Size(23, 22);
+            this.btnPreviousMove.Text = "Goto Previous Move";
+            this.btnPreviousMove.Click += BtnPreviousMove_Click;
+            // 
+            // btnNextMove
+            // 
+            this.btnNextMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnNextMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNextMove.Name = "btnNextMove";
+            this.btnNextMove.Size = new System.Drawing.Size(23, 22);
+            this.btnNextMove.Text = "Goto Next Move";
+            this.btnNextMove.Click += BtnNextMove_Click;
+            // 
+            // btnLastMove
+            // 
+            this.btnLastMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLastMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnLastMove.Name = "btnLastMove";
+            this.btnLastMove.Size = new System.Drawing.Size(23, 22);
+            this.btnLastMove.Text = "Goto Last Move";
+            this.btnLastMove.Click += BtnLastMove_Click;
             // 
             // ChessFrm
             // 
@@ -77,6 +117,10 @@ namespace Chess.AF.ChessForm
 
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnLoadFen;
+        private System.Windows.Forms.ToolStripButton btnFirstMove;
+        private System.Windows.Forms.ToolStripButton btnPreviousMove;
+        private System.Windows.Forms.ToolStripButton btnNextMove;
+        private System.Windows.Forms.ToolStripButton btnLastMove;
     }
 }
 
