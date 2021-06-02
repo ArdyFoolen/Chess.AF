@@ -10,22 +10,50 @@ namespace Chess.AF
 {
     public class Game
     {
-        private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        private Option<Position> Position = None;
+        private Option<Position> Position
+        {
+            get
+            {
+                if (this.CurrentCommand < 0)
+                    return None;
+                return this.Commands[this.CurrentCommand].Position;
+            }
+        }
+        private List<Command> Commands = new List<Command>();
+        private int CurrentCommand = -1;
 
         public void Load()
-            => Load(DefaultFen);
+            => LoadCommand(new LoadCommand());
 
         public void Load(string fenString)
-            => Position = fenString.CreateFen().CreatePosition();
+            => LoadCommand(new LoadCommand(fenString));
 
         public bool IsLoaded { get { return !Position.Equals(None); } }
 
         public void Move(Move move)
-            => Position = Position.Bind(p => p.Move(move))
-            .Match(None: () => Position,
-                    Some: s => s);
+            => ExecuteCommand(new MoveCommand(Position, move));
+
+        private void LoadCommand(Command command)
+        {
+            this.Commands.Clear();
+            this.CurrentCommand = -1;
+            ExecuteCommand(command);
+        }
+
+        private void ExecuteCommand(Command command)
+        {
+            command.Execute();
+            AddCommand(command);
+        }
+
+        private void AddCommand(Command command)
+        {
+            if (this.CurrentCommand + 1 < this.Commands.Count)
+                this.Commands = this.Commands.Take(this.CurrentCommand + 1).ToList();
+
+            this.Commands.Add(command);
+            this.CurrentCommand += 1;
+        }
 
         public Option<Selected> SelectPiece(Option<PieceEnum> piece)
             => piece.Bind(pc => Position.Bind(p => Selected.Of(pc, p.GetIteratorFor(pc), p)));
@@ -50,7 +78,7 @@ namespace Chess.AF
                 );
 
         public void Map(Func<Position, Position> func)
-            => Position = Position.Map(func);
+            => Position.Map(func);
 
         public bool IsWhiteToMove
         {
