@@ -44,8 +44,6 @@ namespace Chess.AF.ChessForm.Controllers
         {
             game = new Game();
             game.Load();
-            //game.Load("1q5k/P7/8/8/8/8/8/6K1 w - - 0 1");
-            //game.Load("7k/8/8/8/8/8/p7/1Q4K1 b - - 0 1");
             SetPositionDict();
             moves = game.AllMoves();
         }

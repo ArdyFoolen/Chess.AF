@@ -42,33 +42,8 @@ namespace Chess.AF.ChessForm
             lblResult.Location = new Point(600, 50);
             lblResult.Size = new Size(200, 23);
 
-            //Button button = new Button();
-            //button.Image = LastMove((600 / 4) / 4, (620 / 4) / 4);
-            //button.Location = new Point(600, 250);
-            //button.Size = new Size((600 / 4) / 4, (620 / 4) / 4);
-
-            //frmLocation.Location = new Point(600, 35);
-            //frmLocation.Text = $"Form location: {this.Location.X}:{this.Location.Y}";
-            //this.Controls.Add(frmLocation);
-
-            //ptToScreen.Location = new Point(600, 70);
-            //var loc = this.PointToScreen(this.Location);
-            //ptToScreen.Text = $"Form location: {loc.X}:{loc.Y}";
-            //this.Controls.Add(ptToScreen);
-
-            //PromoteControl promoteBlack = new PromoteControl(true);
-            //promoteBlack.Location = new Point(600, 100);
-            //promoteBlack.Size = new Size(70, 80);
-
-            //PromoteControl promoteWhite = new PromoteControl(false);
-            //promoteWhite.Location = new Point(600, 200);
-            //promoteWhite.Size = new Size(70, 80);
-
             this.Controls.Add(this.boardControl);
             this.Controls.Add(lblResult);
-            //this.Controls.Add(button);
-            //this.Controls.Add(promoteBlack);
-            //this.Controls.Add(promoteWhite);
 
             this.btnLoadFen.Image = Fen();
             this.btnFirstMove.Image = FirstMove(23, 22);
@@ -78,8 +53,6 @@ namespace Chess.AF.ChessForm
             UpdateView();
         }
 
-        //Label frmLocation = new Label();
-        //Label ptToScreen = new Label();
         Label lblResult = new Label();
         LoadFen loadFen = new LoadFen();
 
@@ -90,14 +63,6 @@ namespace Chess.AF.ChessForm
                 this.boardControl.LoadFen(this.loadFen.Fen);
             if (DialogResult.Yes.Equals(result))
                 this.boardControl.LoadFen();
-            //this.loadFen.Hide();
-            //frmLocation.Text = $"Form location: {this.Location.X}:{this.Location.Y}";
-
-            //var loc = this.PointToScreen(this.Location);
-            //ptToScreen.Text = $"Form location: {loc.X}:{loc.Y}";
-
-            //MessageBox.Show($"Fen: {boardControl.ToFenString()}");
-            //MessageBox.Show($"Size: {Size.Width}:{Size.Height}");
         }
 
         private void BtnFirstMove_Click(object sender, EventArgs e)

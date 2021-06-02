@@ -223,34 +223,4 @@ namespace Chess.AF.Console
                 NoneF: () => None,
                 SomeF: c => { c.Run(); return c; });
     }
-
-    //public class MyCustomerResolver : DataContractResolver
-    //{
-    //    public override bool TryResolveType(Type dataContractType, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
-    //    {
-    //        if (dataContractType == typeof(SquareEnum))
-    //        {
-    //            XmlDictionary dictionary = new XmlDictionary();
-    //            typeName = dictionary.Add("SquareEnum");
-    //            typeNamespace = dictionary.Add("Chess.AF");
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return knownTypeResolver.TryResolveType(dataContractType, declaredType, null, out typeName, out typeNamespace);
-    //        }
-    //    }
-
-    //    public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
-    //    {
-    //        if (typeName == "SquareEnum" && typeNamespace == "Chess.AF")
-    //        {
-    //            return typeof(SquareEnum);
-    //        }
-    //        else
-    //        {
-    //            return knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, null);
-    //        }
-    //    }
-    //}
 }
