@@ -50,6 +50,9 @@
     <Compile Include="Move.cs" />
     <Compile Include="MoveCommand.cs" />
     <Compile Include="MovesDictionaries.cs" />
+    <Compile Include="Pgn.cs" />
+    <Compile Include="PgnBuilder.cs" />
+    <Compile Include="PortableGameNotationBuilder.cs" />
     <Compile Include="QueenMoves.cs" />
     <Compile Include="PawnMoves.cs" />
     <Compile Include="RookMoves.cs" />
