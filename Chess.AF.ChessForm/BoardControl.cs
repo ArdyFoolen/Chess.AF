@@ -63,15 +63,5 @@ namespace Chess.AF.ChessForm
         }
 
         public bool IsReverse { get; private set; } = false;
-
-        public void LoadFen()
-            => boardController.LoadFen();
-
-        public void LoadFen(string fen)
-            => boardController.LoadFen(fen);
-
-        public string ToFenString()
-            => boardController.ToFenString();
-
     }
 }

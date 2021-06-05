@@ -61,9 +61,9 @@ namespace Chess.AF.ChessForm
         {
             var result = this.loadFen.ShowDialog();
             if (DialogResult.OK.Equals(result))
-                this.boardControl.LoadFen(this.loadFen.Fen);
+                boardController.LoadFen(this.loadFen.Fen);
             if (DialogResult.Yes.Equals(result))
-                this.boardControl.LoadFen();
+                boardController.LoadFen();
         }
 
         private void BtnFirstMove_Click(object sender, EventArgs e)
