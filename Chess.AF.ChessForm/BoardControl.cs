@@ -14,17 +14,17 @@ namespace Chess.AF.ChessForm
 {
     public partial class BoardControl : UserControl
     {
-        private IEnumerable<SquareControl> squares;
         private IBoardController boardController;
+
+        public bool IsReverse { get; private set; } = false;
+
 
         public BoardControl(IBoardController boardController)
         {
             InitializeComponent();
 
             this.boardController = boardController;
-            this.squares = GetSquares();
-
-            this.Controls.AddRange(this.squares.ToArray());
+            this.Controls.AddRange(GetSquares().ToArray());
         }
 
         private IEnumerable<SquareControl> GetSquares()
@@ -61,7 +61,5 @@ namespace Chess.AF.ChessForm
                 control.Location = GetLocation(control.Id);
             this.Invalidate(true);
         }
-
-        public bool IsReverse { get; private set; } = false;
     }
 }
