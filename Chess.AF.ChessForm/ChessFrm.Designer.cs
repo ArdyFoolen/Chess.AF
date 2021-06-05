@@ -38,6 +38,7 @@ namespace Chess.AF.ChessForm
             this.btnPreviousMove = new System.Windows.Forms.ToolStripButton();
             this.btnNextMove = new System.Windows.Forms.ToolStripButton();
             this.btnLastMove = new System.Windows.Forms.ToolStripButton();
+            this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,7 +46,7 @@ namespace Chess.AF.ChessForm
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnLoadFen, this.btnFirstMove, this.btnPreviousMove, this.btnNextMove, this.btnLastMove});
+            this.btnLoadFen, this.btnFirstMove, this.btnPreviousMove, this.btnNextMove, this.btnLastMove, this.btnReverseBoard});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -97,6 +98,15 @@ namespace Chess.AF.ChessForm
             this.btnLastMove.Text = "Goto Last Move";
             this.btnLastMove.Click += BtnLastMove_Click;
             // 
+            // btnReverseBoard
+            // 
+            this.btnReverseBoard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnReverseBoard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReverseBoard.Name = "btnReverseBoard";
+            this.btnReverseBoard.Size = new System.Drawing.Size(23, 22);
+            this.btnReverseBoard.Text = "Reverse Board";
+            this.btnReverseBoard.Click += btnReverseBoard_Click;
+            // 
             // ChessFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -121,6 +131,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnPreviousMove;
         private System.Windows.Forms.ToolStripButton btnNextMove;
         private System.Windows.Forms.ToolStripButton btnLastMove;
+        private System.Windows.Forms.ToolStripButton btnReverseBoard;
     }
 }
 

@@ -50,6 +50,7 @@ namespace Chess.AF.ChessForm
             this.btnPreviousMove.Image = PreviousMove(23, 22);
             this.btnNextMove.Image = NextMove(23, 22);
             this.btnLastMove.Image = LastMove(23, 22);
+            this.btnReverseBoard.Image = TurnBoard();
             UpdateView();
         }
 
@@ -76,6 +77,9 @@ namespace Chess.AF.ChessForm
 
         private void BtnLastMove_Click(object sender, EventArgs e)
             => this.boardController.GotoLastMove();
+
+        private void btnReverseBoard_Click(object sender, EventArgs e)
+            => this.boardControl.ReverseBoardView();
 
         public void UpdateView()
             => lblResult.Text = whoToMove() + checkInfo();

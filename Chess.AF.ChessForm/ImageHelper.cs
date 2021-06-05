@@ -18,12 +18,14 @@ namespace Chess.AF.ChessForm
         private static readonly Image ChessPieces;
         private static readonly Image FenImage;
         private static readonly Image MediaPlayerIconSetImage;
+        private static readonly Image TurnBoardImage;
 
         static ImageHelper()
         {
             ChessPieces = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.ChessPieces500x181.png");
             FenImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Fen301x156.png");
             MediaPlayerIconSetImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.MediaPlayeIconSet600x620.png");
+            TurnBoardImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.TurnBoard179x245.png");
         }
 
         #region public Chess Image Helpers
@@ -91,6 +93,13 @@ namespace Chess.AF.ChessForm
 
         public static Image Fen()
             => FenImage;
+
+        #endregion
+
+        #region public Turn Board Image Helper
+
+        public static Image TurnBoard()
+            => TurnBoardImage;
 
         #endregion
 
