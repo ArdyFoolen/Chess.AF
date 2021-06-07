@@ -53,6 +53,7 @@
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\TestSourceHelper.cs" />
     <Compile Include="UnitTests\FenRegexTests.cs" />
+    <Compile Include="UnitTests\GameResultTests.cs" />
     <Compile Include="UnitTests\KingMovesTests.cs" />
     <Compile Include="UnitTests\PawnMovesTests.cs" />
     <Compile Include="UnitTests\PgnTests.cs" />
@@ -80,6 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pgn\Pgn01.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pgn\Pgn02.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

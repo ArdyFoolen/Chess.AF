@@ -12,11 +12,12 @@ namespace Chess.AF.Tests.UnitTests
 {
     public class PgnTests
     {
-        [Test]
-        public void Of_BuildPgn_Succeeds()
+        [TestCase("Chess.AF.Tests.Pgn.Pgn01.txt")]
+        [TestCase("Chess.AF.Tests.Pgn.Pgn02.txt")]
+        public void Of_BuildPgn_Succeeds(string pgnFile)
         {
             // Arrange
-            string lines = ResourceHelper.ReadEmbeddedRessource("Chess.AF.Tests.Pgn.Pgn01.txt");
+            string lines = ResourceHelper.ReadEmbeddedRessource(pgnFile);
             Option<Pgn> expected = Pgn.Of(lines);
 
             // Act
@@ -25,6 +26,5 @@ namespace Chess.AF.Tests.UnitTests
             // Assert
             //Assert.IsFalse(Object.ReferenceEquals(expected, actual));
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -203,5 +204,54 @@ namespace Chess.AF
             return None;
         }
 
+        public static GameResult ToGameResult(this string str)
+        {
+            foreach (GameResult gameResult in Enum.GetValues(typeof(GameResult)))
+            {
+                var dispAttr = gameResult.GetAttributeOfType<DisplayAttribute>();
+                if (dispAttr != null && str.Equals(dispAttr.Name))
+                    return gameResult;
+            }
+            return GameResult.Invalid;
+        }
+
+        /// <summary>
+        /// Gets an attribute on an enum field value
+        /// </summary>
+        /// <typeparam name="T">The type of the attribute you want to retrieve</typeparam>
+        /// <param name="enumVal">The enum value</param>
+        /// <returns>The attribute of type T that exists on the enum value</returns>
+        /// <example><![CDATA[string desc = myEnumVariable.GetAttributeOfType<DescriptionAttribute>().Description;]]></example>
+        public static T GetAttributeOfType<T>(this Enum enumVal) where T : System.Attribute
+        {
+            var type = enumVal.GetType();
+            var memInfo = type.GetMember(enumVal.ToString());
+            var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
+            return (attributes.Length > 0) ? (T)attributes[0] : null;
+        }
+
+        public static Option<PieceEnum> FromSanToPiece(this string str)
+        {
+            if ("O-O".Equals(str) || "O-O-O".Equals(str) || 'K'.Equals(str.FirstOrDefault()))
+                return Some(PieceEnum.King);
+            else if (promoteDict.ContainsKey(str.FirstOrDefault().ToString()))
+                return str.FirstOrDefault().ToString().ToPiece();
+            else return Some(PieceEnum.Pawn);
+        }
+
+        public static PieceEnum FromSanToPromoted(this string str, Option<PieceEnum> piece)
+            => piece.Match(
+                None: () => PieceEnum.Pawn,
+                Some: p => str.FromSanToPromoted(p));
+
+        public static PieceEnum FromSanToPromoted(this string str, PieceEnum piece)
+        {
+            if (promoteDict.ContainsKey(str.LastOrDefault().ToString()))
+                return str.FirstOrDefault().ToString().ToPiece().Match(
+                    None: () => piece,
+                    Some: s => s);
+            else
+                return piece;
+        }
     }
 }
