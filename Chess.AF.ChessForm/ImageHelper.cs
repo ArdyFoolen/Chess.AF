@@ -20,6 +20,7 @@ namespace Chess.AF.ChessForm
         private static readonly Image TurnBoardImage;
         private static readonly Image FenPgnImage;
         private static readonly Image ResignImage;
+        private static readonly Image Draw50Image;
 
         static ImageHelper()
         {
@@ -28,6 +29,7 @@ namespace Chess.AF.ChessForm
             TurnBoardImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.TurnBoard179x245.png");
             FenPgnImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.FenPgn843x162.png");
             ResignImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Resign200x200.png");
+            Draw50Image = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Draw291x189.png");
         }
 
         #region public Chess Image Helpers
@@ -119,6 +121,13 @@ namespace Chess.AF.ChessForm
 
         public static Image ResignFlag()
             => ResignImage;
+
+        #endregion
+
+        #region Draw image helper
+
+        public static Image Draw50()
+            => Draw50Image;
 
         #endregion
 

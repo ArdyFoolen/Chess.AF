@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Images\ChessPieces500x181.png" />
+    <None Remove="Images\Draw291x189.png" />
     <None Remove="Images\FenPgn843x162.png" />
     <None Remove="Images\MediaPlayeIconSet600x620.png" />
     <None Remove="Images\Resign200x200.png" />
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Images\ChessPieces500x181.png" />
+    <EmbeddedResource Include="Images\Draw291x189.png" />
     <EmbeddedResource Include="Images\FenPgn843x162.png" />
     <EmbeddedResource Include="Images\MediaPlayeIconSet600x620.png" />
     <EmbeddedResource Include="Images\Resign200x200.png" />

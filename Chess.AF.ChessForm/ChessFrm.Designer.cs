@@ -41,6 +41,7 @@ namespace Chess.AF.ChessForm
             this.btnLastMove = new System.Windows.Forms.ToolStripButton();
             this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
             this.btnResign = new System.Windows.Forms.ToolStripButton();
+            this.btnDraw = new System.Windows.Forms.ToolStripButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +57,8 @@ namespace Chess.AF.ChessForm
             this.btnNextMove,
             this.btnLastMove,
             this.btnReverseBoard,
-            this.btnResign});
+            this.btnResign,
+            this.btnDraw});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -135,6 +137,15 @@ namespace Chess.AF.ChessForm
             this.btnResign.Text = "Resign Game";
             this.btnResign.Click += btnResign_Click;
             // 
+            // btnDraw
+            // 
+            this.btnDraw.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnDraw.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDraw.Name = "btnDraw";
+            this.btnDraw.Size = new System.Drawing.Size(23, 22);
+            this.btnDraw.Text = "Draw Game";
+            this.btnDraw.Click += btnDraw_Click;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -166,6 +177,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnLastMove;
         private System.Windows.Forms.ToolStripButton btnReverseBoard;
         private System.Windows.Forms.ToolStripButton btnResign;
+        private System.Windows.Forms.ToolStripButton btnDraw;
         private OpenFileDialog openFileDialog1;
     }
 }
