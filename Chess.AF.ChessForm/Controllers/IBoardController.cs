@@ -22,6 +22,8 @@ namespace Chess.AF.ChessForm.Controllers
             get;
         }
 
+        void SetFromPgn(Option<Pgn> pgn);
+
         bool IsWhiteToMove { get; }
         bool IsMate { get; }
         bool IsInCheck { get; }

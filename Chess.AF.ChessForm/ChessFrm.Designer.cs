@@ -40,6 +40,7 @@ namespace Chess.AF.ChessForm
             this.btnNextMove = new System.Windows.Forms.ToolStripButton();
             this.btnLastMove = new System.Windows.Forms.ToolStripButton();
             this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +48,13 @@ namespace Chess.AF.ChessForm
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnLoadFen, this.btnLoadPgn, this.btnFirstMove, this.btnPreviousMove, this.btnNextMove, this.btnLastMove, this.btnReverseBoard});
+            this.btnLoadFen,
+            this.btnLoadPgn,
+            this.btnFirstMove,
+            this.btnPreviousMove,
+            this.btnNextMove,
+            this.btnLastMove,
+            this.btnReverseBoard});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -117,6 +124,10 @@ namespace Chess.AF.ChessForm
             this.btnReverseBoard.Text = "Reverse Board";
             this.btnReverseBoard.Click += btnReverseBoard_Click;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // ChessFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -143,6 +154,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnNextMove;
         private System.Windows.Forms.ToolStripButton btnLastMove;
         private System.Windows.Forms.ToolStripButton btnReverseBoard;
+        private OpenFileDialog openFileDialog1;
     }
 }
 

@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
 using static Chess.AF.ChessForm.ImageHelper;
+using static AF.Functional.F;
 
 namespace Chess.AF.ChessForm
 {
@@ -69,11 +71,17 @@ namespace Chess.AF.ChessForm
 
         private void BtnLoadPgn_Click(object sender, EventArgs e)
         {
-            //var result = this.loadFen.ShowDialog();
-            //if (DialogResult.OK.Equals(result))
-            //    boardController.LoadFen(this.loadFen.Fen);
-            //if (DialogResult.Yes.Equals(result))
-            //    boardController.LoadFen();
+            this.openFileDialog1 = new OpenFileDialog();
+            this.openFileDialog1.Filter = "pgn files (*.pgn)|*.pgn|All files (*.*)|*.*";
+            this.openFileDialog1.FilterIndex = 0;
+            this.openFileDialog1.Title = "Browse Portable Game Notation files";
+            var result = this.openFileDialog1.ShowDialog();
+            if (DialogResult.OK.Equals(result))
+            {
+                string pgnString = string.Empty;
+                Using(new StreamReader(this.openFileDialog1.FileName), reader => pgnString = reader.ReadToEnd());
+                this.boardController.SetFromPgn(Pgn.Import(pgnString));
+            }
         }
 
         private void BtnFirstMove_Click(object sender, EventArgs e)

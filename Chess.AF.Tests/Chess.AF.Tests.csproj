@@ -80,10 +80,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pgn\Pgn01.txt" />
+    <EmbeddedResource Include="Pgn\Pgn01.pgn" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pgn\Pgn02.txt" />
+    <EmbeddedResource Include="Pgn\Pgn02.pgn" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

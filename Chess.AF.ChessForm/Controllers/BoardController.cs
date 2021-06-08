@@ -48,6 +48,16 @@ namespace Chess.AF.ChessForm.Controllers
             moves = game.AllMoves();
         }
 
+        public void SetFromPgn(Option<Pgn> pgn)
+            => pgn.Map(p => SetFromPgn(p));
+
+        private Unit SetFromPgn(Pgn pgn)
+        {
+            game = pgn.Game;
+            GotoFirstMove();
+            return Unit();
+        }
+
         public void Register(IBoardView view)
         {
             if (!views.Contains(view))

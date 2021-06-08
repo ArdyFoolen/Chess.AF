@@ -12,8 +12,8 @@ namespace Chess.AF.Tests.UnitTests
 {
     public class PgnTests
     {
-        [TestCase("Chess.AF.Tests.Pgn.Pgn01.txt")]
-        [TestCase("Chess.AF.Tests.Pgn.Pgn02.txt")]
+        [TestCase("Chess.AF.Tests.Pgn.Pgn01.pgn")]
+        [TestCase("Chess.AF.Tests.Pgn.Pgn02.pgn")]
         public void Of_BuildPgn_Succeeds(string pgnFile)
         {
             // Arrange
