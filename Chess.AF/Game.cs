@@ -125,5 +125,12 @@ namespace Chess.AF
                 None: () => false,
                 Some: s => s.IsStaleMate);
         }
+
+        public GameResult Result
+        {
+            get => Position.Match(
+                None: () => GameResult.Invalid,
+                Some: s => s.Result);
+        }
     }
 }

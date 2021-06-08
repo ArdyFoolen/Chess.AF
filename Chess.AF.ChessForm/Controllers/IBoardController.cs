@@ -29,6 +29,8 @@ namespace Chess.AF.ChessForm.Controllers
         bool IsInCheck { get; }
         bool IsStaleMate { get; }
 
+        GameResult Result { get; }
+
         void GotoFirstMove();
         void GotoPreviousMove();
         void GotoNextMove();

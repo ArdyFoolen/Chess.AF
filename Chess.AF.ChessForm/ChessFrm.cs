@@ -100,25 +100,44 @@ namespace Chess.AF.ChessForm
             => this.boardControl.ReverseBoardView();
 
         public void UpdateView()
-            => lblResult.Text = whoToMove() + checkInfo();
+            => lblResult.Text = whoToMove();
 
         private string whoToMove()
         {
-            if (boardController.IsWhiteToMove)
-                return "White to move";
+            if (!tryToShowFinalInfo(out string finalResult))
+                if (boardController.IsWhiteToMove)
+                    return $"White to move{checkInfo()}";
+                else
+                    return $"Black to move{checkInfo()}";
             else
-                return "Black to move";
+                return finalResult;
         }
 
-        private string checkInfo()
+        private bool tryToShowFinalInfo(out string finalResult)
         {
-            if (boardController.IsMate)
-                return " Check Mate";
-            if (boardController.IsInCheck)
-                return " Check";
-            if (boardController.IsStaleMate)
-                return " Stale Mate";
-            return string.Empty;
+            finalResult = string.Empty;
+            bool final = false;
+            var result = boardController.Result;
+            if (!GameResult.Ongoing.Equals(result) && !GameResult.Invalid.Equals(result))
+            {
+                final = true;
+                if (GameResult.Draw.Equals(result))
+                    finalResult = $"Draw{showStalemate()}";
+                if (GameResult.WhiteWins.Equals(result))
+                    finalResult = $"White Wins{showMate()}";
+                if (GameResult.BlackWins.Equals(result))
+                    finalResult = $"Black Wins{showMate()}";
+            }
+            return final;
         }
+
+        private string showMate()
+            => boardController.IsMate ? " Checkmate" : string.Empty;
+
+        private string showStalemate()
+            => boardController.IsStaleMate ? " Stalemate" : string.Empty;
+
+        private string checkInfo()
+            => boardController.IsInCheck ? " Check" : string.Empty;
     }
 }

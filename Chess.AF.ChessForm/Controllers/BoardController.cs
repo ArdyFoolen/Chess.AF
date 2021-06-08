@@ -23,6 +23,8 @@ namespace Chess.AF.ChessForm.Controllers
         public bool IsInCheck { get => game.IsInCheck; }
         public bool IsStaleMate { get => game.IsStaleMate; }
 
+        public GameResult Result { get => game.Result; }
+
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMoves
         {
             get

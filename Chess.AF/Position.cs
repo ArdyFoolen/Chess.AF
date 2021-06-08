@@ -518,6 +518,24 @@ namespace Chess.AF
 
         #endregion
 
+        #region Result
+
+        public GameResult Result
+        {
+            get
+            {
+                if (IsStaleMate)
+                    return GameResult.Draw;
+                if (IsWhiteToMove && IsMate)
+                    return GameResult.BlackWins;
+                if (!IsWhiteToMove && IsMate)
+                    return GameResult.WhiteWins;
+                return GameResult.Ongoing;
+            }
+        }
+
+        #endregion
+
         #region Iterators
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
