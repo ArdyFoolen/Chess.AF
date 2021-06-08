@@ -41,8 +41,10 @@ namespace Chess.AF.ChessForm
 
             lblResult.Text = string.Empty;
             lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            lblResult.Location = new Point(600, 50);
+            lblResult.Location = new Point(570, 43);
             lblResult.Size = new Size(200, 23);
+
+            //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
             this.Controls.Add(lblResult);
