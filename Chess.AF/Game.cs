@@ -34,10 +34,16 @@ namespace Chess.AF
             => ExecuteCommand(new MoveCommand(Position, move));
 
         public void Resign()
-            => ExecuteCommand(new ResignCommand(Position));
+            => ReplaceCommand(new ResignCommand(Position));
 
         public void Draw()
-            => ExecuteCommand(new DrawCommand(Position));
+            => ReplaceCommand(new DrawCommand(Position));
+
+        private void ReplaceCommand(Command command)
+        {
+            this.CurrentCommand -= 1;
+            ExecuteCommand(command);
+        }
 
         private void LoadCommand(Command command)
         {
