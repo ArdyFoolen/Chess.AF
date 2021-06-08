@@ -35,10 +35,12 @@ namespace Chess.AF.ChessForm
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnLoadFen = new System.Windows.Forms.ToolStripButton();
             this.btnLoadPgn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnFirstMove = new System.Windows.Forms.ToolStripButton();
             this.btnPreviousMove = new System.Windows.Forms.ToolStripButton();
             this.btnNextMove = new System.Windows.Forms.ToolStripButton();
             this.btnLastMove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
             this.btnResign = new System.Windows.Forms.ToolStripButton();
             this.btnDraw = new System.Windows.Forms.ToolStripButton();
@@ -52,10 +54,12 @@ namespace Chess.AF.ChessForm
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnLoadFen,
             this.btnLoadPgn,
+            this.toolStripSep1,
             this.btnFirstMove,
             this.btnPreviousMove,
             this.btnNextMove,
             this.btnLastMove,
+            this.toolStripSep2,
             this.btnReverseBoard,
             this.btnResign,
             this.btnDraw});
@@ -178,6 +182,8 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnReverseBoard;
         private System.Windows.Forms.ToolStripButton btnResign;
         private System.Windows.Forms.ToolStripButton btnDraw;
+        private System.Windows.Forms.ToolStripSeparator toolStripSep1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSep2;
         private OpenFileDialog openFileDialog1;
     }
 }
