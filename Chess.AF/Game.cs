@@ -33,6 +33,12 @@ namespace Chess.AF
         public void Move(Move move)
             => ExecuteCommand(new MoveCommand(Position, move));
 
+        public void Resign()
+            => ExecuteCommand(new ResignCommand(Position));
+
+        public void Draw()
+            => ExecuteCommand(new DrawCommand(Position));
+
         private void LoadCommand(Command command)
         {
             this.Commands.Clear();
@@ -132,5 +138,7 @@ namespace Chess.AF
                 None: () => GameResult.Invalid,
                 Some: s => s.Result);
         }
+
+
     }
 }

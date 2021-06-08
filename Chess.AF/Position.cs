@@ -112,7 +112,7 @@ namespace Chess.AF
 
     public enum GameResult
     {
-        [Display(Name ="*")]
+        [Display(Name = "*")]
         Ongoing,
         [Display(Name = "1-0")]
         WhiteWins,
@@ -249,7 +249,7 @@ namespace Chess.AF
                 IsTake = true;
                 int epIndex = (int)(IsWhiteToMove ? (int)moveTo.MoveSquare + 8 : (int)moveTo.MoveSquare - 8);
                 Maps[otherIndex] = Maps[otherIndex].SetBitOff(epIndex);
-                Maps[otherIndex+1] = Maps[otherIndex+1].SetBitOff(epIndex);
+                Maps[otherIndex + 1] = Maps[otherIndex + 1].SetBitOff(epIndex);
             }
 
             EpSquare = None;
@@ -520,6 +520,7 @@ namespace Chess.AF
 
         #region Result
 
+        private GameResult result = GameResult.Ongoing;
         public GameResult Result
         {
             get
@@ -530,8 +531,33 @@ namespace Chess.AF
                     return GameResult.BlackWins;
                 if (!IsWhiteToMove && IsMate)
                     return GameResult.WhiteWins;
-                return GameResult.Ongoing;
+                return this.result;
             }
+        }
+
+        #endregion
+
+        #region Resign and Draw
+
+        public Position Resign()
+            => (GameResult.Ongoing.Equals(result)) ? new Position(this).resign() : this;
+
+        public Position Draw()
+            => (GameResult.Ongoing.Equals(result)) ? new Position(this).draw() : this;
+
+        private Position resign()
+        {
+            if (IsWhiteToMove)
+                result = GameResult.BlackWins;
+            else
+                result = GameResult.WhiteWins;
+            return this;
+        }
+
+        private Position draw()
+        {
+            result = GameResult.Draw;
+            return this;
         }
 
         #endregion

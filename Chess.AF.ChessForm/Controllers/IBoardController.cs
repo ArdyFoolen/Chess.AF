@@ -35,7 +35,10 @@ namespace Chess.AF.ChessForm.Controllers
         void GotoPreviousMove();
         void GotoNextMove();
         void GotoLastMove();
- 
+
+        void Resign();
+        void Draw();
+
         bool IsPromoteMove(int square);
 
         void LoadFen();

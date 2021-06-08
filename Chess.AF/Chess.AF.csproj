@@ -49,6 +49,8 @@
     <Compile Include="LoadCommand.cs" />
     <Compile Include="MapNotFoundException.cs" />
     <Compile Include="Move.cs" />
+    <Compile Include="DrawCommand.cs" />
+    <Compile Include="ResignCommand.cs" />
     <Compile Include="MoveCommand.cs" />
     <Compile Include="MovesDictionaries.cs" />
     <Compile Include="Pgn.cs" />

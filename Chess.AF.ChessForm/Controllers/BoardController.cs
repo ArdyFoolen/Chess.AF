@@ -149,6 +149,19 @@ namespace Chess.AF.ChessForm.Controllers
             return Unit();
         }
 
+        public void Resign()
+        {
+            game.Resign();
+            NotifyViews();
+        }
+
+        public void Draw()
+        {
+            game.Draw();
+            NotifyViews();
+        }
+
+
         private bool IsSelected
         {
             get

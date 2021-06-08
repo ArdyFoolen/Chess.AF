@@ -40,6 +40,7 @@ namespace Chess.AF.ChessForm
             this.btnNextMove = new System.Windows.Forms.ToolStripButton();
             this.btnLastMove = new System.Windows.Forms.ToolStripButton();
             this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
+            this.btnResign = new System.Windows.Forms.ToolStripButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +55,8 @@ namespace Chess.AF.ChessForm
             this.btnPreviousMove,
             this.btnNextMove,
             this.btnLastMove,
-            this.btnReverseBoard});
+            this.btnReverseBoard,
+            this.btnResign});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -124,6 +126,15 @@ namespace Chess.AF.ChessForm
             this.btnReverseBoard.Text = "Reverse Board";
             this.btnReverseBoard.Click += btnReverseBoard_Click;
             // 
+            // btnResign
+            // 
+            this.btnResign.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnResign.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnResign.Name = "btnResign";
+            this.btnResign.Size = new System.Drawing.Size(23, 22);
+            this.btnResign.Text = "Resign Game";
+            this.btnResign.Click += btnResign_Click;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -154,6 +165,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnNextMove;
         private System.Windows.Forms.ToolStripButton btnLastMove;
         private System.Windows.Forms.ToolStripButton btnReverseBoard;
+        private System.Windows.Forms.ToolStripButton btnResign;
         private OpenFileDialog openFileDialog1;
     }
 }

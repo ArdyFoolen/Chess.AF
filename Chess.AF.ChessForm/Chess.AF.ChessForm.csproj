@@ -10,6 +10,7 @@
     <None Remove="Images\ChessPieces500x181.png" />
     <None Remove="Images\FenPgn843x162.png" />
     <None Remove="Images\MediaPlayeIconSet600x620.png" />
+    <None Remove="Images\Resign200x200.png" />
     <None Remove="Images\TurnBoard179x245.png" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
     <EmbeddedResource Include="Images\ChessPieces500x181.png" />
     <EmbeddedResource Include="Images\FenPgn843x162.png" />
     <EmbeddedResource Include="Images\MediaPlayeIconSet600x620.png" />
+    <EmbeddedResource Include="Images\Resign200x200.png" />
     <EmbeddedResource Include="Images\TurnBoard179x245.png" />
   </ItemGroup>
 
