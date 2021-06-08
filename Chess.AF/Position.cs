@@ -237,12 +237,6 @@ namespace Chess.AF
             Maps[piecesIndex] = Maps[piecesIndex].SetBit((int)moveTo.MoveSquare);
 
             int otherIndex = (int)(!IsWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);
-            if (Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
-            {
-                IsTake = true;
-                foreach (var i in Enumerable.Range(otherIndex, 7))
-                    Maps[i] = Maps[i].SetBitOff((int)moveTo.MoveSquare);
-            }
 
             if (IsEpTake(otherIndex, moveTo))
             {
@@ -250,6 +244,13 @@ namespace Chess.AF
                 int epIndex = (int)(IsWhiteToMove ? (int)moveTo.MoveSquare + 8 : (int)moveTo.MoveSquare - 8);
                 Maps[otherIndex] = Maps[otherIndex].SetBitOff(epIndex);
                 Maps[otherIndex + 1] = Maps[otherIndex + 1].SetBitOff(epIndex);
+            }
+
+            if (Maps[otherIndex].IsBitOn((int)moveTo.MoveSquare))
+            {
+                IsTake = true;
+                foreach (var i in Enumerable.Range(otherIndex, 7))
+                    Maps[i] = Maps[i].SetBitOff((int)moveTo.MoveSquare);
             }
 
             EpSquare = None;

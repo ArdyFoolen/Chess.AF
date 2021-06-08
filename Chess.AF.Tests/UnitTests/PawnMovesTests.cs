@@ -80,6 +80,7 @@ namespace Chess.AF.Tests.UnitTests
             get
             {
                 yield return new[] { ("r1bqk2r/ppp2ppp/2n5/2bpP1N1/2Bp2n1/8/PPP2PPP/RNBQ1RK1 w kq d6 0 1", PieceEnum.Pawn, SquareEnum.e5, PieceEnum.Pawn, SquareEnum.d6, "r1bqk2r/ppp2ppp/2nP4/2b3N1/2Bp2n1/8/PPP2PPP/RNBQ1RK1 b kq - 0 1") };
+                yield return new[] { ("rnbqkbnr/ppp2ppp/8/3p4/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq d6 0 1", PieceEnum.Pawn, SquareEnum.e4, PieceEnum.Pawn, SquareEnum.d5, "rnbqkbnr/ppp2ppp/8/3P4/3p4/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 1") };
             }
         }
     }
