@@ -12,8 +12,7 @@ namespace Chess.AF
     {
         private abstract class PgnBuilder
         {
-            protected Option<Pgn> pgn = None;
-            public Option<Pgn> Pgn { get { return pgn; } }
+            public Option<Pgn> Pgn { get; protected set; } = None;
             public string PgnString { get; set; }
 
             public abstract void BuildPrepare();

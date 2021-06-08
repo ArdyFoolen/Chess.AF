@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
+using Unit = System.ValueTuple;
 
 namespace Chess.AF
 {
     public partial class Pgn
     {
-        private class PortableGameNotationBuilder : PgnBuilder
+        private class PgnImportBuilder : PgnBuilder
         {
             private bool isValid = true;
             private GameResult gameResult;
-            private Game game = new Game();
+            public Game Game { get; private set; } = new Game();
 
             private Option<string[]> tagPairsMoveText;
             private Option<Dictionary<string, string>> tagPairDict;
@@ -27,13 +28,18 @@ namespace Chess.AF
             public override void BuildMoveText()
             {
                 createGameFrom();
-                //var moveText = splitMoveText();
+                if (isValid)
+                {
+                    var pgn = new Pgn(PgnString);
+                    pgn.Game = Game;
+                    this.Pgn = Some(pgn);
+                }
             }
 
             private void createGameFrom()
                 => tagPairsMoveText.Bind(m => createGameFrom(m[1]));
 
-            private Option<string> createGameFrom(string moveText)
+            private Option<Unit> createGameFrom(string moveText)
             {
                 loadGame();
                 moveText = sanitizeMoveText(moveText);
@@ -53,14 +59,88 @@ namespace Chess.AF
                     foreach (string halfMove in halfMoves)
                         makeMoveToGame(halfMove);
                 }
-                return game;
+                return Game;
             }
 
             private void makeMoveToGame(string halfMove)
             {
+                var parts = dissectHalfMoveIntoParts(halfMove);
+                var selectedMove = selectMove(parts).FirstOrDefault();
+                var toMove = AF.Move.Of(selectedMove.Piece, selectedMove.Square, selectedMove.MoveSquare, selectedMove.Promoted, RokadeEnum.None);
+                toMove.Map(m => Move(m));
+            }
+
+            private Unit Move(AF.Move move)
+            {
+                Game.Move(move);
+                return Unit();
+            }
+
+            private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectMove(
+                (Option<PieceEnum> Piece, string from, PieceEnum Promoted, string MoveSquare) parts)
+            {
+                var iter = selectPieceMoves(parts.Piece);
+                iter = selectMoveSquareMoves(iter, parts.MoveSquare);
+                iter = selectFromSquareMoves(iter, parts.from);
+                iter = selectPromotedMove(iter, parts.Promoted);
+                return iter;
+            }
+
+            private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectPromotedMove(
+                IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iter, PieceEnum promoted)
+                => iter.Where(w => promoted.Equals(w.Promoted));
+
+            private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectFromSquareMoves(
+                IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iter, string from)
+            {
+                if (string.IsNullOrWhiteSpace(from))
+                    return iter;
+                if (from.Length == 2)
+                    return from.ToSquare().Match(
+                        None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
+                        Some: s => iter.Where(w => s.Equals(w.Square)));
+                if (from[0] >= 'a' && from[0] <= 'h')
+                    return iter.Where(w => w.Square.File() == ((int)from[0] - (int)('a')));
+                if (from[0] >= '1' && from[0] <= '8')
+                    return iter.Where(w => w.Square.Row() == ((int)from[0] - (int)('1')));
+                return Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>();
+            }
+
+            private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectMoveSquareMoves(
+                IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iter, string moveSquare)
+            {
+                if ("O-O".Equals(moveSquare))
+                    return iter.Where(w => w.MoveSquare.File() == 6);
+                if ("O-O-O".Equals(moveSquare))
+                    return iter.Where(w => w.MoveSquare.File() == 2);
+                return moveSquare.ToSquare().Match(
+                    None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
+                    Some: s => iter.Where(w => s.Equals(w.MoveSquare)));
+            }
+
+            private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectPieceMoves(Option<PieceEnum> piece)
+                => piece.Match(
+                    None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
+                    Some: p => Game.AllMoves().Where(w => p.Equals(w.Piece)));
+
+            private (Option<PieceEnum> Piece, string from, PieceEnum Promoted, string MoveSquare) dissectHalfMoveIntoParts(string halfMove)
+            {
                 var piece = halfMove.FromSanToPiece();
                 var promoted = halfMove.FromSanToPromoted(piece);
                 halfMove = sanitizeHalfMove(halfMove, piece);
+                var fromToInfo = splitFromAndToSquare(halfMove);
+                return (piece, fromToInfo.from, promoted, fromToInfo.moveSquare);
+            }
+
+            private (string from, string moveSquare) splitFromAndToSquare(string halfMove)
+            {
+                if (!halfMove.StartsWith("O-O"))
+                {
+                    string from = halfMove.Substring(0, halfMove.Length - 2);
+                    string to = halfMove.Substring(halfMove.Length - 2);
+                    return (from, to);
+                }
+                return (string.Empty, halfMove);
             }
 
             private string sanitizeHalfMove(string halfMove, Option<PieceEnum> piece)
@@ -69,9 +149,13 @@ namespace Chess.AF
                     Some: p => sanitizeHalfMove(halfMove, p));
 
             private string sanitizeHalfMove(string halfMove, PieceEnum piece)
-                => piece.Equals(PieceEnum.Pawn)
-                ? halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Split('=')[0]
-                : halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Split('=')[0].Substring(1);
+            {
+                if (!halfMove.StartsWith("O-O"))
+                    return piece.Equals(PieceEnum.Pawn)
+                        ? halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0]
+                        : halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0].Substring(1);
+                return halfMove;
+            }
 
             private void loadGame()
                 => tagPairDict.Map(d => loadGame(d));
@@ -79,10 +163,10 @@ namespace Chess.AF
             private Game loadGame(Dictionary<string, string> dict)
             {
                 if (dict.ContainsKey("setup") && dict["setup"].Equals("1") && dict.ContainsKey("fen"))
-                    game.Load(dict["fen"]);
+                    Game.Load(dict["fen"]);
                 else
-                    game.Load();
-                return game;
+                    Game.Load();
+                return Game;
             }
 
             private Option<List<string>> splitMoves(string moveText)
@@ -95,7 +179,7 @@ namespace Chess.AF
                 while (index < indexes.Count())
                 {
                     var i1 = indexes[index];
-                    var i2 = index + 1 < indexes.Count() ? indexes[index+1] : 999;
+                    var i2 = index + 1 < indexes.Count() ? indexes[index + 1] : 999;
                     var take = i2 - i1 - 1;
                     if (!int.TryParse(splits[i1].Replace(".", string.Empty), out int moveNbr))
                         return None;

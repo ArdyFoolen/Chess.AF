@@ -24,14 +24,13 @@ namespace Chess.AF
         public string PgnString { get; }
         private Pgn(string pgnString) { this.PgnString = pgnString; }
 
-        //public static Option<Pgn> Of(string pgnString)
-        //    => IsValid(pgnString) ? Some(new Pgn(pgnString)) : None;
+        public Game Game { get; private set; }
 
-        public static Option<Pgn> Of(IEnumerable<string> lines)
-            => Of(string.Join(Environment.NewLine, lines.ToArray()));
-        public static Option<Pgn> Of(string pgnString)
+        public static Option<Pgn> Import(IEnumerable<string> lines)
+            => Import(string.Join(Environment.NewLine, lines.ToArray()));
+        public static Option<Pgn> Import(string pgnString)
         {
-            PgnBuilder builder = new PortableGameNotationBuilder();
+            PgnBuilder builder = new PgnImportBuilder();
             builder.PgnString = pgnString;
             builder.BuildPrepare();
             builder.BuildTagPairs();
@@ -39,9 +38,5 @@ namespace Chess.AF
 
             return builder.Pgn;
         }
-
-        public static bool IsValid(string pgnString)
-            => true;//FenRegex.IsValid(pgnString);
-
     }
 }

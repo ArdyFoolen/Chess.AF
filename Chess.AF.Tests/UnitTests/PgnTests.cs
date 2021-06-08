@@ -18,13 +18,14 @@ namespace Chess.AF.Tests.UnitTests
         {
             // Arrange
             string lines = ResourceHelper.ReadEmbeddedRessource(pgnFile);
-            Option<Pgn> expected = Pgn.Of(lines);
 
             // Act
-            //Board actual = Board.Of();
+            Option<Pgn> expected = Pgn.Import(lines);
 
             // Assert
-            //Assert.IsFalse(Object.ReferenceEquals(expected, actual));
+            expected.Match(
+                None: () => Assert.Fail(),
+                Some: p => Assert.IsTrue(true));
         }
     }
 }
