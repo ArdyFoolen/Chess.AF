@@ -539,11 +539,11 @@ namespace Chess.AF
 
         #region Resign and Draw
 
-        public Position Resign()
-            => (GameResult.Ongoing.Equals(result)) ? new Position(this).resign() : this;
+        public Option<Position> Resign()
+            => (GameResult.Ongoing.Equals(result)) ? Some(new Position(this).resign()) : None;
 
-        public Position Draw()
-            => (GameResult.Ongoing.Equals(result)) ? new Position(this).draw() : this;
+        public Option<Position> Draw()
+            => (GameResult.Ongoing.Equals(result)) ? Some(new Position(this).draw()) : None;
 
         private Position resign()
         {

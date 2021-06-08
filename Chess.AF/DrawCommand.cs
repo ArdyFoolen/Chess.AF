@@ -12,6 +12,8 @@ namespace Chess.AF
         public DrawCommand(Option<Position> position) : base(position) { }
 
         public override void Execute()
-            => Position = Position.Map(p => p.Draw());
+            => Position = Position.Bind(p => p.Draw())
+            .Match(None: () => Position,
+                    Some: s => s);
     }
 }

@@ -12,6 +12,8 @@ namespace Chess.AF
         public ResignCommand(Option<Position> position) : base(position) { }
 
         public override void Execute()
-            => Position = Position.Map(p => p.Resign());
+            => Position = Position.Bind(p => p.Resign())
+            .Match(None: () => Position,
+                    Some: s => s);
     }
 }
