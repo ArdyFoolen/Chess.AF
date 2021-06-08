@@ -16,16 +16,16 @@ namespace Chess.AF.ChessForm
     public static class ImageHelper
     {
         private static readonly Image ChessPieces;
-        private static readonly Image FenImage;
         private static readonly Image MediaPlayerIconSetImage;
         private static readonly Image TurnBoardImage;
+        private static readonly Image FenPgnImage;
 
         static ImageHelper()
         {
             ChessPieces = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.ChessPieces500x181.png");
-            FenImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Fen301x156.png");
             MediaPlayerIconSetImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.MediaPlayeIconSet600x620.png");
             TurnBoardImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.TurnBoard179x245.png");
+            FenPgnImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.FenPgn843x162.png");
         }
 
         #region public Chess Image Helpers
@@ -89,10 +89,20 @@ namespace Chess.AF.ChessForm
 
         #endregion
 
-        #region public Fen Image Helper
+        #region Fen and Pgn Image Helper
 
         public static Image Fen()
-            => FenImage;
+            => LoadFenPgnImage(0);
+
+        public static Image Pgn()
+            => LoadFenPgnImage(1);
+
+        private static Image LoadFenPgnImage(int index)
+        {
+            int x = 421 * index;
+            Rectangle source = new Rectangle(new Point(x, 0), new Size(421, 162));
+            return CropImage(FenPgnImage, source);
+        }
 
         #endregion
 

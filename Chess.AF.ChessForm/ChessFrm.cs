@@ -46,6 +46,7 @@ namespace Chess.AF.ChessForm
             this.Controls.Add(lblResult);
 
             this.btnLoadFen.Image = Fen();
+            this.btnLoadPgn.Image = Pgn();
             this.btnFirstMove.Image = FirstMove(23, 22);
             this.btnPreviousMove.Image = PreviousMove(23, 22);
             this.btnNextMove.Image = NextMove(23, 22);
@@ -64,6 +65,15 @@ namespace Chess.AF.ChessForm
                 boardController.LoadFen(this.loadFen.Fen);
             if (DialogResult.Yes.Equals(result))
                 boardController.LoadFen();
+        }
+
+        private void BtnLoadPgn_Click(object sender, EventArgs e)
+        {
+            //var result = this.loadFen.ShowDialog();
+            //if (DialogResult.OK.Equals(result))
+            //    boardController.LoadFen(this.loadFen.Fen);
+            //if (DialogResult.Yes.Equals(result))
+            //    boardController.LoadFen();
         }
 
         private void BtnFirstMove_Click(object sender, EventArgs e)
