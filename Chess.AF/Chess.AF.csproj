@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="Enums\PositionPiecesEnums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="KingMoves.cs" />
     <Compile Include="LoadCommand.cs" />

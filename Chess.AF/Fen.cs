@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;

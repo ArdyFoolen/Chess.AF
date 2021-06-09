@@ -13,6 +13,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
+using Chess.AF.Enums;
 
 namespace Chess.AF.Console
 {

@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using AF.Functional.Option;
+using Chess.AF.Enums;
 using Chess.AF.Tests.Helpers;
 using NUnit.Framework;
 using System;

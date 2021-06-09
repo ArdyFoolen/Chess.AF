@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
 using static Chess.AF.ChessForm.ImageHelper;
 using static AF.Functional.F;
+using Chess.AF.Enums;
 
 namespace Chess.AF.ChessForm
 {

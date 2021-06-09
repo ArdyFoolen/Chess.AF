@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chess.AF;
 using AF.Functional;
+using Chess.AF.Enums;
 
 namespace Chess.AF.Tests.UnitTests
 {

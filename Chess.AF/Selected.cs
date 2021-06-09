@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Chess.AF.Position;
 using static AF.Functional.F;
+using Chess.AF.Enums;
 
 namespace Chess.AF
 {
