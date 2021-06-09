@@ -138,7 +138,7 @@ namespace Chess.AF.ChessForm.Controllers
 
         private void Move((PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare) move)
         {
-            var toMove = AF.Move.Of(move.Piece, move.Square, move.MoveSquare, move.Promoted, RokadeEnum.None);
+            var toMove = AF.Move.Of(move.Piece, move.Square, move.MoveSquare, move.Promoted);
             toMove.Map(m => Move(m));
             SetPositionDict();
             moves = game.AllMoves();

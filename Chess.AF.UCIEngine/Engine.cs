@@ -143,13 +143,12 @@ namespace Chess.AF.UCIEngine
             if (!tuple.Promoted.Is(PieceEnum.Pawn))
                 promote = tuple.Promoted;
 
-            RokadeEnum rokade = RokadeEnum.None;
             if (tuple.Piece.IsQueensideRokadeMove(tuple.Square, tuple.MoveSquare))
-                rokade = RokadeEnum.QueenSide;
+                return Move.Of(RokadeEnum.QueenSide);
             if (tuple.Piece.IsKingsideRokadeMove(tuple.Square, tuple.MoveSquare))
-                rokade = RokadeEnum.KingSide;
+                return Move.Of(RokadeEnum.KingSide);
 
-            return Move.Of(tuple.Piece, tuple.Square, tuple.MoveSquare, promote, rokade);
+            return Move.Of(tuple.Piece, tuple.Square, tuple.MoveSquare, promote);
         }
 
         private void SendBestMove(Option<Move> move)

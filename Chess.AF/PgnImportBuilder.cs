@@ -65,10 +65,27 @@ namespace Chess.AF
 
             private void makeMoveToGame(string halfMove)
             {
+                Option<Move> toMove = None;
+                toMove = GetRokadeMoveWhenValid(halfMove).Match(
+                    None: () => GetNoneRokadeMoveWhenValid(halfMove),
+                    Some: m => m);
+                toMove.Map(m => Move(m));
+            }
+
+            private Option<Move> GetNoneRokadeMoveWhenValid(string halfMove)
+            {
                 var parts = dissectHalfMoveIntoParts(halfMove);
                 var selectedMove = selectMove(parts).FirstOrDefault();
-                var toMove = AF.Move.Of(selectedMove.Piece, selectedMove.Square, selectedMove.MoveSquare, selectedMove.Promoted, RokadeEnum.None);
-                toMove.Map(m => Move(m));
+                return AF.Move.Of(selectedMove.Piece, selectedMove.Square, selectedMove.MoveSquare, selectedMove.Promoted);
+            }
+
+            private Option<Move> GetRokadeMoveWhenValid(string halfMove)
+            {
+                if ("O-O".Equals(halfMove))
+                    return AF.Move.Of(RokadeEnum.KingSide);
+                if ("O-O=O".Equals(halfMove))
+                    return AF.Move.Of(RokadeEnum.QueenSide);
+                return None;
             }
 
             private Unit Move(AF.Move move)
@@ -109,15 +126,9 @@ namespace Chess.AF
 
             private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectMoveSquareMoves(
                 IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> iter, string moveSquare)
-            {
-                if ("O-O".Equals(moveSquare))
-                    return iter.Where(w => w.MoveSquare.File() == 6);
-                if ("O-O-O".Equals(moveSquare))
-                    return iter.Where(w => w.MoveSquare.File() == 2);
-                return moveSquare.ToSquare().Match(
+                => moveSquare.ToSquare().Match(
                     None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
                     Some: s => iter.Where(w => s.Equals(w.MoveSquare)));
-            }
 
             private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> selectPieceMoves(Option<PieceEnum> piece)
                 => piece.Match(
@@ -135,13 +146,9 @@ namespace Chess.AF
 
             private (string from, string moveSquare) splitFromAndToSquare(string halfMove)
             {
-                if (!halfMove.StartsWith("O-O"))
-                {
-                    string from = halfMove.Substring(0, halfMove.Length - 2);
-                    string to = halfMove.Substring(halfMove.Length - 2);
-                    return (from, to);
-                }
-                return (string.Empty, halfMove);
+                string from = halfMove.Substring(0, halfMove.Length - 2);
+                string to = halfMove.Substring(halfMove.Length - 2);
+                return (from, to);
             }
 
             private string sanitizeHalfMove(string halfMove, Option<PieceEnum> piece)
@@ -151,11 +158,9 @@ namespace Chess.AF
 
             private string sanitizeHalfMove(string halfMove, PieceEnum piece)
             {
-                if (!halfMove.StartsWith("O-O"))
-                    return piece.Equals(PieceEnum.Pawn)
-                        ? halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0]
-                        : halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0].Substring(1);
-                return halfMove;
+                return piece.Equals(PieceEnum.Pawn)
+                    ? halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0]
+                    : halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0].Substring(1);
             }
 
             private void loadGame()

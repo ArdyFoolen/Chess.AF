@@ -39,6 +39,22 @@ namespace Chess.AF
         public static PiecesEnum ToPieces(this PieceEnum pieceEnum, bool isWhiteToMove)
             => (PiecesEnum)(isWhiteToMove ? ((int)pieceEnum + 7) : (int)pieceEnum);
 
+        public static SquareEnum GetKingRokadeSquare(this RokadeEnum rokade, bool isWhiteToMove)
+        {
+            if (RokadeEnum.KingSide.Equals(rokade))
+                return isWhiteToMove ? SquareEnum.g1 : SquareEnum.g8;
+            else
+                return isWhiteToMove ? SquareEnum.c1 : SquareEnum.c8;
+        }
+
+        public static (SquareEnum From, SquareEnum To) GetRookRokadeSquares(this SquareEnum kingMoveSquare, bool isWhiteToMove)
+        {
+            if (kingMoveSquare.File() == 6)
+                return (isWhiteToMove ? SquareEnum.h1 : SquareEnum.h8, (SquareEnum)((int)kingMoveSquare - 1));
+            else
+                return (isWhiteToMove ? SquareEnum.a1 : SquareEnum.a8, (SquareEnum)((int)kingMoveSquare + 1));
+        }
+
         public static bool Is(this PieceEnum pieceEnum, PieceEnum compare)
             => pieceEnum == compare;
 
@@ -233,9 +249,7 @@ namespace Chess.AF
 
         public static Option<PieceEnum> FromSanToPiece(this string str)
         {
-            if ("O-O".Equals(str) || "O-O-O".Equals(str) || 'K'.Equals(str.FirstOrDefault()))
-                return Some(PieceEnum.King);
-            else if (promoteDict.ContainsKey(str.FirstOrDefault().ToString()))
+            if (promoteDict.ContainsKey(str.FirstOrDefault().ToString()))
                 return str.FirstOrDefault().ToString().ToPiece();
             else return Some(PieceEnum.Pawn);
         }

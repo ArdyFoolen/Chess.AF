@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,16 @@ namespace Chess.AF
         {
             var bIterator = BishopMoves.Get().GetIteratorFor(square, position, pieceEnum);
             var rIterator = RookMoves.Get().GetIteratorFor(square, position, pieceEnum);
+            return new PiecesIterator<PieceEnum>(bIterator, rIterator);
+        }
+
+        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, bool isWhiteToMove, PieceEnum pieceEnum = PieceEnum.Queen)
+            => CreateIterator(square, position, isWhiteToMove, pieceEnum);
+
+        private PiecesIterator<PieceEnum> CreateIterator(SquareEnum square, IPositionImpl position, bool isWhiteToMove, PieceEnum pieceEnum)
+        {
+            var bIterator = BishopMoves.Get().GetIteratorFor(square, position, isWhiteToMove, pieceEnum);
+            var rIterator = RookMoves.Get().GetIteratorFor(square, position, isWhiteToMove, pieceEnum);
             return new PiecesIterator<PieceEnum>(bIterator, rIterator);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,6 +46,28 @@ namespace Chess.AF
             ulong tkMap = MovesDictionaries.GetTakeMap(square);
 
             return position.GetPawnMapFor(square, mvMap, tkMap);
+        }
+
+        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, bool isWhiteToMove, PieceEnum pieceEnum = PieceEnum.Pawn)
+            => new PiecesIterator<PieceEnum>((pieceEnum, GetMapFor(position, square, isWhiteToMove)));
+
+        // Make a map for black/white pawns, later set bits of either below or above square
+        private ulong GetMapFor(IPositionImpl position, SquareEnum square, bool isWhiteToMove)
+        {
+            var mvMap = 0x0000000000000000ul;
+
+            if (square.Row() < 7)
+                mvMap = mvMap.SetBit((int)square + 8);
+            if (square.Row() > 0)
+                mvMap = mvMap.SetBit((int)square - 8);
+            if (square.Row() == 1)
+                mvMap = mvMap.SetBit((int)square + 16);
+            if (square.Row() == 6)
+                mvMap = mvMap.SetBit((int)square - 16);
+
+            ulong tkMap = MovesDictionaries.GetTakeMap(square);
+
+            return position.GetPawnMapFor(square, mvMap, tkMap, isWhiteToMove);
         }
     }
 }

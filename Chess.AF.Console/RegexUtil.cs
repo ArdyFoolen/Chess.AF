@@ -25,19 +25,10 @@ namespace Chess.AF.Console
                 SquareEnum from = SquareEnum.a1;
                 SquareEnum to = SquareEnum.a1;
                 PieceEnum promote = PieceEnum.Pawn;
-                RokadeEnum rokade = RokadeEnum.None;
                 if (IsKingsideRokade(match.Groups))
-                {
-                    piece = PieceEnum.King;
-                    rokade = RokadeEnum.KingSide;
-                    promote = piece;
-                }
+                    return Move.Of(RokadeEnum.KingSide);
                 else if (IsQueensideRokade(match.Groups))
-                {
-                    piece = PieceEnum.King;
-                    rokade = RokadeEnum.QueenSide;
-                    promote = piece;
-                }
+                    return Move.Of(RokadeEnum.QueenSide);
                 else
                 {
                     if (IsPawnMove(match.Groups))
@@ -64,7 +55,7 @@ namespace Chess.AF.Console
                     to = value.ParseEnum<SquareEnum>();
                 }
 
-                return Move.Of(piece, from, to, promote, rokade);
+                return Move.Of(piece, from, to, promote);
             }
             else
                 return None;
