@@ -46,6 +46,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Enums\PositionPiecesEnums.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Helpers\Material.cs" />
     <Compile Include="KingMoves.cs" />
     <Compile Include="LoadCommand.cs" />
     <Compile Include="MapNotFoundException.cs" />

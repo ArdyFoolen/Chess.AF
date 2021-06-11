@@ -26,6 +26,7 @@ namespace Chess.AF.ChessForm.Controllers
         public bool IsStaleMate { get => game.IsStaleMate; }
 
         public GameResult Result { get => game.Result; }
+        public int MaterialCount { get => game.MaterialCount; }
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMoves
         {

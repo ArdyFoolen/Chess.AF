@@ -45,10 +45,16 @@ namespace Chess.AF.ChessForm
             lblResult.Location = new Point(570, 43);
             lblResult.Size = new Size(200, 23);
 
+            lblCount.Text = string.Empty;
+            lblCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblCount.Location = new Point(570, 76);
+            lblCount.Size = new Size(200, 23);
+
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
             this.Controls.Add(lblResult);
+            this.Controls.Add(lblCount);
 
             this.btnLoadFen.Image = Fen();
             this.btnLoadPgn.Image = Pgn();
@@ -63,6 +69,7 @@ namespace Chess.AF.ChessForm
         }
 
         Label lblResult = new Label();
+        Label lblCount = new Label();
         LoadFen loadFen = new LoadFen();
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
@@ -111,7 +118,10 @@ namespace Chess.AF.ChessForm
             => boardController.Draw();
 
         public void UpdateView()
-            => lblResult.Text = whoToMove();
+        {
+            lblResult.Text = whoToMove();
+            lblCount.Text = $"Material: {boardController.MaterialCount.ToString("+0;-#")}";
+        }
 
         private string whoToMove()
         {

@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.Helpers;
 using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
@@ -149,6 +150,17 @@ namespace Chess.AF
                 Some: s => s.Result);
         }
 
+        public int MaterialCount
+        {
+            get => Position.Match(
+                None: () => 0,
+                Some: s => GetMaterialCount(s));
+        }
 
+        private int GetMaterialCount(IPositionAbstraction position)
+        {
+            Material material = new Material(position.GetIteratorForAll<PiecesEnum>());
+            return material.Count();
+        }
     }
 }

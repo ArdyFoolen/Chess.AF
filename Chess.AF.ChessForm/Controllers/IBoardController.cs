@@ -31,6 +31,7 @@ namespace Chess.AF.ChessForm.Controllers
         bool IsStaleMate { get; }
 
         GameResult Result { get; }
+        int MaterialCount { get; }
 
         void GotoFirstMove();
         void GotoPreviousMove();

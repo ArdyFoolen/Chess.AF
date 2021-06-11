@@ -25,6 +25,7 @@ namespace Chess.AF.PositionBridge
         Option<IPositionAbstraction> Move(Move move);
 
         IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves();
+        PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 
         string ToFenString();
         Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary();
