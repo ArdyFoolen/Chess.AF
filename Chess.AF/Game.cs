@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Chess.AF
 {
     public class Game
     {
-        private Option<Position> Position
+        private Option<IPositionAbstraction> Position
         {
             get
             {
@@ -86,8 +87,8 @@ namespace Chess.AF
         public void GotoLastMove()
             => this.CurrentCommand = this.Commands.Count() - 1;
 
-        public Option<Selected> SelectPiece(Option<PieceEnum> piece)
-            => piece.Bind(pc => Position.Bind(p => Selected.Of(pc, p.GetIteratorFor(pc), p)));
+        //public Option<Selected> SelectPiece(Option<PieceEnum> piece)
+        //    => piece.Bind(pc => Position.Bind(p => Selected.Of(pc, p.GetIteratorFor(pc), p)));
 
         public string ToFenString()
             => Position.Match(
@@ -108,7 +109,9 @@ namespace Chess.AF
                 Some: s => s
                 );
 
-        public void Map(Func<Position, Position> func)
+        //public void Map(Func<Position, Position> func)
+        //    => Position.Map(func);
+        public void Map(Func<IPositionAbstraction, IPositionAbstraction> func)
             => Position.Map(func);
 
         public bool IsWhiteToMove

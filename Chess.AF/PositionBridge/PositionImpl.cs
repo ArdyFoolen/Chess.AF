@@ -15,27 +15,18 @@ namespace Chess.AF.PositionBridge
     {
         #region Properties
 
-        //[DataMember]
+        private IPositionMediatorImpl Mediator { get; set; }
         private ulong[] Maps = new ulong[14];
 
-        //[DataMember]
         public bool IsTake { get; private set; } = false;
-
-        private Func<RokadeEnum> getRokade { get; set; }
-        public void SetRokade(Func<RokadeEnum> rokade)
-            => this.getRokade = rokade;
-
-        private Func<Option<SquareEnum>> epSquare { get; set; }
-        private Option<SquareEnum> EpSquare { get => epSquare?.Invoke() ?? F.None; }
-        public void SetEpSquare(Func<Option<SquareEnum>> epSquare)
-            => this.epSquare = epSquare;
 
         #endregion
 
         #region ctors
 
-        public PositionImpl(ulong[] maps)
+        public PositionImpl(IPositionMediatorImpl mediator, ulong[] maps)
         {
+            Mediator = mediator;
             Maps = maps;
         }
 
@@ -45,45 +36,51 @@ namespace Chess.AF.PositionBridge
                 this.Maps[i] = position.Maps[i];
         }
 
+        public IPositionImpl CreateCopy()
+            => new PositionImpl(this);
+
+        public void SetMediator(IPositionMediatorImpl mediator)
+            => Mediator = mediator;
+
         #endregion
 
         #region public methods
 
-        public IPositionImpl CreateCopy()
-            => new PositionImpl(this);
+        private bool IsWhiteToMove { get => Mediator.IsWhiteToMove; }
 
-        public SquareEnum KingSquare(bool isWhiteToMove)
-            => this.Maps[(int)PieceEnum.King.ToPieces(isWhiteToMove)].GetSquareFrom();
+        public SquareEnum KingSquare { get => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom(); }
 
-        public void SetBits(Move move, bool isWhiteToMove)
+        #region SetBits
+
+        public void SetBits(Move move)
         {
-            SetBitsForRokadeRook(move, isWhiteToMove);
-            SetBitsForMove(move, isWhiteToMove);
-            SetBitsForEnPassantTake(move, isWhiteToMove);
-            SetBitsForTake(move, isWhiteToMove);
+            SetBitsForRokadeRook(move);
+            SetBitsForMove(move);
+            SetBitsForEnPassantTake(move);
+            SetBitsForTake(move);
         }
 
-        public void SetBitsForRokadeRook(Move move, bool isWhiteToMove)
+        private void SetBitsForRokadeRook(Move move)
         {
             bool isRokade = move.Piece.IsRokadeMove(move.From, move.To);
             if (isRokade)
             {
-                var rookRokadeSquares = move.To.GetRookRokadeSquares(isWhiteToMove);
-                var rook = (int)PieceEnum.Rook.ToPieces(isWhiteToMove);
+                var rookRokadeSquares = move.To.GetRookRokadeSquares(IsWhiteToMove);
+                var rook = (int)PieceEnum.Rook.ToPieces(IsWhiteToMove);
 
                 Maps[rook] = Maps[rook].SetBitOff((int)rookRokadeSquares.From);
                 Maps[rook] = Maps[rook].SetBit((int)rookRokadeSquares.To);
 
-                int piecesIndex = GetIndexAllPiecesFor(isWhiteToMove);
+                int piecesIndex = GetIndexAllPiecesFor(IsWhiteToMove);
                 Maps[piecesIndex] = Maps[piecesIndex].SetBitOff((int)rookRokadeSquares.From);
                 Maps[piecesIndex] = Maps[piecesIndex].SetBit((int)rookRokadeSquares.To);
             }
         }
 
-        public void SetBitsForMove(Move move, bool isWhiteToMove)
+        private void SetBitsForMove(Move move)
         {
-            var pieces = move.Piece.ToPieces(isWhiteToMove);
-            var promoted = move.Promote.ToPieces(isWhiteToMove);
+            var pieces = move.Piece.ToPieces(IsWhiteToMove);
+            var promoted = move.Promote.ToPieces(IsWhiteToMove);
 
             Maps[(int)pieces] = Maps[(int)pieces].SetBitOff((int)move.From);
             if (move.Piece == move.Promote)
@@ -91,27 +88,27 @@ namespace Chess.AF.PositionBridge
             else
                 Maps[(int)promoted] = Maps[(int)promoted].SetBit((int)move.To);
 
-            int piecesIndex = GetIndexAllPiecesFor(isWhiteToMove);
+            int piecesIndex = GetIndexAllPiecesFor(IsWhiteToMove);
             Maps[piecesIndex] = Maps[piecesIndex].SetBitOff((int)move.From);
             Maps[piecesIndex] = Maps[piecesIndex].SetBit((int)move.To);
         }
 
-        public void SetBitsForEnPassantTake(Move move, bool isWhiteToMove)
+        private void SetBitsForEnPassantTake(Move move)
         {
-            int oppositeColoredIndex = GetOppositeColoredIndexAllPiecesFor(isWhiteToMove);
+            int oppositeColoredIndex = GetOppositeColoredIndexAllPiecesFor(IsWhiteToMove);
 
             if (IsEpTake(oppositeColoredIndex, move))
             {
                 IsTake = true;
-                int epIndex = (int)(isWhiteToMove ? (int)move.To + 8 : (int)move.To - 8);
+                int epIndex = (int)(IsWhiteToMove ? (int)move.To + 8 : (int)move.To - 8);
                 Maps[oppositeColoredIndex] = Maps[oppositeColoredIndex].SetBitOff(epIndex);
                 Maps[oppositeColoredIndex + 1] = Maps[oppositeColoredIndex + 1].SetBitOff(epIndex);
             }
         }
 
-        public void SetBitsForTake(Move move, bool isWhiteToMove)
+        private void SetBitsForTake(Move move)
         {
-            int oppositeColoredIndex = GetOppositeColoredIndexAllPiecesFor(isWhiteToMove);
+            int oppositeColoredIndex = GetOppositeColoredIndexAllPiecesFor(IsWhiteToMove);
             if (Maps[oppositeColoredIndex].IsBitOn((int)move.To))
             {
                 IsTake = true;
@@ -120,35 +117,37 @@ namespace Chess.AF.PositionBridge
             }
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece, bool isWhiteToMove)
-            => new PiecesIterator<PieceEnum>((piece, GetMapFor(piece, isWhiteToMove)));
+        #endregion
 
-        public PiecesIterator<T> GetIteratorForAll<T>(bool isWhiteToMove)
+        public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
+            => new PiecesIterator<PieceEnum>((piece, GetMapFor(piece)));
+
+        public PiecesIterator<T> GetIteratorForAll<T>()
             where T : Enum
             => new PiecesIterator<T>(
                 Enum.GetValues(typeof(T))
                 .Cast<T>()
-                .Select(piece => (piece, GetMapFor(piece, isWhiteToMove)))
+                .Select(piece => (piece, GetMapFor(piece)))
                 .ToArray());
 
-        public ulong ExcludeOwnPieces(ulong map, bool isWhiteToMove)
-            => isWhiteToMove ? map & ~Maps[(int)PositionEnum.WhitePieces] : map & ~Maps[(int)PositionEnum.BlackPieces];
+        public ulong ExcludeOwnPieces(ulong map)
+            => IsWhiteToMove ? map & ~Maps[(int)PositionEnum.WhitePieces] : map & ~Maps[(int)PositionEnum.BlackPieces];
 
-        public ulong IncludeRokade(ulong map, bool isWhiteToMove)
+        public ulong IncludeRokade(ulong map)
         {
-            RokadeEnum rokade = PossibleRokade(isWhiteToMove);
+            RokadeEnum rokade = PossibleRokade();
             if (RokadeEnum.KingAndQueenSide.Equals(rokade))
-                return map | (isWhiteToMove ? 0x0000000000000022ul : 0x2200000000000000ul);
+                return map | (IsWhiteToMove ? 0x0000000000000022ul : 0x2200000000000000ul);
             if (RokadeEnum.KingSide.Equals(rokade))
-                return map | (isWhiteToMove ? 0x0000000000000002ul : 0x0200000000000000ul);
+                return map | (IsWhiteToMove ? 0x0000000000000002ul : 0x0200000000000000ul);
             if (RokadeEnum.QueenSide.Equals(rokade))
-                return map | (isWhiteToMove ? 0x0000000000000020ul : 0x2000000000000000ul);
+                return map | (IsWhiteToMove ? 0x0000000000000020ul : 0x2000000000000000ul);
             return map;
         }
 
-        public ulong ExcludeOpponentKing(ulong map, bool isWhiteToMove)
+        public ulong ExcludeOpponentKing(ulong map)
         {
-            PiecesEnum king = PieceEnum.King.ToPieces(!isWhiteToMove);
+            PiecesEnum king = PieceEnum.King.ToPieces(!IsWhiteToMove);
             ulong kingMap = Maps[(int)king];
 
             if (kingMap == 0x0ul)
@@ -159,7 +158,7 @@ namespace Chess.AF.PositionBridge
             return ~MovesDictionaries.KingMovesDictionary[kingSquare] & map;
         }
 
-        public ulong GetMinMap(ulong map, bool isWhiteToMove)
+        public ulong GetMinMap(ulong map)
         {
             bool succesWhite = TryGetLowestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out SquareEnum whitePiece);
             bool succesBlack = TryGetLowestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out SquareEnum blackPiece);
@@ -168,12 +167,12 @@ namespace Chess.AF.PositionBridge
                 return map;
 
             if (succesWhite && !succesBlack || succesWhite && succesBlack && whitePiece > blackPiece)
-                return whitePiece.UpBitsOff(isWhiteToMove ? 1 : 0) & map;
+                return whitePiece.UpBitsOff(IsWhiteToMove ? 1 : 0) & map;
             else
-                return blackPiece.UpBitsOff(isWhiteToMove ? 0 : 1) & map;
+                return blackPiece.UpBitsOff(IsWhiteToMove ? 0 : 1) & map;
         }
 
-        public ulong GetMaxMap(ulong map, bool isWhiteToMove)
+        public ulong GetMaxMap(ulong map)
         {
             bool succesWhite = TryGetHighestSquare(Maps[(int)PositionEnum.WhitePieces] & map, out SquareEnum whitePiece);
             bool succesBlack = TryGetHighestSquare(Maps[(int)PositionEnum.BlackPieces] & map, out SquareEnum blackPiece);
@@ -182,9 +181,9 @@ namespace Chess.AF.PositionBridge
                 return map;
 
             if (succesWhite && !succesBlack || succesWhite && succesBlack && whitePiece < blackPiece)
-                return whitePiece.DownBitsOff(isWhiteToMove ? 1 : 0) & map;
+                return whitePiece.DownBitsOff(IsWhiteToMove ? 1 : 0) & map;
             else
-                return blackPiece.DownBitsOff(isWhiteToMove ? 0 : 1) & map;
+                return blackPiece.DownBitsOff(IsWhiteToMove ? 0 : 1) & map;
         }
 
         private bool TryGetLowestSquare(ulong map, out SquareEnum piece)
@@ -207,15 +206,15 @@ namespace Chess.AF.PositionBridge
             return !((test & map) == 0);
         }
 
-        public ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap, bool isWhiteToMove)
+        public ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
         {
-            if (isWhiteToMove)
-                return GetWhitePawnMapFor(square, mvMap, tkMap, isWhiteToMove);
+            if (IsWhiteToMove)
+                return GetWhitePawnMapFor(square, mvMap, tkMap);
             else
-                return GetBlackPawnMapFor(square, mvMap, tkMap, isWhiteToMove);
+                return GetBlackPawnMapFor(square, mvMap, tkMap);
         }
 
-        private ulong GetWhitePawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap, bool isWhiteToMove)
+        private ulong GetWhitePawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
         {
             mvMap &= square.DownBitsOff();
             tkMap &= square.DownBitsOff();
@@ -231,27 +230,27 @@ namespace Chess.AF.PositionBridge
 
             tkMap &= Maps[(int)PositionEnum.BlackPieces];
 
-            tkMap |= GetEPMap(square, isWhiteToMove);
+            tkMap |= GetEPMap(square);
 
             return mvMap | tkMap;
         }
 
-        private ulong GetEPMap(SquareEnum square, bool isWhiteToMove)
-            => EpSquare.Match(
+        private ulong GetEPMap(SquareEnum square)
+            => Mediator.EpSquare.Match(
                 None: () => 0x0ul,
-                Some: s => CanTakeEP(s, square, isWhiteToMove) ? 0x0ul.SetBit((int)s) : 0x0ul
+                Some: s => CanTakeEP(s, square) ? 0x0ul.SetBit((int)s) : 0x0ul
                 );
 
-        private bool CanTakeEP(SquareEnum epSquare, SquareEnum square, bool isWhiteToMove)
+        private bool CanTakeEP(SquareEnum epSquare, SquareEnum square)
         {
-            if (isWhiteToMove && square.Row() == 3 ||
-                !isWhiteToMove && square.Row() == 4)
+            if (IsWhiteToMove && square.Row() == 3 ||
+                !IsWhiteToMove && square.Row() == 4)
                 if (Math.Abs(square.File() - epSquare.File()) == 1)
                     return true;
             return false;
         }
 
-        private ulong GetBlackPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap, bool isWhiteToMove)
+        private ulong GetBlackPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap)
         {
             mvMap &= square.UpBitsOff();
             tkMap &= square.UpBitsOff();
@@ -267,37 +266,37 @@ namespace Chess.AF.PositionBridge
 
             tkMap &= Maps[(int)PositionEnum.WhitePieces];
 
-            tkMap |= GetEPMap(square, isWhiteToMove);
+            tkMap |= GetEPMap(square);
 
             return mvMap | tkMap;
         }
 
-        public bool IsInCheck(bool isWhiteToMove)
+        public bool IsInCheck
         {
-            PiecesEnum king = PieceEnum.King.ToPieces(isWhiteToMove);
-            ulong kingMap = Maps[(int)king];
-            SquareEnum kingSquare = kingMap.GetSquareFrom();
+            get
+            {
+                PiecesEnum king = PieceEnum.King.ToPieces(IsWhiteToMove);
+                ulong kingMap = Maps[(int)king];
+                SquareEnum kingSquare = kingMap.GetSquareFrom();
 
-            return IsSquareAttacked(kingSquare, isWhiteToMove);
+                return IsSquareAttacked(kingSquare);
+            }
         }
 
-        public bool OpponentIsInCheck(bool isWhiteToMove)
-            => IsInCheck(!isWhiteToMove);
-
-        public RokadeEnum PossibleRokade(bool isWhiteToMove)
+        public RokadeEnum PossibleRokade()
         {
-            RokadeEnum rokade = getRokade();
-            if (RokadeEnum.None.Equals(rokade) || IsInCheck(isWhiteToMove))
+            RokadeEnum rokade = Mediator.Rokade;
+            if (RokadeEnum.None.Equals(rokade) || IsInCheck)
                 return RokadeEnum.None;
 
             RokadeEnum queenSide = RokadeEnum.None;
             if (RokadeEnum.KingAndQueenSide.Equals(rokade) || RokadeEnum.QueenSide.Equals(rokade))
-                if (!QueenSideRokadeSquaresOccupied(isWhiteToMove) && !QueenSideRokadeSquares(isWhiteToMove).Any(a => IsSquareAttacked(a, isWhiteToMove)))
+                if (!QueenSideRokadeSquaresOccupied(IsWhiteToMove) && !QueenSideRokadeSquares(IsWhiteToMove).Any(a => IsSquareAttacked(a)))
                     queenSide = RokadeEnum.QueenSide;
 
             RokadeEnum kingSide = RokadeEnum.None;
             if (RokadeEnum.KingAndQueenSide.Equals(rokade) || RokadeEnum.KingSide.Equals(rokade))
-                if (!KingSideRokadeSquaresOccupied(isWhiteToMove) && !KingSideRokadeSquares(isWhiteToMove).Any(a => IsSquareAttacked(a, isWhiteToMove)))
+                if (!KingSideRokadeSquaresOccupied(IsWhiteToMove) && !KingSideRokadeSquares(IsWhiteToMove).Any(a => IsSquareAttacked(a)))
                     kingSide = RokadeEnum.KingSide;
 
             return queenSide | kingSide;
@@ -316,9 +315,9 @@ namespace Chess.AF.PositionBridge
         private bool IsEpTake(int index, Move move)
             => PieceEnum.Pawn == move.Piece && move.From.File() != move.To.File() && !Maps[index].IsBitOn((int)move.To);
 
-        private ulong GetMapFor(PieceEnum piece, bool isWhiteToMove)
+        private ulong GetMapFor(PieceEnum piece)
         {
-            if (isWhiteToMove)
+            if (IsWhiteToMove)
                 return Maps[(int)piece + 7];
             return Maps[(int)piece];
         }
@@ -326,11 +325,11 @@ namespace Chess.AF.PositionBridge
         private ulong GetMapFor(PiecesEnum piece)
             => Maps[(int)piece];
 
-        private ulong GetMapFor<T>(T piece, bool isWhiteToMove)
+        private ulong GetMapFor<T>(T piece)
             where T : Enum
         {
             if (piece is PieceEnum)
-                return GetMapFor((PieceEnum)(object)piece, isWhiteToMove);
+                return GetMapFor((PieceEnum)(object)piece);
             if (piece is PiecesEnum)
                 return GetMapFor((PiecesEnum)(object)piece);
             throw new ArgumentException();
@@ -360,30 +359,30 @@ namespace Chess.AF.PositionBridge
             return (Maps[(int)(isWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces)] & map) != 0x0ul;
         }
 
-        private bool IsSquareAttacked(SquareEnum square, bool isWhiteToMove)
+        private bool IsSquareAttacked(SquareEnum square)
         {
-            PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!isWhiteToMove);
+            PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
             ulong opponentKnightMap = Maps[(int)opponentKnight];
 
             bool knightChecks = (MovesDictionaries.KnightMovesDictionary[square] & opponentKnightMap) != 0x0ul;
 
-            PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!isWhiteToMove);
+            PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!IsWhiteToMove);
             ulong opponentBishopMap = Maps[(int)opponentBishop];
-            PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!isWhiteToMove);
+            PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!IsWhiteToMove);
             ulong opponentQueenMap = Maps[(int)opponentQueen];
 
-            bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, square, isWhiteToMove) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, square, isWhiteToMove) & opponentQueenMap) != 0x0ul;
+            bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
 
-            PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!isWhiteToMove);
+            PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!IsWhiteToMove);
             ulong opponentRookMap = Maps[(int)opponentRook];
 
-            bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, square, isWhiteToMove) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, square, isWhiteToMove) & opponentQueenMap) != 0x0ul;
+            bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, square) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
 
-            PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!isWhiteToMove);
+            PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!IsWhiteToMove);
             ulong opponentPawnMap = Maps[(int)opponentPawn];
 
             ulong takeMap = MovesDictionaries.GetTakeMap(square);
-            takeMap &= isWhiteToMove ? square.DownBitsOff() : square.UpBitsOff();
+            takeMap &= IsWhiteToMove ? square.DownBitsOff() : square.UpBitsOff();
 
             bool pawnChecks = (takeMap & opponentPawnMap) != 0x0ul;
 

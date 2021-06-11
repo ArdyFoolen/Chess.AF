@@ -22,7 +22,9 @@ namespace Chess.AF
             this.Fen = fen;
         }
 
+        //public override void Execute()
+        //    => Position = Fen.CreateFen().CreatePosition();
         public override void Execute()
-            => Position = Fen.CreateFen().CreatePosition();
+            => Position = Fen.CreateFen().CreatePositionAbstraction();
     }
 }

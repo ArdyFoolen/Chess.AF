@@ -28,7 +28,7 @@ namespace Chess.AF
                 Some: p => new PiecesIterator<PieceEnum>((pieceEnum, MovesDictionaries.GetRookMovesMapFor(p, square)))
                 );
 
-        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, bool isWhiteToMove, PieceEnum pieceEnum = PieceEnum.Rook)
-            => new PiecesIterator<PieceEnum>((pieceEnum, MovesDictionaries.GetRookMovesMapFor(position, square, isWhiteToMove)));
+        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Rook)
+            => new PiecesIterator<PieceEnum>((pieceEnum, MovesDictionaries.GetRookMovesMapFor(position, square)));
     }
 }

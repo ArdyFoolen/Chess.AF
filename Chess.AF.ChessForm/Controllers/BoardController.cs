@@ -1,6 +1,7 @@
 ﻿using AF.Functional;
 using Chess.AF.ChessForm.Views;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -213,7 +214,12 @@ namespace Chess.AF.ChessForm.Controllers
         private void SetPositionDict()
             => game.Map(SetPositionDict);
 
-        private Position SetPositionDict(Position position)
+        //private Position SetPositionDict(Position position)
+        //{
+        //    positionDict = position.ToDictionary();
+        //    return position;
+        //}
+        private IPositionAbstraction SetPositionDict(IPositionAbstraction position)
         {
             positionDict = position.ToDictionary();
             return position;

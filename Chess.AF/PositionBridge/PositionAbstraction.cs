@@ -12,11 +12,11 @@ using static Chess.AF.PositionBridge.PositionImpl.PositionFactory;
 namespace Chess.AF.PositionBridge
 {
     [DataContract]
-    public partial class PositionAbstraction
+    public partial class PositionAbstraction : IPositionAbstraction
     {
         #region Properties
 
-        private IPositionImpl PositionImpl { get; set; }
+        private IPositionMediatorAbstraction Mediator { get; set; }
 
         [DataMember]
         public bool IsWhiteToMove { get; private set; }
@@ -28,7 +28,7 @@ namespace Chess.AF.PositionBridge
         public Option<SquareEnum> EpSquare { get; private set; }
 
         [DataMember]
-        public bool IsTake { get => PositionImpl.IsTake; }
+        public bool IsTake { get => Mediator.IsTake; }
         [DataMember]
         public int PlyCount { get; private set; }
 
@@ -37,37 +37,22 @@ namespace Chess.AF.PositionBridge
 
         #endregion
 
-        #region static methods
-
-        public static Option<PositionAbstraction> Of(Option<Fen> fen)
-            => fen.Bind(WhenValid);
-
-        private static Option<PositionAbstraction> WhenValid(Fen fen)
-            => Some(new PositionAbstraction(Create(fen), fen.IsWhiteToMove, fen.WhiteRokade, fen.BlackRokade, fen.EnPassant,
-                fen.PlyCount, fen.MoveNumber));
-
-        #endregion
-
         #region ctors
 
-        public PositionAbstraction(IPositionImpl positionImpl, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade,
+        public PositionAbstraction(IPositionMediatorAbstraction mediator, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade,
             Option<SquareEnum> ep, int plyCount, int moveNumber)
         {
-            this.PositionImpl = positionImpl;
+            this.Mediator = mediator;
             this.IsWhiteToMove = isWhiteToMove;
             this.WhiteRokade = whiteRokade;
             this.BlackRokade = blackRokade;
             this.EpSquare = ep;
             this.PlyCount = plyCount;
             this.MoveNumber = moveNumber;
-
-            this.PositionImpl.SetRokade(() => IsWhiteToMove ? this.WhiteRokade : this.BlackRokade);
-            this.PositionImpl.SetEpSquare(() => EpSquare);
         }
 
         private PositionAbstraction(PositionAbstraction position)
         {
-            this.PositionImpl = position.PositionImpl.CreateCopy();
             this.IsWhiteToMove = position.IsWhiteToMove;
             this.WhiteRokade = position.WhiteRokade;
             this.BlackRokade = position.BlackRokade;
@@ -76,39 +61,44 @@ namespace Chess.AF.PositionBridge
             this.MoveNumber = position.MoveNumber;
         }
 
+        public IPositionAbstraction CreateCopy()
+            => new PositionAbstraction(this);
+        public void SetMediator(IPositionMediatorAbstraction mediator)
+            => Mediator = mediator;
+
         #endregion
 
         #region Move
 
-        public Option<PositionAbstraction> Move(Move move)
+        public Option<IPositionAbstraction> Move(Move move)
             => RokadeEnum.None.Equals(move.Rokade) ?
                     MoveAndValidateFromTo(move) :
                     MoveAndValidateRokade(move);
 
-        private Option<PositionAbstraction> MoveAndValidateRokade(Move move)
+        private Option<IPositionAbstraction> MoveAndValidateRokade(Move move)
         {
             if (RokadeEnum.None.Equals(move.Rokade) || RokadeEnum.KingAndQueenSide.Equals(move.Rokade) ||
-                RokadeEnum.None.Equals(PositionImpl.PossibleRokade(IsWhiteToMove) | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
+                RokadeEnum.None.Equals(Mediator.PossibleRokade() | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
                 return None;
-            var om = AF.Move.Of(move.Piece, PositionImpl.KingSquare(IsWhiteToMove), move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
+            var om = AF.Move.Of(move.Piece, Mediator.KingSquare, move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
             return om.Bind(m => MoveAndValidateFromTo(m));
         }
 
-        private Option<PositionAbstraction> MoveAndValidateFromTo(Move move)
-            => ValidateMoveFromTo(move).Map(p => p.MoveFromTo(move));
+        private Option<IPositionAbstraction> MoveAndValidateFromTo(Move move)
+            => ValidateMoveFromTo(move).Map(p => ((PositionAbstraction)p).MoveFromTo(move));
 
-        private Option<PositionAbstraction> ValidateMoveFromTo(Move move)
+        private Option<IPositionAbstraction> ValidateMoveFromTo(Move move)
             => IterateForAllMoves().Any(a => move.Piece.Equals(a.Piece) && move.From.Equals(a.Square) &&
-            move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(new PositionAbstraction(this)) : None;
+            move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(Mediator.CreateCopy()) : None;
 
-        private PositionAbstraction Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
+        private IPositionAbstraction Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
             => AF.Move.Of(move.Piece, move.From, move.To, move.Promote).Match(
                 None: () => this,
                 Some: m => MoveFromTo(m));
 
-        private PositionAbstraction MoveFromTo(Move move)
+        private IPositionAbstraction MoveFromTo(Move move)
         {
-            PositionImpl.SetBits(move, IsWhiteToMove);
+            Mediator.SetBits(move);
 
             SetEpSquare(move);
 
@@ -150,27 +140,29 @@ namespace Chess.AF.PositionBridge
         #region Iterators
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
-            => PositionImpl.GetIteratorFor(piece, IsWhiteToMove);
+            => Mediator.GetIteratorFor(piece);
 
         public PiecesIterator<T> GetIteratorForAll<T>()
             where T : Enum
-            => PositionImpl.GetIteratorForAll<T>(IsWhiteToMove);
+            => Mediator.GetIteratorForAll<T>();
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves()
         {
             foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
-                foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, PositionImpl, IsWhiteToMove))
-                    if (!(new PositionAbstraction(this)).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)).OpponentIsInCheck)
+                foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Mediator.PositionImpl))
+                {
+                    var pos = ((PositionAbstraction)Mediator.CreateCopy()).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as PositionAbstraction;
+                    pos.IsWhiteToMove = !pos.IsWhiteToMove;
+                    if (!pos.IsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
+                }
         }
 
         #endregion
 
         #region IsInCheck
 
-        public bool IsInCheck { get => PositionImpl.IsInCheck(IsWhiteToMove); }
-
-        public bool OpponentIsInCheck { get => PositionImpl.OpponentIsInCheck(IsWhiteToMove); }
+        public bool IsInCheck { get => Mediator.IsInCheck; }
 
         #endregion
 
@@ -180,7 +172,7 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                if (PositionImpl.IsInCheck(IsWhiteToMove))
+                if (Mediator.IsInCheck)
                     return IterateForAllMoves().Count() == 0;
                 return false;
             }
@@ -190,7 +182,7 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                PositionAbstraction position = new PositionAbstraction(this);
+                PositionAbstraction position = Mediator.CreateCopy() as PositionAbstraction;
                 position.IsWhiteToMove = !IsWhiteToMove;
                 return position.IsMate;
             }
@@ -204,7 +196,7 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                if (!PositionImpl.IsInCheck(IsWhiteToMove))
+                if (!Mediator.IsInCheck)
                     return IterateForAllMoves().Count() == 0;
                 return false;
             }
@@ -214,7 +206,7 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                PositionAbstraction position = new PositionAbstraction(this);
+                PositionAbstraction position = Mediator.CreateCopy() as PositionAbstraction;
                 position.IsWhiteToMove = !IsWhiteToMove;
                 return position.IsStaleMate;
             }
@@ -243,13 +235,13 @@ namespace Chess.AF.PositionBridge
 
         #region Resign and Draw
 
-        public Option<PositionAbstraction> Resign()
-            => (GameResult.Ongoing.Equals(result)) ? Some(new PositionAbstraction(this).resign()) : None;
+        public Option<IPositionAbstraction> Resign()
+            => (GameResult.Ongoing.Equals(result)) ? Some(((PositionAbstraction)Mediator.CreateCopy()).resign()) : None;
 
-        public Option<PositionAbstraction> Draw()
-            => (GameResult.Ongoing.Equals(result)) ? Some(new PositionAbstraction(this).draw()) : None;
+        public Option<IPositionAbstraction> Draw()
+            => (GameResult.Ongoing.Equals(result)) ? Some(((PositionAbstraction)Mediator.CreateCopy()).draw()) : None;
 
-        private PositionAbstraction resign()
+        private IPositionAbstraction resign()
         {
             if (IsWhiteToMove)
                 result = GameResult.BlackWins;
@@ -258,7 +250,7 @@ namespace Chess.AF.PositionBridge
             return this;
         }
 
-        private PositionAbstraction draw()
+        private IPositionAbstraction draw()
         {
             result = GameResult.Draw;
             return this;
@@ -267,6 +259,8 @@ namespace Chess.AF.PositionBridge
         #endregion
 
         #region Rokade
+
+        public RokadeEnum Rokade { get => IsWhiteToMove ? this.WhiteRokade : this.BlackRokade; }
 
         private void UpdateRokadePossibilities(PieceEnum piece, SquareEnum from)
         {

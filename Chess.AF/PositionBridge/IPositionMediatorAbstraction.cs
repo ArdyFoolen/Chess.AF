@@ -1,5 +1,4 @@
-﻿using AF.Functional;
-using Chess.AF.Enums;
+﻿using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +8,19 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF.PositionBridge
 {
-    public interface IPositionImpl
+    public interface IPositionMediatorAbstraction
     {
+        IPositionImpl PositionImpl { get; }
         bool IsTake { get; }
         bool IsInCheck { get; }
-        SquareEnum KingSquare { get; }
 
-        IPositionImpl CreateCopy();
-        void SetMediator(IPositionMediatorImpl mediator);
+        SquareEnum KingSquare { get; }
 
         void SetBits(Move move);
         PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece);
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
-
         RokadeEnum PossibleRokade();
 
-        ulong ExcludeOwnPieces(ulong map);
-        ulong IncludeRokade(ulong map);
-        ulong ExcludeOpponentKing(ulong map);
-        ulong GetMinMap(ulong map);
-        ulong GetMaxMap(ulong map);
-        ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap);
+        IPositionAbstraction CreateCopy();
     }
 }

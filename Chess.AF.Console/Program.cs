@@ -14,6 +14,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 
 namespace Chess.AF.Console
 {
@@ -90,6 +91,10 @@ namespace Chess.AF.Console
 
         public static void ShowBoard(Game game)
             => game.Map(ShowBoard);
+        private static IPositionAbstraction ShowBoard(IPositionAbstraction position)
+        {
+            return position;
+        }
 
         private static Position ShowBoard(Position position)
         {
@@ -160,7 +165,7 @@ namespace Chess.AF.Console
             if (parameters.Length != 1)
                 return;
             Option<PieceEnum> pieceOpt = parameters[0].TryPieceParse();
-            SelectOpt = game.SelectPiece(pieceOpt);
+            //SelectOpt = game.SelectPiece(pieceOpt);
 
             SelectOpt.Map(ShowSelected);
         }

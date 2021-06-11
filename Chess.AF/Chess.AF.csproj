@@ -51,12 +51,16 @@
     <Compile Include="MapNotFoundException.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="DrawCommand.cs" />
+    <Compile Include="PositionBridge\IPositionAbstraction.cs" />
     <Compile Include="PositionBridge\IPositionImpl.cs" />
+    <Compile Include="PositionBridge\IPositionMediatorImpl.cs" />
+    <Compile Include="PositionBridge\IPositionMediatorAbstraction.cs" />
     <Compile Include="PositionBridge\MovesFactory.cs" />
     <Compile Include="PositionBridge\PiecesIterator.cs" />
     <Compile Include="PositionBridge\PositionAbstraction.cs" />
     <Compile Include="PositionBridge\PositionFactory.cs" />
     <Compile Include="PositionBridge\PositionImpl.cs" />
+    <Compile Include="PositionBridge\PositionMediator.cs" />
     <Compile Include="ResignCommand.cs" />
     <Compile Include="MoveCommand.cs" />
     <Compile Include="MovesDictionaries.cs" />

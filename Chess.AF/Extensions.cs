@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using Microsoft.SqlServer.Server;
 
 namespace Chess.AF
@@ -24,6 +25,9 @@ namespace Chess.AF
 
         public static Option<Position> CreatePosition(this Option<Fen> fen)
             => Position.Of(fen);
+
+        public static Option<IPositionAbstraction> CreatePositionAbstraction(this Option<Fen> fen)
+            => PositionMediator.Of(fen);
 
         internal static int Value(this PositionEnum position) { return (int)position; }
 

@@ -10,10 +10,10 @@ namespace Chess.AF.PositionBridge
 {
     public class MovesFactory
     {
-        public static IEnumerable<(PieceEnum Piece, SquareEnum Square)> Create(PieceEnum piece, SquareEnum square, IPositionImpl position, bool isWhiteToMove)
+        public static IEnumerable<(PieceEnum Piece, SquareEnum Square)> Create(PieceEnum piece, SquareEnum square, IPositionImpl position)
         {
             var moves = Create(piece);
-            foreach (var m in moves.GetIteratorFor(square, position, isWhiteToMove, piece).Iterate())
+            foreach (var m in moves.GetIteratorFor(square, position, piece).Iterate())
                 yield return (m.Piece, m.Square);
         }
 
