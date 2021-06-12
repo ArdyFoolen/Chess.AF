@@ -29,8 +29,5 @@ namespace Chess.AF.PositionBridge
 
         string ToFenString();
         Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary();
-
-        IPositionAbstraction CreateCopy();
-        void SetMediator(IPositionMediatorAbstraction mediator);
     }
 }

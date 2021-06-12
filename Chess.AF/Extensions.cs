@@ -27,7 +27,8 @@ namespace Chess.AF
             => Position.Of(fen);
 
         public static Option<IPositionAbstraction> CreatePositionAbstraction(this Option<Fen> fen)
-            => PositionMediator.Of(fen);
+            => PositionAbstraction.Of(fen);
+            //=> PositionMediator.Of(fen);
 
         internal static int Value(this PositionEnum position) { return (int)position; }
 
@@ -72,9 +73,17 @@ namespace Chess.AF
             { "R", PieceEnum.Rook },
             { "Q", PieceEnum.Queen }
         };
+        private static readonly Dictionary<string, PieceEnum> pieceDict = new Dictionary<string, PieceEnum>()
+        {
+            { "N", PieceEnum.Knight },
+            { "B", PieceEnum.Bishop },
+            { "R", PieceEnum.Rook },
+            { "Q", PieceEnum.Queen },
+            { "K", PieceEnum.King }
+        };
 
         public static Option<PieceEnum> ToPiece(this string piece)
-            => promoteDict.ContainsKey(piece) ? Some(promoteDict[piece]) : None;
+            => pieceDict.ContainsKey(piece) ? Some(pieceDict[piece]) : None;
 
         // A8: 0 / 8 = 0
         // H8: 7 / 8 = 0;
@@ -253,7 +262,7 @@ namespace Chess.AF
 
         public static Option<PieceEnum> FromSanToPiece(this string str)
         {
-            if (promoteDict.ContainsKey(str.FirstOrDefault().ToString()))
+            if (pieceDict.ContainsKey(str.FirstOrDefault().ToString()))
                 return str.FirstOrDefault().ToString().ToPiece();
             else return Some(PieceEnum.Pawn);
         }

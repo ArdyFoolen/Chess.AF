@@ -15,10 +15,7 @@ namespace Chess.AF.PositionBridge
         bool IsInCheck { get; }
         SquareEnum KingSquare { get; }
 
-        IPositionImpl CreateCopy();
-        void SetMediator(IPositionMediatorImpl mediator);
-
-        void SetBits(Move move);
+        IPositionImpl SetBits(Move move, IPositionAbstraction abstraction);
         PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece);
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 

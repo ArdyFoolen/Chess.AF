@@ -11,7 +11,7 @@ namespace Chess.AF.PositionBridge
     {
         public static class PositionFactory
         {
-            public static IPositionImpl Create(Fen fen, IPositionMediatorImpl mediator)
+            public static IPositionImpl Create(Fen fen, IPositionAbstraction abstraction)
             {
                 ulong[] maps = new ulong[14];
                 int i = 0;
@@ -21,7 +21,7 @@ namespace Chess.AF.PositionBridge
                     .Where(ic => !char.IsDigit(ic.piece))
                     .ForEach(ic => ic.piece.SetToMaps(maps, ic.index - 1));
 
-                IPositionImpl position = new PositionImpl(mediator, maps);
+                IPositionImpl position = new PositionImpl(abstraction, maps);
                 return position;
             }
         }

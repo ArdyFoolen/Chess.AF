@@ -15,7 +15,8 @@ namespace Chess.AF.PositionBridge
     {
         #region Properties
 
-        private IPositionMediatorImpl Mediator { get; set; }
+        private IPositionAbstraction Abstraction { get; set; }
+
         private ulong[] Maps = new ulong[14];
 
         public bool IsTake { get; private set; } = false;
@@ -24,40 +25,37 @@ namespace Chess.AF.PositionBridge
 
         #region ctors
 
-        public PositionImpl(IPositionMediatorImpl mediator, ulong[] maps)
+        public PositionImpl(IPositionAbstraction abstraction, ulong[] maps)
         {
-            Mediator = mediator;
+            Abstraction = abstraction;
             Maps = maps;
         }
 
-        private PositionImpl(PositionImpl position)
+        private PositionImpl(PositionImpl position, IPositionAbstraction abstraction)
         {
+            Abstraction = abstraction;
             for (int i = 0; i < position.Maps.Length; i++)
                 this.Maps[i] = position.Maps[i];
         }
-
-        public IPositionImpl CreateCopy()
-            => new PositionImpl(this);
-
-        public void SetMediator(IPositionMediatorImpl mediator)
-            => Mediator = mediator;
 
         #endregion
 
         #region public methods
 
-        private bool IsWhiteToMove { get => Mediator.IsWhiteToMove; }
+        private bool IsWhiteToMove { get => Abstraction.IsWhiteToMove; }
 
         public SquareEnum KingSquare { get => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom(); }
 
         #region SetBits
 
-        public void SetBits(Move move)
+        public IPositionImpl SetBits(Move move, IPositionAbstraction abstraction)
         {
-            SetBitsForRokadeRook(move);
-            SetBitsForMove(move);
-            SetBitsForEnPassantTake(move);
-            SetBitsForTake(move);
+            PositionImpl implementor = new PositionImpl(this, abstraction);
+            implementor.SetBitsForRokadeRook(move);
+            implementor.SetBitsForMove(move);
+            implementor.SetBitsForEnPassantTake(move);
+            implementor.SetBitsForTake(move);
+            return implementor;
         }
 
         private void SetBitsForRokadeRook(Move move)
@@ -236,7 +234,7 @@ namespace Chess.AF.PositionBridge
         }
 
         private ulong GetEPMap(SquareEnum square)
-            => Mediator.EpSquare.Match(
+            => Abstraction.EpSquare.Match(
                 None: () => 0x0ul,
                 Some: s => CanTakeEP(s, square) ? 0x0ul.SetBit((int)s) : 0x0ul
                 );
@@ -285,7 +283,7 @@ namespace Chess.AF.PositionBridge
 
         public RokadeEnum PossibleRokade()
         {
-            RokadeEnum rokade = Mediator.Rokade;
+            RokadeEnum rokade = Abstraction.Rokade;
             if (RokadeEnum.None.Equals(rokade) || IsInCheck)
                 return RokadeEnum.None;
 

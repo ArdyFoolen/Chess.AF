@@ -60,7 +60,18 @@ namespace Chess.AF
                     foreach (string halfMove in halfMoves)
                         makeMoveToGame(halfMove);
                 }
+
+                setFinalResult();
+
                 return Game;
+            }
+
+            private void setFinalResult()
+            {
+                if (GameResult.Draw.Equals(gameResult))
+                    Game.Draw();
+                else if (GameResult.BlackWins.Equals(gameResult) || GameResult.WhiteWins.Equals(gameResult))
+                    Game.Resign();
             }
 
             private void makeMoveToGame(string halfMove)

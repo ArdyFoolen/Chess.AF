@@ -14,9 +14,19 @@ namespace Chess.AF.PositionBridge
     [DataContract]
     public partial class PositionAbstraction : IPositionAbstraction
     {
+        #region static methods
+
+        public static Option<IPositionAbstraction> Of(Option<Fen> fen)
+            => fen.Bind(WhenValid);
+
+        private static Option<IPositionAbstraction> WhenValid(Fen fen)
+            => Some((IPositionAbstraction)new PositionAbstraction(fen));
+
+        #endregion
+
         #region Properties
 
-        private IPositionMediatorAbstraction Mediator { get; set; }
+        private IPositionImpl Implementor { get; set; }
 
         [DataMember]
         public bool IsWhiteToMove { get; private set; }
@@ -28,7 +38,7 @@ namespace Chess.AF.PositionBridge
         public Option<SquareEnum> EpSquare { get; private set; }
 
         [DataMember]
-        public bool IsTake { get => Mediator.IsTake; }
+        public bool IsTake { get => Implementor.IsTake; }
         [DataMember]
         public int PlyCount { get; private set; }
 
@@ -39,20 +49,20 @@ namespace Chess.AF.PositionBridge
 
         #region ctors
 
-        public PositionAbstraction(IPositionMediatorAbstraction mediator, bool isWhiteToMove, RokadeEnum whiteRokade, RokadeEnum blackRokade,
-            Option<SquareEnum> ep, int plyCount, int moveNumber)
+        private PositionAbstraction(Fen fen)
         {
-            this.Mediator = mediator;
-            this.IsWhiteToMove = isWhiteToMove;
-            this.WhiteRokade = whiteRokade;
-            this.BlackRokade = blackRokade;
-            this.EpSquare = ep;
-            this.PlyCount = plyCount;
-            this.MoveNumber = moveNumber;
+            Implementor = Create(fen, this);
+            this.IsWhiteToMove = fen.IsWhiteToMove;
+            this.WhiteRokade = fen.WhiteRokade;
+            this.BlackRokade = fen.BlackRokade;
+            this.EpSquare = fen.EnPassant;
+            this.PlyCount = fen.PlyCount;
+            this.MoveNumber = fen.MoveNumber;
         }
 
-        private PositionAbstraction(PositionAbstraction position)
+        private PositionAbstraction(PositionAbstraction position, IPositionImpl implementor)
         {
+            this.Implementor = implementor;
             this.IsWhiteToMove = position.IsWhiteToMove;
             this.WhiteRokade = position.WhiteRokade;
             this.BlackRokade = position.BlackRokade;
@@ -61,10 +71,8 @@ namespace Chess.AF.PositionBridge
             this.MoveNumber = position.MoveNumber;
         }
 
-        public IPositionAbstraction CreateCopy()
-            => new PositionAbstraction(this);
-        public void SetMediator(IPositionMediatorAbstraction mediator)
-            => Mediator = mediator;
+        private IPositionAbstraction CreateCopy()
+            => new PositionAbstraction(this, Implementor);
 
         #endregion
 
@@ -78,9 +86,9 @@ namespace Chess.AF.PositionBridge
         private Option<IPositionAbstraction> MoveAndValidateRokade(Move move)
         {
             if (RokadeEnum.None.Equals(move.Rokade) || RokadeEnum.KingAndQueenSide.Equals(move.Rokade) ||
-                RokadeEnum.None.Equals(Mediator.PossibleRokade() | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
+                RokadeEnum.None.Equals(Implementor.PossibleRokade() | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
                 return None;
-            var om = AF.Move.Of(move.Piece, Mediator.KingSquare, move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
+            var om = AF.Move.Of(move.Piece, Implementor.KingSquare, move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
             return om.Bind(m => MoveAndValidateFromTo(m));
         }
 
@@ -89,7 +97,7 @@ namespace Chess.AF.PositionBridge
 
         private Option<IPositionAbstraction> ValidateMoveFromTo(Move move)
             => IterateForAllMoves().Any(a => move.Piece.Equals(a.Piece) && move.From.Equals(a.Square) &&
-            move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(Mediator.CreateCopy()) : None;
+            move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(CreateCopy()) : None;
 
         private IPositionAbstraction Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
             => AF.Move.Of(move.Piece, move.From, move.To, move.Promote).Match(
@@ -98,7 +106,7 @@ namespace Chess.AF.PositionBridge
 
         private IPositionAbstraction MoveFromTo(Move move)
         {
-            Mediator.SetBits(move);
+            Implementor = Implementor.SetBits(move, this);
 
             SetEpSquare(move);
 
@@ -140,18 +148,18 @@ namespace Chess.AF.PositionBridge
         #region Iterators
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
-            => Mediator.GetIteratorFor(piece);
+            => Implementor.GetIteratorFor(piece);
 
         public PiecesIterator<T> GetIteratorForAll<T>()
             where T : Enum
-            => Mediator.GetIteratorForAll<T>();
+            => Implementor.GetIteratorForAll<T>();
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves()
         {
             foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
-                foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Mediator.PositionImpl))
+                foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Implementor))
                 {
-                    var pos = ((PositionAbstraction)Mediator.CreateCopy()).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as PositionAbstraction;
+                    var pos = (new PositionAbstraction(this, Implementor)).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as PositionAbstraction;
                     pos.IsWhiteToMove = !pos.IsWhiteToMove;
                     if (!pos.IsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
@@ -162,7 +170,7 @@ namespace Chess.AF.PositionBridge
 
         #region IsInCheck
 
-        public bool IsInCheck { get => Mediator.IsInCheck; }
+        public bool IsInCheck { get => Implementor.IsInCheck; }
 
         #endregion
 
@@ -172,19 +180,9 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                if (Mediator.IsInCheck)
+                if (Implementor.IsInCheck)
                     return IterateForAllMoves().Count() == 0;
                 return false;
-            }
-        }
-
-        public bool OpponentIsMate
-        {
-            get
-            {
-                PositionAbstraction position = Mediator.CreateCopy() as PositionAbstraction;
-                position.IsWhiteToMove = !IsWhiteToMove;
-                return position.IsMate;
             }
         }
 
@@ -196,19 +194,9 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                if (!Mediator.IsInCheck)
+                if (!Implementor.IsInCheck)
                     return IterateForAllMoves().Count() == 0;
                 return false;
-            }
-        }
-
-        public bool OpponentIsStaleMate
-        {
-            get
-            {
-                PositionAbstraction position = Mediator.CreateCopy() as PositionAbstraction;
-                position.IsWhiteToMove = !IsWhiteToMove;
-                return position.IsStaleMate;
             }
         }
 
@@ -236,10 +224,10 @@ namespace Chess.AF.PositionBridge
         #region Resign and Draw
 
         public Option<IPositionAbstraction> Resign()
-            => (GameResult.Ongoing.Equals(result)) ? Some(((PositionAbstraction)Mediator.CreateCopy()).resign()) : None;
+            => (GameResult.Ongoing.Equals(result)) ? Some((new PositionAbstraction(this, Implementor)).resign()) : None;
 
         public Option<IPositionAbstraction> Draw()
-            => (GameResult.Ongoing.Equals(result)) ? Some(((PositionAbstraction)Mediator.CreateCopy()).draw()) : None;
+            => (GameResult.Ongoing.Equals(result)) ? Some((new PositionAbstraction(this, Implementor)).draw()) : None;
 
         private IPositionAbstraction resign()
         {
