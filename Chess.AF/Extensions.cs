@@ -23,12 +23,8 @@ namespace Chess.AF
         public static Option<Fen> CreateFen(this string fenString)
             => Fen.Of(fenString);
 
-        public static Option<Position> CreatePosition(this Option<Fen> fen)
-            => Position.Of(fen);
-
         public static Option<IPositionAbstraction> CreatePositionAbstraction(this Option<Fen> fen)
             => PositionAbstraction.Of(fen);
-            //=> PositionMediator.Of(fen);
 
         internal static int Value(this PositionEnum position) { return (int)position; }
 
