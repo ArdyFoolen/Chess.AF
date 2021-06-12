@@ -167,8 +167,10 @@ namespace Chess.AF
             ' ', 'P', 'N', 'B', 'R', 'Q', 'K'
         };
 
-        public static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
+        public static char ConvertPieceToChar(IDictionary<SquareEnum, PieceOnSquare<PiecesEnum>> dictionary, SquareEnum square)
             => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
+        //public static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
+        //    => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
         public static char ConvertPieceToChar(int index)
             => PiecesCharEnum[index];
 

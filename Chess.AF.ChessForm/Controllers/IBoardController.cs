@@ -13,7 +13,7 @@ namespace Chess.AF.ChessForm.Controllers
     {
         void Register(IBoardView view);
         void UnRegister(IBoardView view);
-        Option<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> this[int index]
+        Option<PieceOnSquare<PiecesEnum>> this[int index]
         {
             get;
         }

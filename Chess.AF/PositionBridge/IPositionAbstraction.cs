@@ -28,6 +28,6 @@ namespace Chess.AF.PositionBridge
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 
         string ToFenString();
-        Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary();
+        Dictionary<int, PieceOnSquare<PiecesEnum>> ToDictionary();
     }
 }

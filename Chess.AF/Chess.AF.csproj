@@ -52,6 +52,7 @@
     <Compile Include="MapNotFoundException.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="DrawCommand.cs" />
+    <Compile Include="PieceOnSquare.cs" />
     <Compile Include="PositionBridge\IPositionAbstraction.cs" />
     <Compile Include="PositionBridge\IPositionImpl.cs" />
     <Compile Include="PositionBridge\MovesFactory.cs" />

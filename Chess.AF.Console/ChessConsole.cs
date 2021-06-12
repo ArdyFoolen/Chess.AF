@@ -154,7 +154,7 @@ namespace Chess.AF.Console
             for (int i = 0; i < 64; i++)
             {
                 Write($"{ucodeVertical}");
-                WritePiece(AF.Extensions.ConvertPieceToChar(dictionary, (SquareEnum)i), IsSelected(dictionary, (SquareEnum)i));
+                //WritePiece(AF.Extensions.ConvertPieceToChar(dictionary, (SquareEnum)i), IsSelected(dictionary, (SquareEnum)i));
                 if (i % 8 == 7)
                 {
                     whiteBackground = !whiteBackground;

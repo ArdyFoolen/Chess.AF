@@ -312,13 +312,23 @@ namespace Chess.AF.PositionBridge
             return fenString;
         }
 
-        public Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary()
+        //public Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> ToDictionary()
+        //{
+        //    Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dict = new Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
+        //    PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
+        //    foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+        //    {
+        //        dict.Add((int)square.Square, square);
+        //    }
+        //    return dict;
+        //}
+        public Dictionary<int, PieceOnSquare<PiecesEnum>> ToDictionary()
         {
-            Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dict = new Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
+            Dictionary<int, PieceOnSquare<PiecesEnum>> dict = new Dictionary<int, PieceOnSquare<PiecesEnum>>();
             PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
-            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+            foreach (var pieceOnSquare in iterator.Iterate().OrderBy(o => o.Square))
             {
-                dict.Add((int)square.Square, square);
+                dict.Add((int)pieceOnSquare.Square, pieceOnSquare);
             }
             return dict;
         }

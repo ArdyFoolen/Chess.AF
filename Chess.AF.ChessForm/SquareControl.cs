@@ -69,11 +69,11 @@ namespace Chess.AF.ChessForm
                 );
         }
 
-        private void SetImage((PiecesEnum Piece, SquareEnum Square, bool IsSelected) tuple)
+        private void SetImage(PieceOnSquare<PiecesEnum> pieceOnSquare)
         {
-            isSelected = tuple.IsSelected;
-            btnImage.Image = GetPieceDict[(int)tuple.Piece]();
-            SetBackColorToImage(tuple.IsSelected);
+            isSelected = pieceOnSquare.IsSelected;
+            btnImage.Image = GetPieceDict[(int)pieceOnSquare.Piece]();
+            SetBackColorToImage(pieceOnSquare.IsSelected);
         }
 
         private void DrawCircle(Graphics graphics)

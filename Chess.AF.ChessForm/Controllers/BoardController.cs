@@ -15,7 +15,8 @@ namespace Chess.AF.ChessForm.Controllers
     public class BoardController : IBoardController
     {
         private Game game;
-        private Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> positionDict;
+        //private Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> positionDict;
+        private Dictionary<int, PieceOnSquare<PiecesEnum>> positionDict;
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> moves;
         private List<IBoardView> views = new List<IBoardView>();
         private int? selectedSquare;
@@ -81,7 +82,7 @@ namespace Chess.AF.ChessForm.Controllers
                 view.UpdateView();
         }
 
-        public Option<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> this[int index]
+        public Option<PieceOnSquare<PiecesEnum>> this[int index]
         {
             get
             {
@@ -200,7 +201,8 @@ namespace Chess.AF.ChessForm.Controllers
         private void SetSelectedSquare(int square)
         {
             selectedSquare = square;
-            positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, true);
+            //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, true);
+            positionDict[square] = new PieceOnSquare<PiecesEnum>() { Piece = positionDict[square].Piece, Square = positionDict[square].Square, IsSelected = true };
         }
 
         private bool IsFromMove(int square)
@@ -209,17 +211,13 @@ namespace Chess.AF.ChessForm.Controllers
         private void UnSelect(int square)
         {
             if (positionDict.ContainsKey(square))
-                positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, false);
+                //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, false);
+                positionDict[square] = new PieceOnSquare<PiecesEnum>() { Piece = positionDict[square].Piece, Square = positionDict[square].Square, IsSelected = false };
         }
 
         private void SetPositionDict()
             => game.Map(SetPositionDict);
 
-        //private Position SetPositionDict(Position position)
-        //{
-        //    positionDict = position.ToDictionary();
-        //    return position;
-        //}
         private IPositionAbstraction SetPositionDict(IPositionAbstraction position)
         {
             positionDict = position.ToDictionary();
