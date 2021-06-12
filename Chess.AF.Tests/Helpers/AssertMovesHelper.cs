@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertIterateForMoves(Position position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
+        public Unit AssertIterateForMoves(IPositionAbstraction position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
         {
             int count = 0;
             foreach (var tuple in position.IterateForAllMoves())
@@ -53,12 +54,12 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertRokadeAfterMove(Position position, Move moveTo, RokadeEnum expected)
+        public Unit AssertRokadeAfterMove(IPositionAbstraction position, Move moveTo, RokadeEnum expected)
             => position.Move(moveTo).Match(
                 None: () => Assert.Fail(),
-                Some: s => Assert.AreEqual(GetOpponentColorRokade(s), expected));
+                Some: s => Assert.AreEqual(GetOpponentColorRokade(s as PositionAbstraction), expected));
 
-        private RokadeEnum GetOpponentColorRokade(Position position)
+        private RokadeEnum GetOpponentColorRokade(PositionAbstraction position)
             => position.IsWhiteToMove ? position.BlackRokade : position.WhiteRokade;
     }
 }
