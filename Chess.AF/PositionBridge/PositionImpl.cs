@@ -274,11 +274,17 @@ namespace Chess.AF.PositionBridge
         {
             get
             {
-                PiecesEnum king = PieceEnum.King.ToPieces(IsWhiteToMove);
-                ulong kingMap = Maps[(int)king];
-                SquareEnum kingSquare = kingMap.GetSquareFrom();
+                try
+                {
+                    PiecesEnum king = PieceEnum.King.ToPieces(IsWhiteToMove);
+                    ulong kingMap = Maps[(int)king];
+                    SquareEnum kingSquare = kingMap.GetSquareFrom();
 
-                return IsSquareAttacked(kingSquare);
+                    return IsSquareAttacked(kingSquare);
+                }
+                catch (MapNotFoundException) { }
+
+                return false;
             }
         }
 

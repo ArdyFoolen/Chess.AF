@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.PositionBridge;
 using System;
@@ -7,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.Position;
+using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF
 {
@@ -23,33 +24,8 @@ namespace Chess.AF
             return instance;
         }
 
-        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, Option<Position> position, PieceEnum pieceEnum = PieceEnum.Pawn)
-            => position.Match(
-                None: () => new PiecesIterator<PieceEnum>((pieceEnum, 0ul)),
-                Some: p => new PiecesIterator<PieceEnum>((pieceEnum, GetMapFor(p, square)))
-                );
-
-        // Make a map for black/white pawns, later set bits of either below or above square
-        private ulong GetMapFor(Position position, SquareEnum square)
-        {
-            var mvMap = 0x0000000000000000ul;
-
-            if (square.Row() < 7)
-                mvMap = mvMap.SetBit((int)square + 8);
-            if (square.Row() > 0)
-                mvMap = mvMap.SetBit((int)square - 8);
-            if (square.Row() == 1)
-                mvMap = mvMap.SetBit((int)square + 16);
-            if (square.Row() == 6)
-                mvMap = mvMap.SetBit((int)square - 16);
-
-            ulong tkMap = MovesDictionaries.GetTakeMap(square);
-
-            return position.GetPawnMapFor(square, mvMap, tkMap);
-        }
-
-        public Position.PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Pawn)
-            => new PiecesIterator<PieceEnum>((pieceEnum, GetMapFor(position, square)));
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Pawn)
+            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, GetMapFor(position, square)));
 
         // Make a map for black/white pawns, later set bits of either below or above square
         private ulong GetMapFor(IPositionImpl position, SquareEnum square)

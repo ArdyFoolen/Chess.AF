@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
+using static Chess.AF.PositionBridge.PositionAbstraction;
 using Unit = System.ValueTuple;
 
 namespace Chess.AF.Tests.Helpers
@@ -17,24 +18,23 @@ namespace Chess.AF.Tests.Helpers
         public void AssertMovesFor(string fenString, PieceEnum pieceEnum, SquareEnum[] expected)
         {
             Option<Fen> fen = Fen.Of(fenString);
-            Option<Position> position = Position.Of(fen);
-            Option<PieceEnum> pieceOpt = pieceEnum;
-            Option<Selected> selected = pieceOpt.Bind(piece => position.Bind(p => Selected.Of(piece, p.GetIteratorFor(piece), p)));
+            Option<IPositionAbstraction> position = PositionAbstraction.Of(fen);
 
-            selected.Match(
+            position.Match(
                 None: () => Assert.Fail(),
-                Some: s => position.Match(
-                    None: () => Assert.Fail(),
-                    Some: p => AssertSelected(s, expected.ToList())
-                ));
+                Some: p => AssertSelected(FilterByPiece(p.IterateForAllMoves(), pieceEnum), expected.ToList())
+            );
         }
 
-        private Unit AssertSelected(Selected selected, List<SquareEnum> expected)
+        private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> FilterByPiece(IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> moves, PieceEnum piece)
+            => moves.Where(w => piece.IsEqual(w.Piece));
+
+        private Unit AssertSelected(IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> moves, List<SquareEnum> expected)
         {
             int count = 0;
-            foreach (var square in selected.Moves())
+            foreach (var tuple in moves)
             {
-                Assert.That(expected.Contains(square));
+                Assert.That(expected.Contains(tuple.MoveSquare));
                 count += 1;
             }
             Assert.AreEqual(expected.Count(), count);

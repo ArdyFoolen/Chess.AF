@@ -78,14 +78,9 @@
     <Compile Include="FenRegex.cs" />
     <Compile Include="KnightMoves.cs" />
     <Compile Include="Moves.cs" />
-    <Compile Include="MovesFactory.cs" />
     <Compile Include="PiecesIterator.cs" />
     <Compile Include="MoveGenerator.cs" />
-    <Compile Include="MapIterator.cs" />
-    <Compile Include="Position.cs" />
-    <Compile Include="PositionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selected.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AF.Functional\AF.Functional.csproj">
