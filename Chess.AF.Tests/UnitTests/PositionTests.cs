@@ -9,6 +9,7 @@ using Chess.AF;
 using AF.Functional;
 using Chess.AF.Enums;
 using Chess.AF.PositionBridge;
+using Chess.AF.Dto;
 
 namespace Chess.AF.Tests.UnitTests
 {

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.PositionBridge;
 using Microsoft.SqlServer.Server;
@@ -37,6 +38,10 @@ namespace Chess.AF
         public static bool IsEqual(this PieceEnum pieceEnum, PieceEnum piecesEnum)
             => piecesEnum == pieceEnum;
 
+        public static bool IsEqual<T>(this PieceEnum pieceEnum, T piecesEnum) where T : Enum
+            => (piecesEnum is PiecesEnum)
+                ? pieceEnum.IsEqual((PiecesEnum)(object)piecesEnum)
+                : pieceEnum.IsEqual((PieceEnum)(object)piecesEnum);
         public static PiecesEnum ToPieces(this PieceEnum pieceEnum, bool isWhiteToMove)
             => (PiecesEnum)(isWhiteToMove ? ((int)pieceEnum + 7) : (int)pieceEnum);
 

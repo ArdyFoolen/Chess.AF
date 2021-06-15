@@ -44,17 +44,29 @@ namespace Chess.AF.ChessForm
             lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
             lblResult.Location = new Point(570, 43);
             lblResult.Size = new Size(200, 23);
+            lblResult.Paint += label_Paint;
 
             lblCount.Text = string.Empty;
             lblCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
             lblCount.Location = new Point(570, 76);
             lblCount.Size = new Size(200, 23);
+            lblCount.Paint += label_Paint;
 
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
             this.Controls.Add(lblResult);
             this.Controls.Add(lblCount);
+
+            this.btnLoadFen.Click += BtnLoadFen_Click;
+            this.btnLoadPgn.Click += BtnLoadPgn_Click;
+            this.btnFirstMove.Click += BtnFirstMove_Click;
+            this.btnPreviousMove.Click += BtnPreviousMove_Click;
+            this.btnNextMove.Click += BtnNextMove_Click;
+            this.btnLastMove.Click += BtnLastMove_Click;
+            this.btnReverseBoard.Click += btnReverseBoard_Click;
+            this.btnResign.Click += btnResign_Click;
+            this.btnDraw.Click += btnDraw_Click;
 
             this.btnLoadFen.Image = Fen();
             this.btnLoadPgn.Image = Pgn();
@@ -66,6 +78,23 @@ namespace Chess.AF.ChessForm
             this.btnResign.Image = ResignFlag();
             this.btnDraw.Image = Draw50();
             UpdateView();
+        }
+
+        private float newFontSize(Graphics graphics, Size size, Font font, string str)
+        {
+            SizeF stringSize = graphics.MeasureString(str, font);
+            float wRatio = size.Width / stringSize.Width;
+            float hRatio = size.Height / stringSize.Height;
+            float ratio = Math.Min(hRatio, wRatio);
+            return font.Size * ratio;
+        }
+
+        private void label_Paint(object sender, PaintEventArgs e)
+        {
+            Label lbl = sender as Label;
+            float fontSize = newFontSize(e.Graphics, lbl.Bounds.Size, lbl.Font, lbl.Text);
+            Font f = new Font(lbl.Font.Name, fontSize, FontStyle.Regular);
+            lbl.Font = f;
         }
 
         Label lblResult = new Label();

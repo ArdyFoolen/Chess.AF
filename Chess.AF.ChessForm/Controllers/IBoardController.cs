@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.ChessForm.Views;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;

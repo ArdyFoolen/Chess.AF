@@ -30,7 +30,7 @@ namespace Chess.AF
         public bool Contains(PiecesEnum piece, SquareEnum square)
         {
             if (!this.Piece.IsEqual(piece)) return false;
-            foreach (var sq in Iterator.Iterate())
+            foreach (var sq in Iterator)
                 if (square.Equals(sq.Square))
                     return true;
             return false;
@@ -38,7 +38,7 @@ namespace Chess.AF
 
         public IEnumerable<SquareEnum> Moves()
         {
-            foreach (var pc in Iterator.Iterate())
+            foreach (var pc in Iterator)
                 foreach (var tuple in MovesFactory.Create(Piece, pc.Square, Position))
                     yield return tuple.Square;
         }

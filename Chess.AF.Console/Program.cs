@@ -27,7 +27,7 @@ namespace Chess.AF.Console
 
         private static Unit ShowSelected(Selected selected)
         {
-            foreach (var square in selected.Iterator.Iterate())
+            foreach (var square in selected.Iterator)
                 Write($"{square.Square.ToString()} ");
             WriteLine();
             return Unit();
@@ -38,7 +38,7 @@ namespace Chess.AF.Console
             WriteLine($"Moves for {selected.Piece.ToString()}");
             foreach (var sq in selected.Moves())
             {
-                if (selected.Piece.IsRokadeMove(selected.Iterator.Iterate().FirstOrDefault().Square, sq))
+                if (selected.Piece.IsRokadeMove(selected.Iterator.FirstOrDefault().Square, sq))
                     ShowRokade(sq);
                 else
                     Write($"{sq.ToString()}");
@@ -103,8 +103,8 @@ namespace Chess.AF.Console
             ChessConsole.WriteInfo = WriteInfo(position);
             PiecesIterator<PiecesEnum> iterator = position.GetIteratorForAll<PiecesEnum>();
             List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)> list = new List<(PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
-            foreach (var square in iterator.Iterate(IsSelected))
-                list.Add(square);
+            //foreach (var square in iterator)
+            //    list.Add(square);
             var dictionary = list.ToDictionary(d => d.Square);
             WriteBoard(dictionary);
             return position;

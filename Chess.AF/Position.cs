@@ -457,7 +457,7 @@ namespace Chess.AF
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves()
         {
-            foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
+            foreach (var pieceTuple in GetIteratorForAll<PieceEnum>())
                 foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Some(this)))
                     if (!(new Position(this)).Move((pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square)).OpponentIsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
@@ -643,7 +643,7 @@ namespace Chess.AF
             StringBuilder sb = new StringBuilder();
             int prevIndex = -1;
             int lastIndex = 0;
-            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+            foreach (var square in iterator.OrderBy(o => o.Square))
             {
                 lastIndex = EmptyFenSquares(sb, prevIndex, lastIndex, square.Square);
 
@@ -667,10 +667,10 @@ namespace Chess.AF
         {
             Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dict = new Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)>();
             PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
-            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
-            {
-                dict.Add((int)square.Square, square);
-            }
+            //foreach (var square in iterator.OrderBy(o => o.Square))
+            //{
+            //    dict.Add((int)square.Square, square);
+            //}
             return dict;
         }
 

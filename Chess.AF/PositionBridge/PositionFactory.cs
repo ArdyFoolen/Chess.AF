@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.PositionBridge
 {
-    public partial class PositionImpl
+    internal partial class PositionImpl
     {
         public static class PositionFactory
         {

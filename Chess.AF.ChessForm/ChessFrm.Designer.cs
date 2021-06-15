@@ -76,7 +76,6 @@ namespace Chess.AF.ChessForm
             this.btnLoadFen.Name = "btnLoadFen";
             this.btnLoadFen.Size = new System.Drawing.Size(23, 22);
             this.btnLoadFen.Text = "Load Fen";
-            this.btnLoadFen.Click += BtnLoadFen_Click;
             // 
             // btnLoadPgn
             // 
@@ -85,7 +84,11 @@ namespace Chess.AF.ChessForm
             this.btnLoadPgn.Name = "btnLoadPgn";
             this.btnLoadPgn.Size = new System.Drawing.Size(23, 22);
             this.btnLoadPgn.Text = "Load Pgn";
-            this.btnLoadPgn.Click += BtnLoadPgn_Click;
+            // 
+            // toolStripSep1
+            // 
+            this.toolStripSep1.Name = "toolStripSep1";
+            this.toolStripSep1.Size = new System.Drawing.Size(6, 25);
             // 
             // btnFirstMove
             // 
@@ -94,7 +97,6 @@ namespace Chess.AF.ChessForm
             this.btnFirstMove.Name = "btnFirstMove";
             this.btnFirstMove.Size = new System.Drawing.Size(23, 22);
             this.btnFirstMove.Text = "Goto First Move";
-            this.btnFirstMove.Click += BtnFirstMove_Click;
             // 
             // btnPreviousMove
             // 
@@ -103,7 +105,6 @@ namespace Chess.AF.ChessForm
             this.btnPreviousMove.Name = "btnPreviousMove";
             this.btnPreviousMove.Size = new System.Drawing.Size(23, 22);
             this.btnPreviousMove.Text = "Goto Previous Move";
-            this.btnPreviousMove.Click += BtnPreviousMove_Click;
             // 
             // btnNextMove
             // 
@@ -112,7 +113,6 @@ namespace Chess.AF.ChessForm
             this.btnNextMove.Name = "btnNextMove";
             this.btnNextMove.Size = new System.Drawing.Size(23, 22);
             this.btnNextMove.Text = "Goto Next Move";
-            this.btnNextMove.Click += BtnNextMove_Click;
             // 
             // btnLastMove
             // 
@@ -121,7 +121,11 @@ namespace Chess.AF.ChessForm
             this.btnLastMove.Name = "btnLastMove";
             this.btnLastMove.Size = new System.Drawing.Size(23, 22);
             this.btnLastMove.Text = "Goto Last Move";
-            this.btnLastMove.Click += BtnLastMove_Click;
+            // 
+            // toolStripSep2
+            // 
+            this.toolStripSep2.Name = "toolStripSep2";
+            this.toolStripSep2.Size = new System.Drawing.Size(6, 25);
             // 
             // btnReverseBoard
             // 
@@ -130,7 +134,6 @@ namespace Chess.AF.ChessForm
             this.btnReverseBoard.Name = "btnReverseBoard";
             this.btnReverseBoard.Size = new System.Drawing.Size(23, 22);
             this.btnReverseBoard.Text = "Reverse Board";
-            this.btnReverseBoard.Click += btnReverseBoard_Click;
             // 
             // btnResign
             // 
@@ -139,7 +142,6 @@ namespace Chess.AF.ChessForm
             this.btnResign.Name = "btnResign";
             this.btnResign.Size = new System.Drawing.Size(23, 22);
             this.btnResign.Text = "Resign Game";
-            this.btnResign.Click += btnResign_Click;
             // 
             // btnDraw
             // 
@@ -148,7 +150,6 @@ namespace Chess.AF.ChessForm
             this.btnDraw.Name = "btnDraw";
             this.btnDraw.Size = new System.Drawing.Size(23, 22);
             this.btnDraw.Text = "Draw Game";
-            this.btnDraw.Click += btnDraw_Click;
             // 
             // openFileDialog1
             // 
@@ -157,10 +158,10 @@ namespace Chess.AF.ChessForm
             // ChessFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(800, 594);
             this.Controls.Add(this.toolStrip1);
-            this.MaximumSize = new System.Drawing.Size(816, 633);
-            this.MinimumSize = new System.Drawing.Size(816, 633);
             this.Name = "ChessFrm";
             this.Text = "Chess Form";
             this.toolStrip1.ResumeLayout(false);

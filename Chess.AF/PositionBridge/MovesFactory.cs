@@ -13,7 +13,7 @@ namespace Chess.AF.PositionBridge
         public static IEnumerable<(PieceEnum Piece, SquareEnum Square)> Create(PieceEnum piece, SquareEnum square, IPositionImpl position)
         {
             var moves = Create(piece);
-            foreach (var m in moves.GetIteratorFor(square, position, piece).Iterate())
+            foreach (var m in moves.GetIteratorFor(square, position, piece))
                 yield return (m.Piece, m.Square);
         }
 

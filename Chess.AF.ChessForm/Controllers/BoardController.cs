@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.ChessForm.Views;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.PositionBridge;
 using System;
@@ -202,7 +203,7 @@ namespace Chess.AF.ChessForm.Controllers
         {
             selectedSquare = square;
             //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, true);
-            positionDict[square] = new PieceOnSquare<PiecesEnum>() { Piece = positionDict[square].Piece, Square = positionDict[square].Square, IsSelected = true };
+            positionDict[square] = new PieceOnSquare<PiecesEnum>(positionDict[square].Piece, positionDict[square].Square, true);
         }
 
         private bool IsFromMove(int square)
@@ -212,7 +213,7 @@ namespace Chess.AF.ChessForm.Controllers
         {
             if (positionDict.ContainsKey(square))
                 //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, false);
-                positionDict[square] = new PieceOnSquare<PiecesEnum>() { Piece = positionDict[square].Piece, Square = positionDict[square].Square, IsSelected = false };
+                positionDict[square] = new PieceOnSquare<PiecesEnum>(positionDict[square].Piece, positionDict[square].Square, false);
         }
 
         private void SetPositionDict()

@@ -9,6 +9,7 @@ using static Chess.AF.ChessForm.ChessConstants;
 using static Chess.AF.ChessForm.ImageHelper;
 using System.Linq;
 using Chess.AF.Enums;
+using Chess.AF.Dto;
 
 namespace Chess.AF.ChessForm
 {

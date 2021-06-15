@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
@@ -156,7 +157,7 @@ namespace Chess.AF.PositionBridge
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves()
         {
-            foreach (var pieceTuple in GetIteratorForAll<PieceEnum>().Iterate())
+            foreach (var pieceTuple in GetIteratorForAll<PieceEnum>())
                 foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Implementor))
                 {
                     var pos = (new PositionAbstraction(this, Implementor)).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as PositionAbstraction;
@@ -292,7 +293,7 @@ namespace Chess.AF.PositionBridge
             StringBuilder sb = new StringBuilder();
             int prevIndex = -1;
             int lastIndex = 0;
-            foreach (var square in iterator.Iterate().OrderBy(o => o.Square))
+            foreach (var square in iterator.OrderBy(o => o.Square))
             {
                 lastIndex = EmptyFenSquares(sb, prevIndex, lastIndex, square.Square);
 
@@ -326,7 +327,7 @@ namespace Chess.AF.PositionBridge
         {
             Dictionary<int, PieceOnSquare<PiecesEnum>> dict = new Dictionary<int, PieceOnSquare<PiecesEnum>>();
             PiecesIterator<PiecesEnum> iterator = this.GetIteratorForAll<PiecesEnum>();
-            foreach (var pieceOnSquare in iterator.Iterate().OrderBy(o => o.Square))
+            foreach (var pieceOnSquare in iterator.OrderBy(o => o.Square))
             {
                 dict.Add((int)pieceOnSquare.Square, pieceOnSquare);
             }

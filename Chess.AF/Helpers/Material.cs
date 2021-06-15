@@ -19,7 +19,7 @@ namespace Chess.AF.Helpers
         public int Count()
         {
             int count = 0;
-            foreach (var piece in Iterator.Iterate())
+            foreach (var piece in Iterator)
                 count += ValueOf(piece.Piece);
             return count;
         }

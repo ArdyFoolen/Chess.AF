@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using static Chess.AF.PositionBridge.PositionAbstraction;
 using static AF.Functional.F;
 using AF.Functional;
+using Chess.AF.Dto;
 
 namespace Chess.AF.PositionBridge
 {
-    public partial class PositionImpl : IPositionImpl
+    internal partial class PositionImpl : IPositionImpl
     {
         #region Properties
 
@@ -118,14 +119,14 @@ namespace Chess.AF.PositionBridge
         #endregion
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
-            => new PiecesIterator<PieceEnum>((piece, GetMapFor(piece)));
+            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(piece, GetMapFor(piece)));
 
         public PiecesIterator<T> GetIteratorForAll<T>()
             where T : Enum
             => new PiecesIterator<T>(
                 Enum.GetValues(typeof(T))
                 .Cast<T>()
-                .Select(piece => (piece, GetMapFor(piece)))
+                .Select(piece => new PieceMap<T>(piece, GetMapFor(piece)))
                 .ToArray());
 
         public ulong ExcludeOwnPieces(ulong map)
