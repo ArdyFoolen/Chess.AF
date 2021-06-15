@@ -7,17 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF", "Chess.AF\Chess.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF.Tests", "Chess.AF.Tests\Chess.AF.Tests.csproj", "{AFBF9D8E-C333-4F25-B479-F29D0F072BF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF.Console", "Chess.AF.Console\Chess.AF.Console.csproj", "{C4C22C56-E27F-4AFA-9E12-6BEB5BE44D59}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AF.Functional", "AF.Functional\AF.Functional.csproj", "{DFF3BC61-323F-40C4-9097-06FC546EF15C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF.Console.Tests", "Chess.AF.Console.Tests\Chess.AF.Console.Tests.csproj", "{3C6FC7B7-5961-4A64-A8DE-3952C51FECCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF.UCIEngine", "Chess.AF.UCIEngine\Chess.AF.UCIEngine.csproj", "{72C92E06-D4CB-4E48-99ED-4A2C1FBDC650}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AF.Classes", "AF.Classes\AF.Classes.csproj", "{3855EC94-F9A9-4EBA-8BE8-6E2B74284E57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.AF.ChessForm", "Chess.AF.ChessForm\Chess.AF.ChessForm.csproj", "{E0C9B3ED-C53A-4755-936E-FD15FFF9D7B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.AF.ChessForm", "Chess.AF.ChessForm\Chess.AF.ChessForm.csproj", "{E0C9B3ED-C53A-4755-936E-FD15FFF9D7B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,18 +29,10 @@ Global
 		{AFBF9D8E-C333-4F25-B479-F29D0F072BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFBF9D8E-C333-4F25-B479-F29D0F072BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFBF9D8E-C333-4F25-B479-F29D0F072BF3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4C22C56-E27F-4AFA-9E12-6BEB5BE44D59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4C22C56-E27F-4AFA-9E12-6BEB5BE44D59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4C22C56-E27F-4AFA-9E12-6BEB5BE44D59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4C22C56-E27F-4AFA-9E12-6BEB5BE44D59}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFF3BC61-323F-40C4-9097-06FC546EF15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFF3BC61-323F-40C4-9097-06FC546EF15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFF3BC61-323F-40C4-9097-06FC546EF15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFF3BC61-323F-40C4-9097-06FC546EF15C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C6FC7B7-5961-4A64-A8DE-3952C51FECCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C6FC7B7-5961-4A64-A8DE-3952C51FECCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C6FC7B7-5961-4A64-A8DE-3952C51FECCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C6FC7B7-5961-4A64-A8DE-3952C51FECCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72C92E06-D4CB-4E48-99ED-4A2C1FBDC650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72C92E06-D4CB-4E48-99ED-4A2C1FBDC650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72C92E06-D4CB-4E48-99ED-4A2C1FBDC650}.Release|Any CPU.ActiveCfg = Release|Any CPU

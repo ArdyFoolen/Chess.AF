@@ -52,12 +52,6 @@
     <Compile Include="UnitTests\ExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chess.AF.Console\Chess.AF.Console.csproj">
-      <Project>{c4c22c56-e27f-4afa-9e12-6beb5be44d59}</Project>
-      <Name>Chess.AF.Console</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
