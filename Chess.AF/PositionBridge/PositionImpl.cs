@@ -10,6 +10,7 @@ using static AF.Functional.F;
 using AF.Functional;
 using Chess.AF.Dto;
 using Chess.AF.PieceMoves;
+using Chess.AF.Exceptions;
 
 namespace Chess.AF.PositionBridge
 {

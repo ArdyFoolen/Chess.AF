@@ -51,7 +51,7 @@
     <Compile Include="Helpers\Material.cs" />
     <Compile Include="PieceMoves\KingMoves.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
-    <Compile Include="MapNotFoundException.cs" />
+    <Compile Include="Exceptions\MapNotFoundException.cs" />
     <Compile Include="Dto\Move.cs" />
     <Compile Include="Commands\DrawCommand.cs" />
     <Compile Include="PositionBridge\IPositionAbstraction.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="PieceMoves\RookMoves.cs" />
     <Compile Include="PieceMoves\BishopMoves.cs" />
     <Compile Include="Board.cs" />
-    <Compile Include="Errors.cs" />
+    <Compile Include="Exceptions\Errors.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ImportExport\Fen.cs" />
     <Compile Include="ImportExport\FenRegex.cs" />

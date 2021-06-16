@@ -2,7 +2,7 @@
 using AF.Functional;
 using Chess.AF.ImportExport;
 
-namespace Chess.AF
+namespace Chess.AF.Exceptions
 {
     public static class Errors
     {
