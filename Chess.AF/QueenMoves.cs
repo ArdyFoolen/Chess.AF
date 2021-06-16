@@ -10,7 +10,7 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF
 {
-    public class QueenMoves : Moves
+    internal class QueenMoves : Moves
     {
         private static QueenMoves instance = null;
         private QueenMoves() { }

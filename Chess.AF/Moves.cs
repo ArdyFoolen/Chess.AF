@@ -10,7 +10,7 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF
 {
-    public interface Moves
+    internal interface Moves
     {
         PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum);
     }

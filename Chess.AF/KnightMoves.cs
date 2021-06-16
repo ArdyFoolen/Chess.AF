@@ -11,7 +11,7 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF
 {
-    public class KnightMoves : Moves
+    internal class KnightMoves : Moves
     {
         private static KnightMoves instance = null;
         private KnightMoves() { }
@@ -25,13 +25,5 @@ namespace Chess.AF
 
         public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Knight)
             => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, position.ExcludeOwnPieces(MovesDictionaries.KnightMovesDictionary[square])));
-
-        public PiecesIterator<PieceEnum> this[SquareEnum square]
-        {
-            get
-            {
-                return new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(PieceEnum.Knight, MovesDictionaries.KnightMovesDictionary[square]));
-            }
-        }
     }
 }

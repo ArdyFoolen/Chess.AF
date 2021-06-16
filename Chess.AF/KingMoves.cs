@@ -11,7 +11,7 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 
 namespace Chess.AF
 {
-    public class KingMoves : Moves
+    internal class KingMoves : Moves
     {
         private static KingMoves instance = null;
         private KingMoves() { }
