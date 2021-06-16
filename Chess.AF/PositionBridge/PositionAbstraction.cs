@@ -90,7 +90,7 @@ namespace Chess.AF.PositionBridge
             if (RokadeEnum.None.Equals(move.Rokade) || RokadeEnum.KingAndQueenSide.Equals(move.Rokade) ||
                 RokadeEnum.None.Equals(Implementor.PossibleRokade() | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
                 return None;
-            var om = AF.Move.Of(move.Piece, Implementor.KingSquare, move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
+            var om = AF.Dto.Move.Of(move.Piece, Implementor.KingSquare, move.Rokade.GetKingRokadeSquare(IsWhiteToMove), PieceEnum.King);
             return om.Bind(m => MoveAndValidateFromTo(m));
         }
 
@@ -102,7 +102,7 @@ namespace Chess.AF.PositionBridge
             move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(CreateCopy()) : None;
 
         private IPositionAbstraction Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
-            => AF.Move.Of(move.Piece, move.From, move.To, move.Promote).Match(
+            => AF.Dto.Move.Of(move.Piece, move.From, move.To, move.Promote).Match(
                 None: () => this,
                 Some: m => MoveFromTo(m));
 

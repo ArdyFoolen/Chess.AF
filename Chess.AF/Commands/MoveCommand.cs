@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;

@@ -10,6 +10,7 @@ using static AF.Functional.F;
 using AF.Classes.Agent;
 using Unit = System.ValueTuple;
 using Chess.AF.Enums;
+using Chess.AF.Dto;
 
 namespace Chess.AF.UCIEngine
 {

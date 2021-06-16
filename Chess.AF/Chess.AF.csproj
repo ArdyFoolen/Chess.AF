@@ -52,7 +52,7 @@
     <Compile Include="PieceMoves\KingMoves.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="MapNotFoundException.cs" />
-    <Compile Include="Move.cs" />
+    <Compile Include="Dto\Move.cs" />
     <Compile Include="Commands\DrawCommand.cs" />
     <Compile Include="PositionBridge\IPositionAbstraction.cs" />
     <Compile Include="PositionBridge\IPositionImpl.cs" />

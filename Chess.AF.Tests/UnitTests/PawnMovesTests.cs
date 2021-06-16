@@ -70,7 +70,7 @@ namespace Chess.AF.Tests.UnitTests
         {
             Game game = new Game();
             game.Load(tuples.fen);
-            var toMove = AF.Move.Of(tuples.Piece, tuples.Square, tuples.MoveSquare, tuples.Promoted);
+            var toMove = AF.Dto.Move.Of(tuples.Piece, tuples.Square, tuples.MoveSquare, tuples.Promoted);
             toMove.Map(m => { game.Move(m); return Unit(); });
 
             Assert.AreEqual(tuples.expectedFen, game.ToFenString());

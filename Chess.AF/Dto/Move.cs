@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
 
-namespace Chess.AF
+namespace Chess.AF.Dto
 {
     [DataContract]
     public class Move

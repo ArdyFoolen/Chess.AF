@@ -1,12 +1,11 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AF.Functional.F;
 using Unit = System.ValueTuple;
+using static AF.Functional.F;
+using System.Linq;
+using Chess.AF.Dto;
+using System;
 
 namespace Chess.AF
 {
@@ -87,19 +86,19 @@ namespace Chess.AF
             {
                 var parts = dissectHalfMoveIntoParts(halfMove);
                 var selectedMove = selectMove(parts).FirstOrDefault();
-                return AF.Move.Of(selectedMove.Piece, selectedMove.Square, selectedMove.MoveSquare, selectedMove.Promoted);
+                return AF.Dto.Move.Of(selectedMove.Piece, selectedMove.Square, selectedMove.MoveSquare, selectedMove.Promoted);
             }
 
             private Option<Move> GetRokadeMoveWhenValid(string halfMove)
             {
                 if ("O-O".Equals(halfMove))
-                    return AF.Move.Of(RokadeEnum.KingSide);
+                    return AF.Dto.Move.Of(RokadeEnum.KingSide);
                 if ("O-O=O".Equals(halfMove))
-                    return AF.Move.Of(RokadeEnum.QueenSide);
+                    return AF.Dto.Move.Of(RokadeEnum.QueenSide);
                 return None;
             }
 
-            private Unit Move(AF.Move move)
+            private Unit Move(AF.Dto.Move move)
             {
                 Game.Move(move);
                 return Unit();
