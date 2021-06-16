@@ -1,4 +1,5 @@
-﻿using Chess.AF.Tests.Helpers;
+﻿using Chess.AF.ImportExport;
+using Chess.AF.Tests.Helpers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

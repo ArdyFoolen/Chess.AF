@@ -64,9 +64,9 @@
     <Compile Include="Commands\ResignCommand.cs" />
     <Compile Include="Commands\MoveCommand.cs" />
     <Compile Include="PieceMoves\MovesDictionaries.cs" />
-    <Compile Include="Pgn.cs" />
-    <Compile Include="PgnBuilder.cs" />
-    <Compile Include="PgnImportBuilder.cs" />
+    <Compile Include="ImportExport\Pgn.cs" />
+    <Compile Include="ImportExport\PgnBuilder.cs" />
+    <Compile Include="ImportExport\PgnImportBuilder.cs" />
     <Compile Include="PieceMoves\QueenMoves.cs" />
     <Compile Include="PieceMoves\PawnMoves.cs" />
     <Compile Include="PieceMoves\RookMoves.cs" />
@@ -74,8 +74,8 @@
     <Compile Include="Board.cs" />
     <Compile Include="Errors.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Fen.cs" />
-    <Compile Include="FenRegex.cs" />
+    <Compile Include="ImportExport\Fen.cs" />
+    <Compile Include="ImportExport\FenRegex.cs" />
     <Compile Include="PieceMoves\KnightMoves.cs" />
     <Compile Include="PieceMoves\Moves.cs" />
     <Compile Include="PiecesIterator.cs" />

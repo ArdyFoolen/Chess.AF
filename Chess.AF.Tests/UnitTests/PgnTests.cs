@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.ImportExport;
 using Chess.AF.Tests.Helpers;
 using NUnit.Framework;
 using System;

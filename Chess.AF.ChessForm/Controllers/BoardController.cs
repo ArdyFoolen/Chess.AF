@@ -2,6 +2,7 @@
 using Chess.AF.ChessForm.Views;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
+using Chess.AF.ImportExport;
 using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;

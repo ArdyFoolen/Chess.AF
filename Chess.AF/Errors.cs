@@ -1,5 +1,6 @@
 ﻿using System;
 using AF.Functional;
+using Chess.AF.ImportExport;
 
 namespace Chess.AF
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
 
-namespace Chess.AF
+namespace Chess.AF.ImportExport
 {
     public partial class Pgn
     {

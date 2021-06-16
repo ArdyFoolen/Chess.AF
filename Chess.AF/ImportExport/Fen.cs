@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static AF.Functional.F;
 
-namespace Chess.AF
+namespace Chess.AF.ImportExport
 {
     public class Fen
     {

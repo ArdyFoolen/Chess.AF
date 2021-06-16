@@ -121,7 +121,7 @@ namespace Chess.AF.ChessForm
             {
                 string pgnString = string.Empty;
                 Using(new StreamReader(this.openFileDialog1.FileName), reader => pgnString = reader.ReadToEnd());
-                this.boardController.SetFromPgn(Pgn.Import(pgnString));
+                this.boardController.SetFromPgn(ImportExport.Pgn.Import(pgnString));
             }
         }
 

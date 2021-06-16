@@ -7,7 +7,7 @@ using System.Linq;
 using Chess.AF.Dto;
 using System;
 
-namespace Chess.AF
+namespace Chess.AF.ImportExport
 {
     public partial class Pgn
     {

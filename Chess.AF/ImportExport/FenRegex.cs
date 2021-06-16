@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Chess.AF
+namespace Chess.AF.ImportExport
 {
     public class FenRegex
     {
