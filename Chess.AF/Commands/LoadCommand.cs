@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF
+namespace Chess.AF.Commands
 {
     internal class LoadCommand : Command
     {
@@ -22,8 +22,6 @@ namespace Chess.AF
             this.Fen = fen;
         }
 
-        //public override void Execute()
-        //    => Position = Fen.CreateFen().CreatePosition();
         public override void Execute()
             => Position = Fen.CreateFen().CreatePositionAbstraction();
     }

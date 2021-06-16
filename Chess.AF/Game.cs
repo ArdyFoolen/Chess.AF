@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Commands;
 using Chess.AF.Enums;
 using Chess.AF.Helpers;
 using Chess.AF.PositionBridge;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF
+namespace Chess.AF.Commands
 {
     internal class MoveCommand : Command
     {
@@ -19,7 +19,5 @@ namespace Chess.AF
 
         public override void Execute()
             => Position = Position.Bind(p => p.Move(Move));
-            //.Match(None: () => Position,
-            //        Some: s => s);
     }
 }

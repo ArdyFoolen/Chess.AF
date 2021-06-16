@@ -7,22 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
 
-namespace Chess.AF
+namespace Chess.AF.Commands
 {
     internal abstract class Command
     {
-        //public Option<Position> Position { get; protected set; }
         public Option<IPositionAbstraction> Position { get; protected set; }
 
         public Command()
         {
             this.Position = None;
         }
-
-        //public Command(Option<Position> position)
-        //{
-        //    this.Position = position;
-        //}
 
         public Command(Option<IPositionAbstraction> position)
         {
