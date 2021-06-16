@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF
+namespace Chess.AF.PieceMoves
 {
     internal static class MovesDictionaries
     {

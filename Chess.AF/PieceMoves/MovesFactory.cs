@@ -1,12 +1,13 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
+using Chess.AF.PositionBridge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.PositionBridge
+namespace Chess.AF.PieceMoves
 {
     internal class MovesFactory
     {

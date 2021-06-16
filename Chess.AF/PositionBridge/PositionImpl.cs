@@ -9,6 +9,7 @@ using static Chess.AF.PositionBridge.PositionAbstraction;
 using static AF.Functional.F;
 using AF.Functional;
 using Chess.AF.Dto;
+using Chess.AF.PieceMoves;
 
 namespace Chess.AF.PositionBridge
 {

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Chess.AF.PositionBridge.PositionAbstraction;
 
-namespace Chess.AF
+namespace Chess.AF.PieceMoves
 {
     internal class PawnMoves : Moves
     {
