@@ -71,7 +71,6 @@
     <Compile Include="PieceMoves\PawnMoves.cs" />
     <Compile Include="PieceMoves\RookMoves.cs" />
     <Compile Include="PieceMoves\BishopMoves.cs" />
-    <Compile Include="Board.cs" />
     <Compile Include="Exceptions\Errors.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ImportExport\Fen.cs" />
