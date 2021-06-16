@@ -77,7 +77,6 @@
     <Compile Include="ImportExport\FenRegex.cs" />
     <Compile Include="PieceMoves\KnightMoves.cs" />
     <Compile Include="PieceMoves\Moves.cs" />
-    <Compile Include="PiecesIterator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
