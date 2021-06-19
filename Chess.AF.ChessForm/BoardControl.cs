@@ -36,29 +36,31 @@ namespace Chess.AF.ChessForm
         private SquareControl CreateSquareControl(int id)
         {
             var control = new SquareControl(id, boardController);
-            control.Location = GetLocation(id);
+            //control.Location = GetLocation(id);
+            control.Relocate(this.IsReverse);
             control.Margin = new Padding(0);
             control.Size = new Size(SquareWidth, SquareWidth);
             return control;
         }
 
-        private Point GetLocation(int id)
-            => new Point(GetX(id) * SquareWidth, GetY(id) * SquareWidth);
+        //private Point GetLocation(int id)
+        //    => new Point(GetX(id) * SquareWidth, GetY(id) * SquareWidth);
 
-        private int GetX(int id)
-            => GetRelativeLocation(id) % 8;
+        //private int GetX(int id)
+        //    => GetRelativeLocation(id) % 8;
 
-        private int GetY(int id)
-            => GetRelativeLocation(id) / 8;
+        //private int GetY(int id)
+        //    => GetRelativeLocation(id) / 8;
 
-        private int GetRelativeLocation(int id)
-            => IsReverse ? 63 - id : id;
+        //private int GetRelativeLocation(int id)
+        //    => IsReverse ? 63 - id : id;
 
         public void ReverseBoardView()
         {
             this.IsReverse = !this.IsReverse;
             foreach (SquareControl control in this.Controls)
-                control.Location = GetLocation(control.Id);
+                //control.Location = GetLocation(control.Id);
+                control.Relocate(this.IsReverse);
             this.Invalidate(true);
         }
     }
