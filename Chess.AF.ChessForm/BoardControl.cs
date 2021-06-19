@@ -14,12 +14,12 @@ namespace Chess.AF.ChessForm
 {
     public partial class BoardControl : UserControl
     {
-        private IBoardController boardController;
+        private IGameController boardController;
 
         public bool IsReverse { get; private set; } = false;
 
 
-        public BoardControl(IBoardController boardController)
+        public BoardControl(IGameController boardController)
         {
             InitializeComponent();
 

@@ -14,11 +14,10 @@ using Unit = System.ValueTuple;
 
 namespace Chess.AF.ChessForm.Controllers
 {
-    public class BoardController : IBoardController
+    public class GameController : IGameController
     {
         private Game game;
-        //private Dictionary<int, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> positionDict;
-        private Dictionary<int, PieceOnSquare<PiecesEnum>> positionDict;
+        private Dictionary<int, PieceOnSquare<PiecesEnum>> boardDictionary;
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> moves;
         private List<IBoardView> views = new List<IBoardView>();
         private int? selectedSquare;
@@ -48,7 +47,7 @@ namespace Chess.AF.ChessForm.Controllers
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMovesTo(int moveSquare)
             => SelectedMoves.Where(w => (int)w.MoveSquare == moveSquare);
 
-        public BoardController()
+        public GameController()
         {
             game = new Game();
             game.Load();
@@ -88,8 +87,8 @@ namespace Chess.AF.ChessForm.Controllers
         {
             get
             {
-                if (positionDict.ContainsKey(index))
-                    return Some(positionDict[index]);
+                if (boardDictionary.ContainsKey(index))
+                    return Some(boardDictionary[index]);
                 return None;
             }
         }
@@ -122,9 +121,9 @@ namespace Chess.AF.ChessForm.Controllers
                 else
                     Move(SelectedMovesTo(square).First());
 
-            positionDict.Keys.Where(w => positionDict[w].IsSelected).ForEach(f => UnSelect(f));
+            boardDictionary.Keys.Where(w => boardDictionary[w].IsSelected).ForEach(f => UnSelect(f));
             selectedSquare = null;
-            if (positionDict.ContainsKey(square) && IsFromMove(square))
+            if (boardDictionary.ContainsKey(square) && IsFromMove(square))
                 SetSelectedSquare(square);
             NotifyViews();
         }
@@ -134,7 +133,7 @@ namespace Chess.AF.ChessForm.Controllers
             if (IsSelected && SelectedMovesTo(moveSquare).Count() == 4)
                 Move(SelectedMovesTo(moveSquare).Single(s => s.Promoted == (PieceEnum)(piece % 7)));
 
-            positionDict.Keys.Where(w => positionDict[w].IsSelected).ForEach(f => UnSelect(f));
+            boardDictionary.Keys.Where(w => boardDictionary[w].IsSelected).ForEach(f => UnSelect(f));
             NotifyViews();
         }
 
@@ -204,7 +203,7 @@ namespace Chess.AF.ChessForm.Controllers
         {
             selectedSquare = square;
             //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, true);
-            positionDict[square] = new PieceOnSquare<PiecesEnum>(positionDict[square].Piece, positionDict[square].Square, true);
+            boardDictionary[square] = new PieceOnSquare<PiecesEnum>(boardDictionary[square].Piece, boardDictionary[square].Square, true);
         }
 
         private bool IsFromMove(int square)
@@ -212,9 +211,9 @@ namespace Chess.AF.ChessForm.Controllers
 
         private void UnSelect(int square)
         {
-            if (positionDict.ContainsKey(square))
+            if (boardDictionary.ContainsKey(square))
                 //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, false);
-                positionDict[square] = new PieceOnSquare<PiecesEnum>(positionDict[square].Piece, positionDict[square].Square, false);
+                boardDictionary[square] = new PieceOnSquare<PiecesEnum>(boardDictionary[square].Piece, boardDictionary[square].Square, false);
         }
 
         private void SetPositionDict()
@@ -222,7 +221,7 @@ namespace Chess.AF.ChessForm.Controllers
 
         private IPositionAbstraction SetPositionDict(IPositionAbstraction position)
         {
-            positionDict = position.ToDictionary();
+            boardDictionary = position.ToDictionary();
             return position;
         }
     }

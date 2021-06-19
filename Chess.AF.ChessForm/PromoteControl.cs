@@ -16,9 +16,9 @@ namespace Chess.AF.ChessForm
     public partial class PromoteControl : Panel
     {
         public int Id { get; private set; }
-        private IBoardController boardController;
+        private IGameController boardController;
 
-        public PromoteControl(int id, IBoardController boardController, bool isBlackToMove)
+        public PromoteControl(int id, IGameController boardController, bool isBlackToMove)
         {
             InitializeComponent();
 

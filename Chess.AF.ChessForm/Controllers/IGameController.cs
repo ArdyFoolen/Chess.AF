@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.ChessForm.Controllers
 {
-    public interface IBoardController
+    public interface IGameController
     {
         void Register(IBoardView view);
         void UnRegister(IBoardView view);

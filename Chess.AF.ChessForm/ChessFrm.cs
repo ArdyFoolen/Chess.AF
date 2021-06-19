@@ -20,7 +20,7 @@ namespace Chess.AF.ChessForm
     public partial class ChessFrm : Form, IBoardView
     {
         private BoardControl boardControl;
-        private IBoardController boardController;
+        private IGameController boardController;
         public ChessFrm()
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace Chess.AF.ChessForm
             this.loadFen.Hide();
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            this.boardController = new BoardController();
+            this.boardController = new GameController();
             this.boardController.Register(this);
 
             this.boardControl = new BoardControl(this.boardController);

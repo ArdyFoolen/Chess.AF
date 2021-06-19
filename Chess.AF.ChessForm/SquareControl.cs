@@ -15,7 +15,7 @@ namespace Chess.AF.ChessForm
 {
     public partial class SquareControl : UserControl, IBoardView
     {
-        private IBoardController boardController;
+        private IGameController boardController;
         private bool isSelected;
         private PromoteControl promoteControl;
 
@@ -28,7 +28,7 @@ namespace Chess.AF.ChessForm
             }
         }
 
-        public SquareControl(int id, IBoardController boardController)
+        public SquareControl(int id, IGameController boardController)
         {
             InitializeComponent();
 
