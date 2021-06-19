@@ -2,7 +2,7 @@
 using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.ImportExport;
-using Chess.AF.PositionBridge;
+using Chess.AF.Domain;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
-using static Chess.AF.PositionBridge.Board;
+using static Chess.AF.Domain.Board;
 using Unit = System.ValueTuple;
 
 namespace Chess.AF.Tests.Helpers

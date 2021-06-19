@@ -1,6 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Enums;
-using Chess.AF.PositionBridge;
+using Chess.AF.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

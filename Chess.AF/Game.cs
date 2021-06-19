@@ -3,7 +3,7 @@ using Chess.AF.Commands;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.Helpers;
-using Chess.AF.PositionBridge;
+using Chess.AF.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

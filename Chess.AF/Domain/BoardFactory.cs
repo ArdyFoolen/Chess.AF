@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.PositionBridge
+namespace Chess.AF.Domain
 {
     internal partial class BoardMap
     {

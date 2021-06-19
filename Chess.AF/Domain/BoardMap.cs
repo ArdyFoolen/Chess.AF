@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.Board;
+using static Chess.AF.Domain.Board;
 using static AF.Functional.F;
 using AF.Functional;
 using Chess.AF.Dto;
 using Chess.AF.PieceMoves;
 using Chess.AF.Exceptions;
 
-namespace Chess.AF.PositionBridge
+namespace Chess.AF.Domain
 {
     internal partial class BoardMap : IBoardMap
     {

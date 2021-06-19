@@ -10,9 +10,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
-using static Chess.AF.PositionBridge.BoardMap.BoardFactory;
+using static Chess.AF.Domain.BoardMap.BoardFactory;
 
-namespace Chess.AF.PositionBridge
+namespace Chess.AF.Domain
 {
     [DataContract]
     public partial class Board : IBoard

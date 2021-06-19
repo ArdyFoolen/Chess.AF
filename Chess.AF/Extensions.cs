@@ -11,7 +11,7 @@ using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.Exceptions;
 using Chess.AF.ImportExport;
-using Chess.AF.PositionBridge;
+using Chess.AF.Domain;
 using Microsoft.SqlServer.Server;
 
 namespace Chess.AF
