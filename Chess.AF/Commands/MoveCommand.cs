@@ -13,7 +13,7 @@ namespace Chess.AF.Commands
     {
         public Move Move { get; private set; }
 
-        public MoveCommand(Option<IPositionAbstraction> position, Move move) : base(position)
+        public MoveCommand(Option<IBoard> position, Move move) : base(position)
         {
             this.Move = move;
         }

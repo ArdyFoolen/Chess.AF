@@ -11,7 +11,7 @@ namespace Chess.AF.PieceMoves
 {
     internal class MovesFactory
     {
-        public static IEnumerable<(PieceEnum Piece, SquareEnum Square)> Create(PieceEnum piece, SquareEnum square, IPositionImpl position)
+        public static IEnumerable<(PieceEnum Piece, SquareEnum Square)> Create(PieceEnum piece, SquareEnum square, IBoardMap position)
         {
             var moves = Create(piece);
             foreach (var m in moves.GetIteratorFor(square, position, piece))

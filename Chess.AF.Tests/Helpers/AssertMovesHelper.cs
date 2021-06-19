@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 using Unit = System.ValueTuple;
 
 namespace Chess.AF.Tests.Helpers
@@ -20,7 +20,7 @@ namespace Chess.AF.Tests.Helpers
         public void AssertMovesFor(string fenString, PieceEnum pieceEnum, SquareEnum[] expected)
         {
             Option<Fen> fen = Fen.Of(fenString);
-            Option<IPositionAbstraction> position = PositionAbstraction.Of(fen);
+            Option<IBoard> position = Board.Of(fen);
 
             position.Match(
                 None: () => Assert.Fail(),
@@ -43,7 +43,7 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertIterateForMoves(IPositionAbstraction position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
+        public Unit AssertIterateForMoves(IBoard position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
         {
             int count = 0;
             foreach (var tuple in position.IterateForAllMoves())
@@ -56,12 +56,12 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertRokadeAfterMove(IPositionAbstraction position, Move moveTo, RokadeEnum expected)
+        public Unit AssertRokadeAfterMove(IBoard position, Move moveTo, RokadeEnum expected)
             => position.Move(moveTo).Match(
                 None: () => Assert.Fail(),
-                Some: s => Assert.AreEqual(GetOpponentColorRokade(s as PositionAbstraction), expected));
+                Some: s => Assert.AreEqual(GetOpponentColorRokade(s as Board), expected));
 
-        private RokadeEnum GetOpponentColorRokade(PositionAbstraction position)
+        private RokadeEnum GetOpponentColorRokade(Board position)
             => position.IsWhiteToMove ? position.BlackRokade : position.WhiteRokade;
     }
 }

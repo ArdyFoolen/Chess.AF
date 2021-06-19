@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 
 namespace Chess.AF.PositionBridge
 {
-    public interface IPositionImpl
+    public interface IBoardMap
     {
         bool IsTake { get; }
         bool IsInCheck { get; }
         SquareEnum KingSquare { get; }
 
-        IPositionImpl SetBits(Move move, IPositionAbstraction abstraction);
+        IBoardMap SetBits(Move move, IBoard abstraction);
         PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece);
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 

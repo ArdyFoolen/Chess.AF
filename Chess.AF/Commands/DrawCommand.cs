@@ -10,7 +10,7 @@ namespace Chess.AF.Commands
 {
     internal class DrawCommand : Command
     {
-        public DrawCommand(Option<IPositionAbstraction> position) : base(position) { }
+        public DrawCommand(Option<IBoard> position) : base(position) { }
 
         public override void Execute()
             => Position = Position.Bind(p => p.Draw());

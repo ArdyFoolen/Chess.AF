@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.PositionBridge
 {
-    internal partial class PositionImpl
+    internal partial class BoardMap
     {
-        public static class PositionFactory
+        public static class BoardFactory
         {
-            public static IPositionImpl Create(Fen fen, IPositionAbstraction abstraction)
+            public static IBoardMap Create(Fen fen, IBoard abstraction)
             {
                 ulong[] maps = new ulong[14];
                 int i = 0;
@@ -22,7 +22,7 @@ namespace Chess.AF.PositionBridge
                     .Where(ic => !char.IsDigit(ic.piece))
                     .ForEach(ic => ic.piece.SetToMaps(maps, ic.index - 1));
 
-                IPositionImpl position = new PositionImpl(abstraction, maps);
+                IBoardMap position = new BoardMap(abstraction, maps);
                 return position;
             }
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 
 namespace Chess.AF.Helpers
 {

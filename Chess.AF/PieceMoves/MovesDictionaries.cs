@@ -109,7 +109,7 @@ namespace Chess.AF.PieceMoves
             }
         }
 
-        internal static ulong GetRookMovesMapFor(IPositionImpl position, SquareEnum square)
+        internal static ulong GetRookMovesMapFor(IBoardMap position, SquareEnum square)
         {
             var maps = MovesDictionaries.RookMovesDictionary[square];
             ulong upMap = square.UpBitsOn();
@@ -179,7 +179,7 @@ namespace Chess.AF.PieceMoves
             return a1h8;
         }
 
-        internal static ulong GetBishopMovesMapFor(IPositionImpl position, SquareEnum square)
+        internal static ulong GetBishopMovesMapFor(IBoardMap position, SquareEnum square)
         {
             var maps = MovesDictionaries.BishopMovesDictionary[square];
             ulong upMap = square.UpBitsOn();

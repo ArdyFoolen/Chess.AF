@@ -10,26 +10,26 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
-using static Chess.AF.PositionBridge.PositionImpl.PositionFactory;
+using static Chess.AF.PositionBridge.BoardMap.BoardFactory;
 
 namespace Chess.AF.PositionBridge
 {
     [DataContract]
-    public partial class PositionAbstraction : IPositionAbstraction
+    public partial class Board : IBoard
     {
         #region static methods
 
-        public static Option<IPositionAbstraction> Of(Option<Fen> fen)
+        public static Option<IBoard> Of(Option<Fen> fen)
             => fen.Bind(WhenValid);
 
-        private static Option<IPositionAbstraction> WhenValid(Fen fen)
-            => Some((IPositionAbstraction)new PositionAbstraction(fen));
+        private static Option<IBoard> WhenValid(Fen fen)
+            => Some((IBoard)new Board(fen));
 
         #endregion
 
         #region Properties
 
-        private IPositionImpl Implementor { get; set; }
+        private IBoardMap Implementor { get; set; }
 
         [DataMember]
         public bool IsWhiteToMove { get; private set; }
@@ -52,7 +52,7 @@ namespace Chess.AF.PositionBridge
 
         #region ctors
 
-        private PositionAbstraction(Fen fen)
+        private Board(Fen fen)
         {
             Implementor = Create(fen, this);
             this.IsWhiteToMove = fen.IsWhiteToMove;
@@ -63,7 +63,7 @@ namespace Chess.AF.PositionBridge
             this.MoveNumber = fen.MoveNumber;
         }
 
-        private PositionAbstraction(PositionAbstraction position, IPositionImpl implementor)
+        private Board(Board position, IBoardMap implementor)
         {
             this.Implementor = implementor;
             this.IsWhiteToMove = position.IsWhiteToMove;
@@ -74,19 +74,19 @@ namespace Chess.AF.PositionBridge
             this.MoveNumber = position.MoveNumber;
         }
 
-        private IPositionAbstraction CreateCopy()
-            => new PositionAbstraction(this, Implementor);
+        private IBoard CreateCopy()
+            => new Board(this, Implementor);
 
         #endregion
 
         #region Move
 
-        public Option<IPositionAbstraction> Move(Move move)
+        public Option<IBoard> Move(Move move)
             => RokadeEnum.None.Equals(move.Rokade) ?
                     MoveAndValidateFromTo(move) :
                     MoveAndValidateRokade(move);
 
-        private Option<IPositionAbstraction> MoveAndValidateRokade(Move move)
+        private Option<IBoard> MoveAndValidateRokade(Move move)
         {
             if (RokadeEnum.None.Equals(move.Rokade) || RokadeEnum.KingAndQueenSide.Equals(move.Rokade) ||
                 RokadeEnum.None.Equals(Implementor.PossibleRokade() | move.Rokade) || !PieceEnum.King.Equals(move.Piece))
@@ -95,19 +95,19 @@ namespace Chess.AF.PositionBridge
             return om.Bind(m => MoveAndValidateFromTo(m));
         }
 
-        private Option<IPositionAbstraction> MoveAndValidateFromTo(Move move)
-            => ValidateMoveFromTo(move).Map(p => ((PositionAbstraction)p).MoveFromTo(move));
+        private Option<IBoard> MoveAndValidateFromTo(Move move)
+            => ValidateMoveFromTo(move).Map(p => ((Board)p).MoveFromTo(move));
 
-        private Option<IPositionAbstraction> ValidateMoveFromTo(Move move)
+        private Option<IBoard> ValidateMoveFromTo(Move move)
             => IterateForAllMoves().Any(a => move.Piece.Equals(a.Piece) && move.From.Equals(a.Square) &&
             move.Promote.Equals(a.Promoted) && move.To.Equals(a.MoveSquare)) ? Some(CreateCopy()) : None;
 
-        private IPositionAbstraction Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
+        private IBoard Move((PieceEnum Piece, SquareEnum From, SquareEnum To, PieceEnum Promote) move)
             => AF.Dto.Move.Of(move.Piece, move.From, move.To, move.Promote).Match(
                 None: () => this,
                 Some: m => MoveFromTo(m));
 
-        private IPositionAbstraction MoveFromTo(Move move)
+        private IBoard MoveFromTo(Move move)
         {
             Implementor = Implementor.SetBits(move, this);
 
@@ -162,7 +162,7 @@ namespace Chess.AF.PositionBridge
             foreach (var pieceTuple in GetIteratorForAll<PieceEnum>())
                 foreach (var move in MovesFactory.Create(pieceTuple.Piece, pieceTuple.Square, Implementor))
                 {
-                    var pos = (new PositionAbstraction(this, Implementor)).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as PositionAbstraction;
+                    var pos = (new Board(this, Implementor)).Move((pieceTuple.Piece, pieceTuple.Square, move.Square, move.Piece)) as Board;
                     pos.IsWhiteToMove = !pos.IsWhiteToMove;
                     if (!pos.IsInCheck)
                         yield return (pieceTuple.Piece, pieceTuple.Square, move.Piece, move.Square);
@@ -226,13 +226,13 @@ namespace Chess.AF.PositionBridge
 
         #region Resign and Draw
 
-        public Option<IPositionAbstraction> Resign()
-            => (GameResult.Ongoing.Equals(result)) ? Some((new PositionAbstraction(this, Implementor)).resign()) : None;
+        public Option<IBoard> Resign()
+            => (GameResult.Ongoing.Equals(result)) ? Some((new Board(this, Implementor)).resign()) : None;
 
-        public Option<IPositionAbstraction> Draw()
-            => (GameResult.Ongoing.Equals(result)) ? Some((new PositionAbstraction(this, Implementor)).draw()) : None;
+        public Option<IBoard> Draw()
+            => (GameResult.Ongoing.Equals(result)) ? Some((new Board(this, Implementor)).draw()) : None;
 
-        private IPositionAbstraction resign()
+        private IBoard resign()
         {
             if (IsWhiteToMove)
                 result = GameResult.BlackWins;
@@ -241,7 +241,7 @@ namespace Chess.AF.PositionBridge
             return this;
         }
 
-        private IPositionAbstraction draw()
+        private IBoard draw()
         {
             result = GameResult.Draw;
             return this;

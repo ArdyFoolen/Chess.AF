@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 
 namespace Chess.AF.PositionBridge
 {
-    public interface IPositionAbstraction
+    public interface IBoard
     {
         bool IsWhiteToMove { get; }
         RokadeEnum Rokade { get; }
@@ -21,9 +21,9 @@ namespace Chess.AF.PositionBridge
         bool IsStaleMate { get; }
         bool IsInCheck { get; }
 
-        Option<IPositionAbstraction> Resign();
-        Option<IPositionAbstraction> Draw();
-        Option<IPositionAbstraction> Move(Move move);
+        Option<IBoard> Resign();
+        Option<IBoard> Draw();
+        Option<IBoard> Move(Move move);
 
         IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> IterateForAllMoves();
         PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece);

@@ -15,7 +15,7 @@ namespace Chess.AF
 {
     public class Game
     {
-        private Option<IPositionAbstraction> Position
+        private Option<IBoard> Position
         {
             get
             {
@@ -114,7 +114,7 @@ namespace Chess.AF
 
         //public void Map(Func<Position, Position> func)
         //    => Position.Map(func);
-        public void Map(Func<IPositionAbstraction, IPositionAbstraction> func)
+        public void Map(Func<IBoard, IBoard> func)
             => Position.Map(func);
 
         public bool IsWhiteToMove
@@ -159,7 +159,7 @@ namespace Chess.AF
                 Some: s => GetMaterialCount(s));
         }
 
-        private int GetMaterialCount(IPositionAbstraction position)
+        private int GetMaterialCount(IBoard position)
         {
             Material material = new Material(position.GetIteratorForAll<PiecesEnum>());
             return material.Count();

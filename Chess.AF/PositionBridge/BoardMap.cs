@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 using static AF.Functional.F;
 using AF.Functional;
 using Chess.AF.Dto;
@@ -14,11 +14,11 @@ using Chess.AF.Exceptions;
 
 namespace Chess.AF.PositionBridge
 {
-    internal partial class PositionImpl : IPositionImpl
+    internal partial class BoardMap : IBoardMap
     {
         #region Properties
 
-        private IPositionAbstraction Abstraction { get; set; }
+        private IBoard Abstraction { get; set; }
 
         private ulong[] Maps = new ulong[14];
 
@@ -28,13 +28,13 @@ namespace Chess.AF.PositionBridge
 
         #region ctors
 
-        public PositionImpl(IPositionAbstraction abstraction, ulong[] maps)
+        public BoardMap(IBoard abstraction, ulong[] maps)
         {
             Abstraction = abstraction;
             Maps = maps;
         }
 
-        private PositionImpl(PositionImpl position, IPositionAbstraction abstraction)
+        private BoardMap(BoardMap position, IBoard abstraction)
         {
             Abstraction = abstraction;
             for (int i = 0; i < position.Maps.Length; i++)
@@ -51,9 +51,9 @@ namespace Chess.AF.PositionBridge
 
         #region SetBits
 
-        public IPositionImpl SetBits(Move move, IPositionAbstraction abstraction)
+        public IBoardMap SetBits(Move move, IBoard abstraction)
         {
-            PositionImpl implementor = new PositionImpl(this, abstraction);
+            BoardMap implementor = new BoardMap(this, abstraction);
             implementor.SetBitsForRokadeRook(move);
             implementor.SetBitsForMove(move);
             implementor.SetBitsForEnPassantTake(move);

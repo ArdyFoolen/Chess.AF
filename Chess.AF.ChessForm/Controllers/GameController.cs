@@ -219,7 +219,7 @@ namespace Chess.AF.ChessForm.Controllers
         private void SetPositionDict()
             => game.Map(SetPositionDict);
 
-        private IPositionAbstraction SetPositionDict(IPositionAbstraction position)
+        private IBoard SetPositionDict(IBoard position)
         {
             boardDictionary = position.ToDictionary();
             return position;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.PositionBridge
 {
-    public partial class PositionAbstraction
+    public partial class Board
     {
         public class PiecesIterator<T> : IEnumerable<PieceOnSquare<T>>
             where T : Enum

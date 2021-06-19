@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 
 namespace Chess.AF.PieceMoves
 {
@@ -22,10 +22,10 @@ namespace Chess.AF.PieceMoves
             return instance;
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Queen)
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum = PieceEnum.Queen)
             => CreateIterator(square, position, pieceEnum);
 
-        private PiecesIterator<PieceEnum> CreateIterator(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum)
+        private PiecesIterator<PieceEnum> CreateIterator(SquareEnum square, IBoardMap position, PieceEnum pieceEnum)
         {
             var bIterator = BishopMoves.Get().GetIteratorFor(square, position, pieceEnum);
             var rIterator = RookMoves.Get().GetIteratorFor(square, position, pieceEnum);

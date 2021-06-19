@@ -38,7 +38,7 @@ namespace Chess.AF.Tests.UnitTests
                     Some: p => { Assert.AreEqual(fenString.IsValid, p.IsInCheck); return true; });
         }
 
-        private static void ChangeWhoToMove(IPositionAbstraction position)
+        private static void ChangeWhoToMove(IBoard position)
         {
             var prop = position.GetType().GetProperty("IsWhiteToMove");
             var getIsWhiteToMove = prop.GetGetMethod();
@@ -47,29 +47,29 @@ namespace Chess.AF.Tests.UnitTests
             setIsWhiteToMove.Invoke(position, new object[] { !isWhiteToMove });
         }
 
-        private bool isOpponentIncheck(IPositionAbstraction position)
+        private bool isOpponentIncheck(IBoard position)
         {
             ChangeWhoToMove(position);
             return position.IsInCheck;
         }
 
-        private bool isOpponentMate(IPositionAbstraction position)
+        private bool isOpponentMate(IBoard position)
         {
             ChangeWhoToMove(position);
             return position.IsMate;
         }
 
-        private bool isOpponentStaleMate(IPositionAbstraction position)
+        private bool isOpponentStaleMate(IBoard position)
         {
             ChangeWhoToMove(position);
             return position.IsStaleMate;
         }
 
-        private RokadeEnum possibleRokade(IPositionAbstraction position)
+        private RokadeEnum possibleRokade(IBoard position)
         {
             var prop = position.GetType().GetProperty("Implementor", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             var getImplementor = prop.GetGetMethod(true);
-            IPositionImpl implementor = (IPositionImpl)getImplementor.Invoke(position, null);
+            IBoardMap implementor = (IBoardMap)getImplementor.Invoke(position, null);
             return implementor.PossibleRokade();
         }
 

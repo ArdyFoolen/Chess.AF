@@ -11,14 +11,14 @@ namespace Chess.AF.Commands
 {
     internal abstract class Command
     {
-        public Option<IPositionAbstraction> Position { get; protected set; }
+        public Option<IBoard> Position { get; protected set; }
 
         public Command()
         {
             this.Position = None;
         }
 
-        public Command(Option<IPositionAbstraction> position)
+        public Command(Option<IBoard> position)
         {
             this.Position = position;
         }

@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Chess.AF.PositionBridge.PositionAbstraction;
+using static Chess.AF.PositionBridge.Board;
 
 namespace Chess.AF.PieceMoves
 {
@@ -24,11 +24,11 @@ namespace Chess.AF.PieceMoves
             return instance;
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IPositionImpl position, PieceEnum pieceEnum = PieceEnum.Pawn)
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum = PieceEnum.Pawn)
             => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, GetMapFor(position, square)));
 
         // Make a map for black/white pawns, later set bits of either below or above square
-        private ulong GetMapFor(IPositionImpl position, SquareEnum square)
+        private ulong GetMapFor(IBoardMap position, SquareEnum square)
         {
             var mvMap = 0x0000000000000000ul;
 
