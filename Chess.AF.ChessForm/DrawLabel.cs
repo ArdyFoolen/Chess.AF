@@ -22,6 +22,7 @@ namespace Chess.AF.ChessForm
         {
             InitializeComponent();
 
+            Opacity = 100;
             Id = id;
             SetBackColor();
         }
@@ -63,5 +64,40 @@ namespace Chess.AF.ChessForm
             => this.BackColor = (Id % 2 == 0 && (Id / 8) % 2 == 0 ||
                     Id % 2 == 1 && (Id / 8) % 2 == 1)
                    ? Color.White : Color.Brown;
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x00000020;
+                return cp;
+            }
+        }
+
+        private int opacity;
+        public int Opacity
+        {
+            get { return opacity; }
+            set
+            {
+                opacity = value;
+                this.InvalidateEx();
+            }
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            Color bk = Color.FromArgb(Opacity, this.BackColor);
+            e.Graphics.FillRectangle(new SolidBrush(bk), e.ClipRectangle);
+        }
+
+        protected void InvalidateEx()
+        {
+            if (Parent == null)
+                return;
+            Rectangle rc = new Rectangle(this.Location, this.Size);
+            Parent.Invalidate(rc, true);
+        }
     }
 }
