@@ -53,4 +53,8 @@
     <ProjectReference Include="..\Chess.AF\Chess.AF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PgnFiles\" />
+  </ItemGroup>
+
 </Project>

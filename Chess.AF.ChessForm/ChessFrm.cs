@@ -15,6 +15,7 @@ using static Chess.AF.ChessForm.ImageHelper;
 using static AF.Functional.F;
 using Chess.AF.Enums;
 using Chess.AF.ChessForm.Helpers;
+using Chess.AF.ImportExport;
 
 namespace Chess.AF.ChessForm
 {
@@ -25,7 +26,9 @@ namespace Chess.AF.ChessForm
 
         private LoadFen loadFen = new LoadFen();
         private BoardControl boardControl;
-        private IGameController boardController;
+        private IGameController gameController;
+
+        private PgnFile pgnFile;
 
         public ChessFrm()
         {
@@ -34,10 +37,10 @@ namespace Chess.AF.ChessForm
             this.loadFen.Hide();
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            this.boardController = new GameController();
-            this.boardController.Register(this);
+            this.gameController = new GameController();
+            this.gameController.Register(this);
 
-            this.boardControl = new BoardControl(this.boardController);
+            this.boardControl = new BoardControl(this.gameController);
             this.boardControl.BackColor = Color.SaddleBrown;
             this.boardControl.Size = new Size(BoardWidth, BoardWidth);
             this.boardControl.Margin = new Padding(0);
@@ -66,6 +69,7 @@ namespace Chess.AF.ChessForm
 
             this.btnLoadFen.Click += BtnLoadFen_Click;
             this.btnLoadPgn.Click += BtnLoadPgn_Click;
+            this.numUpDown.ValueChanged += NumUpDown_ValueChanged;
             this.btnFirstMove.Click += BtnFirstMove_Click;
             this.btnPreviousMove.Click += BtnPreviousMove_Click;
             this.btnNextMove.Click += BtnNextMove_Click;
@@ -90,9 +94,9 @@ namespace Chess.AF.ChessForm
         {
             var result = this.loadFen.ShowDialog();
             if (DialogResult.OK.Equals(result))
-                boardController.LoadFen(this.loadFen.Fen);
+                gameController.LoadFen(this.loadFen.Fen);
             if (DialogResult.Yes.Equals(result))
-                boardController.LoadFen();
+                gameController.LoadFen();
         }
 
         private void BtnLoadPgn_Click(object sender, EventArgs e)
@@ -104,43 +108,56 @@ namespace Chess.AF.ChessForm
             var result = this.openFileDialog1.ShowDialog();
             if (DialogResult.OK.Equals(result))
             {
-                string pgnString = string.Empty;
-                Using(new StreamReader(this.openFileDialog1.FileName), reader => pgnString = reader.ReadToEnd());
-                this.boardController.SetFromPgn(ImportExport.Pgn.Import(pgnString));
+                this.pgnFile = new PgnFile(this.openFileDialog1.FileName);
+                pgnFile.Read();
+                if (pgnFile.Count() > 0)
+                {
+                    this.gameController.SetFromPgn(ImportExport.Pgn.Import(pgnFile[0]));
+                    numUpDown.Visible = false;
+                }
+                if (pgnFile.Count() > 1)
+                {
+                    numUpDown.Minimum = 1;
+                    numUpDown.Maximum = pgnFile.Count();
+                    numUpDown.Visible = true;
+                }
             }
         }
 
+        private void NumUpDown_ValueChanged(object sender, EventArgs e)
+            => this.gameController.SetFromPgn(ImportExport.Pgn.Import(pgnFile[numUpDown.Value - 1]));
+
         private void BtnFirstMove_Click(object sender, EventArgs e)
-            => this.boardController.GotoFirstMove();
+            => this.gameController.GotoFirstMove();
 
         private void BtnPreviousMove_Click(object sender, EventArgs e)
-            => this.boardController.GotoPreviousMove();
+            => this.gameController.GotoPreviousMove();
 
         private void BtnNextMove_Click(object sender, EventArgs e)
-            => this.boardController.GotoNextMove();
+            => this.gameController.GotoNextMove();
 
         private void BtnLastMove_Click(object sender, EventArgs e)
-            => this.boardController.GotoLastMove();
+            => this.gameController.GotoLastMove();
 
         private void btnReverseBoard_Click(object sender, EventArgs e)
             => this.boardControl.ReverseBoardView();
 
         private void btnResign_Click(object sender, EventArgs e)
-            => boardController.Resign();
+            => gameController.Resign();
 
         private void btnDraw_Click(object sender, EventArgs e)
-            => boardController.Draw();
+            => gameController.Draw();
 
         public void UpdateView()
         {
             lblResult.Text = whoToMove();
-            lblCount.Text = $"Material: {boardController.MaterialCount.ToString("+0;-#")}";
+            lblCount.Text = $"Material: {gameController.MaterialCount.ToString("+0;-#")}";
         }
 
         private string whoToMove()
         {
             if (!tryToShowFinalInfo(out string finalResult))
-                if (boardController.IsWhiteToMove)
+                if (gameController.IsWhiteToMove)
                     return $"White to move{checkInfo()}";
                 else
                     return $"Black to move{checkInfo()}";
@@ -152,7 +169,7 @@ namespace Chess.AF.ChessForm
         {
             finalResult = string.Empty;
             bool final = false;
-            var result = boardController.Result;
+            var result = gameController.Result;
             if (!GameResult.Ongoing.Equals(result) && !GameResult.Invalid.Equals(result))
             {
                 final = true;
@@ -167,12 +184,12 @@ namespace Chess.AF.ChessForm
         }
 
         private string showMate()
-            => boardController.IsMate ? " Checkmate" : string.Empty;
+            => gameController.IsMate ? " Checkmate" : string.Empty;
 
         private string showStalemate()
-            => boardController.IsStaleMate ? " Stalemate" : string.Empty;
+            => gameController.IsStaleMate ? " Stalemate" : string.Empty;
 
         private string checkInfo()
-            => boardController.IsInCheck ? " Check" : string.Empty;
+            => gameController.IsInCheck ? " Check" : string.Empty;
     }
 }

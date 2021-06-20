@@ -35,6 +35,7 @@ namespace Chess.AF.ChessForm
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnLoadFen = new System.Windows.Forms.ToolStripButton();
             this.btnLoadPgn = new System.Windows.Forms.ToolStripButton();
+            this.numUpDown = new ToolstripNumericUpDown();
             this.toolStripSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnFirstMove = new System.Windows.Forms.ToolStripButton();
             this.btnPreviousMove = new System.Windows.Forms.ToolStripButton();
@@ -54,6 +55,7 @@ namespace Chess.AF.ChessForm
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnLoadFen,
             this.btnLoadPgn,
+            this.numUpDown,
             this.toolStripSep1,
             this.btnFirstMove,
             this.btnPreviousMove,
@@ -83,7 +85,15 @@ namespace Chess.AF.ChessForm
             this.btnLoadPgn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLoadPgn.Name = "btnLoadPgn";
             this.btnLoadPgn.Size = new System.Drawing.Size(23, 22);
-            this.btnLoadPgn.Text = "Load Pgn";
+            this.btnLoadPgn.Text = "Load Pgn File";
+            this.btnLoadPgn.Margin = new Padding(0, 0, 5, 0);
+            //
+            // numUpDown
+            //
+            this.numUpDown.Name = "numUpDown";
+            this.numUpDown.Size = new System.Drawing.Size(23, 22);
+            this.numUpDown.Visible = false;
+            this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
             // 
             // toolStripSep1
             // 
@@ -176,6 +186,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnLoadFen;
         private System.Windows.Forms.ToolStripButton btnLoadPgn;
+        private ToolstripNumericUpDown numUpDown;
         private System.Windows.Forms.ToolStripButton btnFirstMove;
         private System.Windows.Forms.ToolStripButton btnPreviousMove;
         private System.Windows.Forms.ToolStripButton btnNextMove;

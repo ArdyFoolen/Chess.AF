@@ -93,7 +93,7 @@ namespace Chess.AF.ImportExport
             {
                 if ("O-O".Equals(halfMove))
                     return AF.Dto.Move.Of(RokadeEnum.KingSide);
-                if ("O-O=O".Equals(halfMove))
+                if ("O-O-O".Equals(halfMove))
                     return AF.Dto.Move.Of(RokadeEnum.QueenSide);
                 return None;
             }
@@ -188,7 +188,7 @@ namespace Chess.AF.ImportExport
             private Option<List<string>> splitMoves(string moveText)
             {
                 List<string> moves = new List<string>();
-                var splits = moveText.Split(' ');
+                var splits = moveText.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var indexes = generateMoveIndexes(splits);
                 int index = 0;
                 int prevMoveNbr = 0;
@@ -223,8 +223,12 @@ namespace Chess.AF.ImportExport
                 SetGameResult(moveText);
                 moveText = RemoveGameResult(moveText);
                 moveText = ReplaceThreeDots(moveText);
+                moveText = ReplaceSingleDot(moveText);
                 return moveText;
             }
+
+            private string ReplaceSingleDot(string moveText)
+                => moveText.Replace(".", ". ");
 
             private string ReplaceThreeDots(string moveText)
                 => moveText.Replace("...", ".");
