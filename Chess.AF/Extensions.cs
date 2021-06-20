@@ -284,7 +284,7 @@ namespace Chess.AF
         public static PieceEnum FromSanToPromoted(this string str, PieceEnum piece)
         {
             if (promoteDict.ContainsKey(str.LastOrDefault().ToString()))
-                return str.FirstOrDefault().ToString().ToPiece().Match(
+                return str.LastOrDefault().ToString().ToPiece().Match(
                     None: () => piece,
                     Some: s => s);
             else

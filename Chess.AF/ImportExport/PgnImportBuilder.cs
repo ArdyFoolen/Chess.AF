@@ -147,6 +147,7 @@ namespace Chess.AF.ImportExport
 
             private (Option<PieceEnum> Piece, string from, PieceEnum Promoted, string MoveSquare) dissectHalfMoveIntoParts(string halfMove)
             {
+                halfMove = sanitizeHalfMove(halfMove);
                 var piece = halfMove.FromSanToPiece();
                 var promoted = halfMove.FromSanToPromoted(piece);
                 halfMove = sanitizeHalfMove(halfMove, piece);
@@ -161,6 +162,9 @@ namespace Chess.AF.ImportExport
                 return (from, to);
             }
 
+            private string sanitizeHalfMove(string halfMove)
+                => halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty);
+
             private string sanitizeHalfMove(string halfMove, Option<PieceEnum> piece)
                 => piece.Match(
                     None: () => halfMove,
@@ -169,8 +173,8 @@ namespace Chess.AF.ImportExport
             private string sanitizeHalfMove(string halfMove, PieceEnum piece)
             {
                 return piece.Equals(PieceEnum.Pawn)
-                    ? halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0]
-                    : halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Split('=')[0].Substring(1);
+                    ? halfMove.Split('=')[0]
+                    : halfMove.Split('=')[0].Substring(1);
             }
 
             private void loadGame()
