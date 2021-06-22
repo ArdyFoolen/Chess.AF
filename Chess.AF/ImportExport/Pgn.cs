@@ -25,6 +25,7 @@ namespace Chess.AF.ImportExport
         private Pgn(string pgnString) { this.PgnString = pgnString; }
 
         public Game Game { get; private set; }
+        public Dictionary<string, string> TagPairDictionary { get; private set; } = new Dictionary<string, string>();
 
         public static Option<Pgn> Import(IEnumerable<string> lines)
             => Import(string.Join(Environment.NewLine, lines.ToArray()));
