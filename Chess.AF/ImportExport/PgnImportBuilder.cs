@@ -11,7 +11,7 @@ namespace Chess.AF.ImportExport
 {
     public partial class Pgn
     {
-        private class PgnImportBuilder : PgnBuilder
+        private class PgnImportBuilder : PgnBuilder, IPgnTagStateContext
         {
             private bool isValid = true;
             private GameResult gameResult;
@@ -19,6 +19,13 @@ namespace Chess.AF.ImportExport
 
             private Option<string[]> tagPairsMoveText;
             private Option<Dictionary<string, string>> tagPairDict;
+
+            PgnTagState IPgnTagStateContext.State { get; set; }
+            private void SetInitialState(IPgnTagStateContext context)
+                => context.State = new PgnTagEventState();
+            public bool TryAddTagPair(IPgnTagStateContext context, Dictionary<string, string> eventTags, KeyValuePair<string, string> kv)
+                => context.State.TryAddTagPair(context, eventTags, kv);
+
             public override void BuildPrepare()
                 => tagPairsMoveText = splitPgnStringIntoTagPairsMoveText();
 
@@ -274,21 +281,26 @@ namespace Chess.AF.ImportExport
             private Option<Dictionary<string, string>> splitTagPairs(string tagPair)
             {
                 var splits = tagPair.Split(new string[] { "]\n[", "]\r\n[", "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
-                var dict = splitTagPairs(splits);
-                if (!isValidSevenTagRoster(dict))
-                    return None;
-                return Some(dict);
+                return splitTagPairs(splits);
             }
 
-            private Dictionary<string, string> splitTagPairs(string[] parts)
+            private Option<Dictionary<string, string>> splitTagPairs(string[] parts)
             {
-                var eventValues = new Dictionary<string, string>();
+                SetInitialState(this);
+
+                var eventTags = new Dictionary<string, string>();
                 foreach (string tagPair in parts)
                 {
                     var kv = splitTagPair(tagPair);
-                    eventValues.Add(kv.Key.ToLowerInvariant(), kv.Value);
+                    if (!TryAddTagPair(this, eventTags, kv))
+                    {
+                        isValid = false;
+                        return None;
+                    }
                 }
-                return eventValues;
+                if (!isValidSevenTagRosterCount(eventTags))
+                    return None;
+                return Some(eventTags);
             }
 
             private KeyValuePair<string, string> splitTagPair(string tagPair)
@@ -308,16 +320,8 @@ namespace Chess.AF.ImportExport
                 return isValidTagPairsMoveText(splits) ? Some(splits) : None;
             }
 
-            private bool isValidSevenTagRoster(Dictionary<string, string> dict)
-                => isValid = isValid && dict.Keys.Count() >= 7 && AreValidSevenTagRosterKeys(dict);
-
-            private bool AreValidSevenTagRosterKeys(Dictionary<string, string> dict)
-            {
-                foreach (string str in Enum.GetNames(typeof(SevenTagRosterEnum)))
-                    if (!dict.ContainsKey(str.ToLowerInvariant()))
-                        return false;
-                return true;
-            }
+            private bool isValidSevenTagRosterCount(Dictionary<string, string> dict)
+                => isValid = isValid && dict.Keys.Count() >= 7;
 
             private bool isValidTagPairsMoveText(string[] parts)
                 => isValid = isValid && parts.Length == 2;

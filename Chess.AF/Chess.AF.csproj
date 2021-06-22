@@ -49,7 +49,9 @@
     <Compile Include="Enums\PositionPiecesEnums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Helpers\Material.cs" />
+    <Compile Include="ImportExport\IPgnTagStateContext.cs" />
     <Compile Include="ImportExport\PgnFile.cs" />
+    <Compile Include="ImportExport\PgnTagState.cs" />
     <Compile Include="PieceMoves\KingMoves.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="Exceptions\MapNotFoundException.cs" />
