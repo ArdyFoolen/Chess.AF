@@ -13,7 +13,7 @@ using static AF.Functional.F;
 
 namespace Chess.AF
 {
-    public class Game
+    public class Game : IGame
     {
         private Option<IBoard> Position
         {
@@ -90,9 +90,6 @@ namespace Chess.AF
         public void GotoLastMove()
             => this.CurrentCommand = this.Commands.Count() - 1;
 
-        //public Option<Selected> SelectPiece(Option<PieceEnum> piece)
-        //    => piece.Bind(pc => Position.Bind(p => Selected.Of(pc, p.GetIteratorFor(pc), p)));
-
         public string ToFenString()
             => Position.Match(
                 None: () => "No Game loaded or Invalid Game",
@@ -112,8 +109,6 @@ namespace Chess.AF
                 Some: s => s
                 );
 
-        //public void Map(Func<Position, Position> func)
-        //    => Position.Map(func);
         public void Map(Func<IBoard, IBoard> func)
             => Position.Map(func);
 

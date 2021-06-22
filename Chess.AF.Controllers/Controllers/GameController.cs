@@ -16,7 +16,7 @@ namespace Chess.AF.Controllers
 {
     public class GameController : IGameController
     {
-        private Game game;
+        private IGame game;
         private IPgnController pgnController;
 
         private Dictionary<int, PieceOnSquare<PiecesEnum>> boardDictionary = new Dictionary<int, PieceOnSquare<PiecesEnum>>();
@@ -43,11 +43,11 @@ namespace Chess.AF.Controllers
             }
         }
 
-        public GameController(IPgnController pgnController)
+        public GameController(IGame game, IPgnController pgnController)
         {
             this.pgnController = pgnController;
-            game = new Game();
-            game.Load();
+            this.game = game;
+            this.game.Load();
             SetPositionDict();
             moves = game.AllMoves();
         }

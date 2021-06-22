@@ -39,8 +39,7 @@ namespace Chess.AF.ChessForm
             this.Size = new Size(this.Size.Width, FormHeight);
 
             IPgnController pgnController = new PgnController();
-            this.gameController = new GameController(pgnController);
-            //this.gameController = new GameController();
+            this.gameController = new GameController(new Game(), pgnController);
             this.gameController.Register(this);
 
             this.boardControl = new BoardControl(this.gameController);
