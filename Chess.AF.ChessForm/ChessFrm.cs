@@ -1,5 +1,5 @@
-﻿using Chess.AF.ChessForm.Controllers;
-using Chess.AF.ChessForm.Views;
+﻿using Chess.AF.Controllers;
+using Chess.AF.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

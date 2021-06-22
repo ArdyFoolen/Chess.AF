@@ -1,11 +1,11 @@
-﻿using Chess.AF.ChessForm.Views;
+﻿using Chess.AF.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.ChessForm.Controllers
+namespace Chess.AF.Controllers
 {
     public class PgnController : IPgnController
     {

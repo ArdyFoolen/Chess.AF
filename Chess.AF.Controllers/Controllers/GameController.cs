@@ -1,5 +1,5 @@
 ﻿using AF.Functional;
-using Chess.AF.ChessForm.Views;
+using Chess.AF.Views;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.ImportExport;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using static AF.Functional.F;
 using Unit = System.ValueTuple;
 
-namespace Chess.AF.ChessForm.Controllers
+namespace Chess.AF.Controllers
 {
     public class GameController : IGameController
     {
@@ -57,14 +57,6 @@ namespace Chess.AF.ChessForm.Controllers
 
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMovesTo(int moveSquare)
             => SelectedMoves.Where(w => (int)w.MoveSquare == moveSquare);
-
-        //public GameController()
-        //{
-        //    game = new Game();
-        //    game.Load();
-        //    SetPositionDict();
-        //    moves = game.AllMoves();
-        //}
 
         public void SetFromPgn(Option<Pgn> pgn)
             => pgn.Map(p => SetFromPgn(p));

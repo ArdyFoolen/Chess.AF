@@ -1,4 +1,4 @@
-﻿using Chess.AF.ChessForm.Controllers;
+﻿using Chess.AF.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

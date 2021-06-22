@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.ChessForm.Views
+namespace Chess.AF.Views
 {
-    public interface IBoardView
+    public interface IPgnView
     {
         void UpdateView();
     }

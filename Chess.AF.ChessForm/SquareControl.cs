@@ -1,7 +1,7 @@
 ﻿using AF.Functional;
-using Chess.AF.ChessForm.Controllers;
+using Chess.AF.Controllers;
 using Chess.AF.ChessForm.Extensions;
-using Chess.AF.ChessForm.Views;
+using Chess.AF.Views;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

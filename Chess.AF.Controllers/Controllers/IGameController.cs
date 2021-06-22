@@ -1,5 +1,5 @@
 ﻿using AF.Functional;
-using Chess.AF.ChessForm.Views;
+using Chess.AF.Views;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
 using Chess.AF.ImportExport;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.ChessForm.Controllers
+namespace Chess.AF.Controllers
 {
     public interface IGameController
     {

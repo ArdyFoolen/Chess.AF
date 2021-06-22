@@ -50,6 +50,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AF.Functional\AF.Functional.csproj" />
+    <ProjectReference Include="..\Chess.AF.Controllers\Chess.AF.Controllers.csproj" />
     <ProjectReference Include="..\Chess.AF\Chess.AF.csproj" />
   </ItemGroup>
 
