@@ -27,6 +27,7 @@ namespace Chess.AF.ChessForm
         private LoadFen loadFen = new LoadFen();
         private BoardControl boardControl;
         private IGameController gameController;
+        private PgnControl pgnControl;
 
         private PgnFile pgnFile;
 
@@ -37,7 +38,9 @@ namespace Chess.AF.ChessForm
             this.loadFen.Hide();
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            this.gameController = new GameController();
+            IPgnController pgnController = new PgnController();
+            this.gameController = new GameController(pgnController);
+            //this.gameController = new GameController();
             this.gameController.Register(this);
 
             this.boardControl = new BoardControl(this.gameController);
@@ -61,11 +64,18 @@ namespace Chess.AF.ChessForm
             lblCount.Size = new Size(200, 23);
             lblCount.Paint += FontHelper.Label_Paint;
 
+            pgnControl = new PgnControl(pgnController)
+            {
+                Location = new Point(570, 109),
+                Size = new Size(200, 400)
+            };
+
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
             this.Controls.Add(lblResult);
             this.Controls.Add(lblCount);
+            this.Controls.Add(this.pgnControl);
 
             this.btnLoadFen.Click += BtnLoadFen_Click;
             this.btnLoadPgn.Click += BtnLoadPgn_Click;

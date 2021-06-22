@@ -17,7 +17,9 @@ namespace Chess.AF.ChessForm.Controllers
     public class GameController : IGameController
     {
         private Game game;
-        private Dictionary<int, PieceOnSquare<PiecesEnum>> boardDictionary;
+        private IPgnController pgnController;
+
+        private Dictionary<int, PieceOnSquare<PiecesEnum>> boardDictionary = new Dictionary<int, PieceOnSquare<PiecesEnum>>();
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> moves;
         private List<IBoardView> views = new List<IBoardView>();
         private int? selectedSquare;
@@ -41,19 +43,28 @@ namespace Chess.AF.ChessForm.Controllers
             }
         }
 
+        public GameController(IPgnController pgnController)
+        {
+            this.pgnController = pgnController;
+            game = new Game();
+            game.Load();
+            SetPositionDict();
+            moves = game.AllMoves();
+        }
+
         public bool IsPromoteMove(int moveSquare)
             => (IsSelected && SelectedMovesTo(moveSquare).Count() == 4);
 
         private IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMovesTo(int moveSquare)
             => SelectedMoves.Where(w => (int)w.MoveSquare == moveSquare);
 
-        public GameController()
-        {
-            game = new Game();
-            game.Load();
-            SetPositionDict();
-            moves = game.AllMoves();
-        }
+        //public GameController()
+        //{
+        //    game = new Game();
+        //    game.Load();
+        //    SetPositionDict();
+        //    moves = game.AllMoves();
+        //}
 
         public void SetFromPgn(Option<Pgn> pgn)
             => pgn.Map(p => SetFromPgn(p));
@@ -62,6 +73,7 @@ namespace Chess.AF.ChessForm.Controllers
         {
             game = pgn.Game;
             GotoFirstMove();
+            pgnController.SetTagPairDictionary(pgn.TagPairDictionary);
             return Unit();
         }
 
@@ -96,12 +108,14 @@ namespace Chess.AF.ChessForm.Controllers
         public void LoadFen()
         {
             game.Load();
+            pgnController.Clear();
             ResetController();
         }
 
         public void LoadFen(string fen)
         {
             game.Load(fen);
+            pgnController.Clear();
             ResetController();
         }
 
@@ -202,7 +216,6 @@ namespace Chess.AF.ChessForm.Controllers
         private void SetSelectedSquare(int square)
         {
             selectedSquare = square;
-            //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, true);
             boardDictionary[square] = new PieceOnSquare<PiecesEnum>(boardDictionary[square].Piece, boardDictionary[square].Square, true);
         }
 
@@ -212,17 +225,16 @@ namespace Chess.AF.ChessForm.Controllers
         private void UnSelect(int square)
         {
             if (boardDictionary.ContainsKey(square))
-                //positionDict[square] = (positionDict[square].Piece, positionDict[square].Square, false);
                 boardDictionary[square] = new PieceOnSquare<PiecesEnum>(boardDictionary[square].Piece, boardDictionary[square].Square, false);
         }
 
         private void SetPositionDict()
             => game.Map(SetPositionDict);
 
-        private IBoard SetPositionDict(IBoard position)
+        private IBoard SetPositionDict(IBoard board)
         {
-            boardDictionary = position.ToDictionary();
-            return position;
+            boardDictionary = board.ToDictionary();
+            return board;
         }
     }
 }
