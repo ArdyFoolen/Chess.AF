@@ -12,6 +12,6 @@ namespace Chess.AF.PieceMoves
 {
     internal interface Moves
     {
-        PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum);
+        PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap boardMap, PieceEnum pieceEnum);
     }
 }

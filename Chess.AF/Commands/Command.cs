@@ -11,16 +11,16 @@ namespace Chess.AF.Commands
 {
     internal abstract class Command
     {
-        public Option<IBoard> Position { get; protected set; }
+        public Option<IBoard> Board { get; protected set; }
 
         public Command()
         {
-            this.Position = None;
+            this.Board = None;
         }
 
-        public Command(Option<IBoard> position)
+        public Command(Option<IBoard> board)
         {
-            this.Position = position;
+            this.Board = board;
         }
 
         public abstract void Execute();

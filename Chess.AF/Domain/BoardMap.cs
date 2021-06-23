@@ -34,11 +34,11 @@ namespace Chess.AF.Domain
             Maps = maps;
         }
 
-        private BoardMap(BoardMap position, IBoard abstraction)
+        private BoardMap(BoardMap boardMap, IBoard abstraction)
         {
             Abstraction = abstraction;
-            for (int i = 0; i < position.Maps.Length; i++)
-                this.Maps[i] = position.Maps[i];
+            for (int i = 0; i < boardMap.Maps.Length; i++)
+                this.Maps[i] = boardMap.Maps[i];
         }
 
         #endregion

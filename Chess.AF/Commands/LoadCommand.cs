@@ -23,6 +23,6 @@ namespace Chess.AF.Commands
         }
 
         public override void Execute()
-            => Position = Fen.CreateFen().CreatePositionAbstraction();
+            => Board = Fen.CreateFen().CreateBoard();
     }
 }

@@ -23,7 +23,7 @@ namespace Chess.AF.PieceMoves
             return instance;
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum = PieceEnum.Bishop)
-            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, MovesDictionaries.GetBishopMovesMapFor(position, square)));
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap boardMap, PieceEnum pieceEnum = PieceEnum.Bishop)
+            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, MovesDictionaries.GetBishopMovesMapFor(boardMap, square)));
     }
 }

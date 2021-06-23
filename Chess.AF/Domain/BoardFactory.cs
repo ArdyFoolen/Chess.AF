@@ -22,8 +22,8 @@ namespace Chess.AF.Domain
                     .Where(ic => !char.IsDigit(ic.piece))
                     .ForEach(ic => ic.piece.SetToMaps(maps, ic.index - 1));
 
-                IBoardMap position = new BoardMap(abstraction, maps);
-                return position;
+                IBoardMap boardMap = new BoardMap(abstraction, maps);
+                return boardMap;
             }
         }
     }

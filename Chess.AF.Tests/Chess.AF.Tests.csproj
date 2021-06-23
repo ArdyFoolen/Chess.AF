@@ -63,7 +63,7 @@
     <Compile Include="UnitTests\FenTests.cs" />
     <Compile Include="UnitTests\BishopMovesTests.cs" />
     <Compile Include="UnitTests\KnightMovesTests.cs" />
-    <Compile Include="UnitTests\PositionTests.cs" />
+    <Compile Include="UnitTests\BoardTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AF.Functional\AF.Functional.csproj">

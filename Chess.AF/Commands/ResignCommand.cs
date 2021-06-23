@@ -10,9 +10,9 @@ namespace Chess.AF.Commands
 {
     internal class ResignCommand : Command
     {
-        public ResignCommand(Option<IBoard> position) : base(position) { }
+        public ResignCommand(Option<IBoard> board) : base(board) { }
 
         public override void Execute()
-            => Position = Position.Bind(p => p.Resign());
+            => Board = Board.Bind(p => p.Resign());
     }
 }

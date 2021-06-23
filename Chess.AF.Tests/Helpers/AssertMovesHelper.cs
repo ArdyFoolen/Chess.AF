@@ -20,9 +20,9 @@ namespace Chess.AF.Tests.Helpers
         public void AssertMovesFor(string fenString, PieceEnum pieceEnum, SquareEnum[] expected)
         {
             Option<Fen> fen = Fen.Of(fenString);
-            Option<IBoard> position = Board.Of(fen);
+            Option<IBoard> board = Board.Of(fen);
 
-            position.Match(
+            board.Match(
                 None: () => Assert.Fail(),
                 Some: p => AssertSelected(FilterByPiece(p.IterateForAllMoves(), pieceEnum), expected.ToList())
             );
@@ -43,10 +43,10 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertIterateForMoves(IBoard position, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
+        public Unit AssertIterateForMoves(IBoard board, (PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)[] Expected)
         {
             int count = 0;
-            foreach (var tuple in position.IterateForAllMoves())
+            foreach (var tuple in board.IterateForAllMoves())
             {
                 Assert.IsTrue(Expected.Any(a => tuple.Piece.Equals(a.Piece) && tuple.Square.Equals(a.Square) && tuple.Promoted.Equals(a.Promoted) && tuple.MoveSquare.Equals(a.MoveSquare)));
                 count += 1;
@@ -56,12 +56,12 @@ namespace Chess.AF.Tests.Helpers
             return Unit();
         }
 
-        public Unit AssertRokadeAfterMove(IBoard position, Move moveTo, RokadeEnum expected)
-            => position.Move(moveTo).Match(
+        public Unit AssertRokadeAfterMove(IBoard board, Move moveTo, RokadeEnum expected)
+            => board.Move(moveTo).Match(
                 None: () => Assert.Fail(),
                 Some: s => Assert.AreEqual(GetOpponentColorRokade(s as Board), expected));
 
-        private RokadeEnum GetOpponentColorRokade(Board position)
-            => position.IsWhiteToMove ? position.BlackRokade : position.WhiteRokade;
+        private RokadeEnum GetOpponentColorRokade(Board board)
+            => board.IsWhiteToMove ? board.BlackRokade : board.WhiteRokade;
     }
 }

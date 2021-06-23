@@ -109,7 +109,7 @@ namespace Chess.AF.PieceMoves
             }
         }
 
-        internal static ulong GetRookMovesMapFor(IBoardMap position, SquareEnum square)
+        internal static ulong GetRookMovesMapFor(IBoardMap boardMap, SquareEnum square)
         {
             var maps = MovesDictionaries.RookMovesDictionary[square];
             ulong upMap = square.UpBitsOn();
@@ -117,19 +117,19 @@ namespace Chess.AF.PieceMoves
 
             // 1
             ulong upL = maps.r8Map & upMap;
-            upL = position.GetMinMap(upL);
+            upL = boardMap.GetMinMap(upL);
 
             // 2
             ulong dwR = maps.r8Map & dwMap;
-            dwR = position.GetMaxMap(dwR);
+            dwR = boardMap.GetMaxMap(dwR);
 
             // 3
             ulong upU = maps.faMap & upMap;
-            upU = position.GetMinMap(upU);
+            upU = boardMap.GetMinMap(upU);
 
             // 4
             ulong dwD = maps.faMap & dwMap;
-            dwD = position.GetMaxMap(dwD);
+            dwD = boardMap.GetMaxMap(dwD);
 
             // 5
             return upL | upU | dwR | dwD;
@@ -179,7 +179,7 @@ namespace Chess.AF.PieceMoves
             return a1h8;
         }
 
-        internal static ulong GetBishopMovesMapFor(IBoardMap position, SquareEnum square)
+        internal static ulong GetBishopMovesMapFor(IBoardMap boardMap, SquareEnum square)
         {
             var maps = MovesDictionaries.BishopMovesDictionary[square];
             ulong upMap = square.UpBitsOn();
@@ -187,19 +187,19 @@ namespace Chess.AF.PieceMoves
 
             // 1
             ulong upR = maps.a1h8Map & upMap;
-            upR = position.GetMinMap(upR);
+            upR = boardMap.GetMinMap(upR);
 
             // 2
             ulong dwL = maps.a1h8Map & dwMap;
-            dwL = position.GetMaxMap(dwL);
+            dwL = boardMap.GetMaxMap(dwL);
 
             // 3
             ulong upL = maps.a8h1Map & upMap;
-            upL = position.GetMinMap(upL);
+            upL = boardMap.GetMinMap(upL);
 
             // 4
             ulong dwR = maps.a8h1Map & dwMap;
-            dwR = position.GetMaxMap(dwR);
+            dwR = boardMap.GetMaxMap(dwR);
 
             // 5
             return upR | upL | dwL | dwR;

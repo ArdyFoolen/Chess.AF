@@ -13,12 +13,12 @@ namespace Chess.AF.Commands
     {
         public Move Move { get; private set; }
 
-        public MoveCommand(Option<IBoard> position, Move move) : base(position)
+        public MoveCommand(Option<IBoard> board, Move move) : base(board)
         {
             this.Move = move;
         }
 
         public override void Execute()
-            => Position = Position.Bind(p => p.Move(Move));
+            => Board = Board.Bind(p => p.Move(Move));
     }
 }

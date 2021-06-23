@@ -14,14 +14,14 @@ using Chess.AF.ImportExport;
 
 namespace Chess.AF.Tests.UnitTests
 {
-    public class PositionTests
+    public class BoardTests
     {
         [Test]
         public void Of_IsValid()
         {
             // Act
             foreach (FenString fenString in FenTests.FenArray)
-                Fen.Of(fenString.Fen).CreatePositionAbstraction()
+                Fen.Of(fenString.Fen).CreateBoard()
                 .Match(
                     None: () => { Assert.IsFalse(fenString.IsValid); return true; },
                     Some: s => { Assert.IsTrue(fenString.IsValid); return true; });
@@ -32,44 +32,44 @@ namespace Chess.AF.Tests.UnitTests
         {
             // Act
             foreach (FenString fenString in FenTests.FenInCheckArray)
-                Fen.Of(fenString.Fen).CreatePositionAbstraction()
+                Fen.Of(fenString.Fen).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(fenString.IsValid, p.IsInCheck); return true; });
         }
 
-        private static void ChangeWhoToMove(IBoard position)
+        private static void ChangeWhoToMove(IBoard board)
         {
-            var prop = position.GetType().GetProperty("IsWhiteToMove");
+            var prop = board.GetType().GetProperty("IsWhiteToMove");
             var getIsWhiteToMove = prop.GetGetMethod();
-            bool isWhiteToMove = (bool)getIsWhiteToMove.Invoke(position, null);
+            bool isWhiteToMove = (bool)getIsWhiteToMove.Invoke(board, null);
             var setIsWhiteToMove = prop.GetSetMethod(true);
-            setIsWhiteToMove.Invoke(position, new object[] { !isWhiteToMove });
+            setIsWhiteToMove.Invoke(board, new object[] { !isWhiteToMove });
         }
 
-        private bool isOpponentIncheck(IBoard position)
+        private bool isOpponentIncheck(IBoard board)
         {
-            ChangeWhoToMove(position);
-            return position.IsInCheck;
+            ChangeWhoToMove(board);
+            return board.IsInCheck;
         }
 
-        private bool isOpponentMate(IBoard position)
+        private bool isOpponentMate(IBoard board)
         {
-            ChangeWhoToMove(position);
-            return position.IsMate;
+            ChangeWhoToMove(board);
+            return board.IsMate;
         }
 
-        private bool isOpponentStaleMate(IBoard position)
+        private bool isOpponentStaleMate(IBoard board)
         {
-            ChangeWhoToMove(position);
-            return position.IsStaleMate;
+            ChangeWhoToMove(board);
+            return board.IsStaleMate;
         }
 
-        private RokadeEnum possibleRokade(IBoard position)
+        private RokadeEnum possibleRokade(IBoard board)
         {
-            var prop = position.GetType().GetProperty("Implementor", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var prop = board.GetType().GetProperty("Implementor", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             var getImplementor = prop.GetGetMethod(true);
-            IBoardMap implementor = (IBoardMap)getImplementor.Invoke(position, null);
+            IBoardMap implementor = (IBoardMap)getImplementor.Invoke(board, null);
             return implementor.PossibleRokade();
         }
 
@@ -78,7 +78,7 @@ namespace Chess.AF.Tests.UnitTests
         {
             // Act
             foreach (FenString fenString in FenTests.FenOpponentInCheckArray)
-                Fen.Of(fenString.Fen).CreatePositionAbstraction()
+                Fen.Of(fenString.Fen).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(fenString.IsValid, isOpponentIncheck(p)); return true; });
@@ -106,7 +106,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1", RokadeEnum.None)]
         public void CanRokade(string fenString, RokadeEnum expected)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
             .Match(
                 None: () => { Assert.Fail(); return true; },
                 Some: p => { Assert.AreEqual(expected, possibleRokade(p)); return true; });
@@ -117,7 +117,7 @@ namespace Chess.AF.Tests.UnitTests
         {
             AssertMovesHelper helper = new AssertMovesHelper();
 
-            Fen.Of(moveTo.FenString).CreatePositionAbstraction()
+            Fen.Of(moveTo.FenString).CreateBoard()
             .Match(
                 None: () => { Assert.Fail(); return true; },
                 Some: p => { helper.AssertIterateForMoves(p, moveTo.Expected); return true; });
@@ -129,7 +129,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("6k1/6Q1/6K1/8/8/8/8/8 b KQkq - 0 1", true)]
         public void IsMate_AreValid(string fenString, bool expected)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, p.IsMate); return true; });
@@ -141,7 +141,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("8/8/8/8/8/6k1/6q1/6K1 b KQkq - 0 1", true)]
         public void OpponentIsMate_AreValid(string fenString, bool expected)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, isOpponentMate(p)); return true; });
@@ -155,7 +155,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("7k/8/5KQ1/8/8/8/8/8 b - - 0 1", true)]
         public void IsStaleMate_AreValid(string fenString, bool expected)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, p.IsStaleMate); return true; });
@@ -169,7 +169,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("8/8/8/8/8/5kq1/8/7K b - - 0 1", true)]
         public void OpponentIsStaleMate_AreValid(string fenString, bool expected)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(expected, isOpponentStaleMate(p)); return true; });
@@ -180,7 +180,7 @@ namespace Chess.AF.Tests.UnitTests
         {
             AssertMovesHelper helper = new AssertMovesHelper();
 
-            Fen.Of(tuple.fenString).CreatePositionAbstraction()
+            Fen.Of(tuple.fenString).CreateBoard()
             .Match(
                 None: () => { Assert.Fail(); return true; },
                 Some: p => tuple.moveTo.Match(
@@ -241,7 +241,7 @@ namespace Chess.AF.Tests.UnitTests
         [TestCase("r3k2r/8/8/b7/B7/8/8/R3K2R b KQkq - 0 1")]
         public void ToFenString_AreValid(string fenString)
         {
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { Assert.AreEqual(fenString, p.ToFenString()); return true; });
@@ -251,7 +251,7 @@ namespace Chess.AF.Tests.UnitTests
         public void ToDictionary_IsValid(string fenString)
         {
             Dictionary<int, PieceOnSquare<PiecesEnum>> dict = null;
-            Fen.Of(fenString).CreatePositionAbstraction()
+            Fen.Of(fenString).CreateBoard()
                 .Match(
                     None: () => { Assert.Fail(); return true; },
                     Some: p => { dict = p.ToDictionary(); return true; });

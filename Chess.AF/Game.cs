@@ -15,13 +15,13 @@ namespace Chess.AF
 {
     public class Game : IGame
     {
-        private Option<IBoard> Position
+        private Option<IBoard> Board
         {
             get
             {
                 if (this.CurrentCommand < 0)
                     return None;
-                return this.Commands[this.CurrentCommand].Position;
+                return this.Commands[this.CurrentCommand].Board;
             }
         }
         private List<Command> Commands = new List<Command>();
@@ -33,16 +33,16 @@ namespace Chess.AF
         public void Load(string fenString)
             => LoadCommand(new LoadCommand(fenString));
 
-        public bool IsLoaded { get { return !Position.Equals(None); } }
+        public bool IsLoaded { get { return !Board.Equals(None); } }
 
         public void Move(Move move)
-            => ExecuteCommand(new MoveCommand(Position, move));
+            => ExecuteCommand(new MoveCommand(Board, move));
 
         public void Resign()
-            => ReplaceCommand(new ResignCommand(Position));
+            => ReplaceCommand(new ResignCommand(Board));
 
         public void Draw()
-            => ReplaceCommand(new DrawCommand(Position));
+            => ReplaceCommand(new DrawCommand(Board));
 
         private void ReplaceCommand(Command command)
         {
@@ -91,79 +91,79 @@ namespace Chess.AF
             => this.CurrentCommand = this.Commands.Count() - 1;
 
         public string ToFenString()
-            => Position.Match(
+            => Board.Match(
                 None: () => "No Game loaded or Invalid Game",
                 Some: p => p.ToFenString());
 
         public Option<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> FindMove(
             Func<IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>,
                 Option<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>> findIn)
-            => Position.Map(p => p.IterateForAllMoves()).Bind(it => findIn(it));
+            => Board.Map(p => p.IterateForAllMoves()).Bind(it => findIn(it));
 
         public void ForEachMove(Action<IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>> iterator)
-            => Position.Map(p => p.IterateForAllMoves()).ForEach(iterator);
+            => Board.Map(p => p.IterateForAllMoves()).ForEach(iterator);
 
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> AllMoves()
-            => Position.Map(p => p.IterateForAllMoves()).Match(
+            => Board.Map(p => p.IterateForAllMoves()).Match(
                 None: () => Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>(),
                 Some: s => s
                 );
 
         public void Map(Func<IBoard, IBoard> func)
-            => Position.Map(func);
+            => Board.Map(func);
 
         public bool IsWhiteToMove
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => false,
                 Some: s => s.IsWhiteToMove);
         }
 
         public bool IsMate
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => false,
                 Some: s => s.IsMate);
         }
 
         public bool IsInCheck
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => false,
                 Some: s => s.IsInCheck);
         }
 
         public bool IsStaleMate
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => false,
                 Some: s => s.IsStaleMate);
         }
 
         public GameResult Result
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => GameResult.Invalid,
                 Some: s => s.Result);
         }
 
         public Move LastMove
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => null,
                 Some: s => s.LastMove);
         }
 
         public int MaterialCount
         {
-            get => Position.Match(
+            get => Board.Match(
                 None: () => 0,
                 Some: s => GetMaterialCount(s));
         }
 
-        private int GetMaterialCount(IBoard position)
+        private int GetMaterialCount(IBoard board)
         {
-            Material material = new Material(position.GetIteratorForAll<PiecesEnum>());
+            Material material = new Material(board.GetIteratorForAll<PiecesEnum>());
             return material.Count();
         }
     }

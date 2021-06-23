@@ -66,15 +66,15 @@ namespace Chess.AF.Domain
             this.MoveNumber = fen.MoveNumber;
         }
 
-        private Board(Board position, IBoardMap implementor)
+        private Board(Board board, IBoardMap implementor)
         {
             this.Implementor = implementor;
-            this.IsWhiteToMove = position.IsWhiteToMove;
-            this.WhiteRokade = position.WhiteRokade;
-            this.BlackRokade = position.BlackRokade;
-            this.EpSquare = position.EpSquare;
-            this.PlyCount = position.PlyCount;
-            this.MoveNumber = position.MoveNumber;
+            this.IsWhiteToMove = board.IsWhiteToMove;
+            this.WhiteRokade = board.WhiteRokade;
+            this.BlackRokade = board.BlackRokade;
+            this.EpSquare = board.EpSquare;
+            this.PlyCount = board.PlyCount;
+            this.MoveNumber = board.MoveNumber;
         }
 
         private IBoard CreateCopy()

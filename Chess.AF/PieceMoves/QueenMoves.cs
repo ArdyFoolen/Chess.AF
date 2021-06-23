@@ -22,13 +22,13 @@ namespace Chess.AF.PieceMoves
             return instance;
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum = PieceEnum.Queen)
-            => CreateIterator(square, position, pieceEnum);
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap boardMap, PieceEnum pieceEnum = PieceEnum.Queen)
+            => CreateIterator(square, boardMap, pieceEnum);
 
-        private PiecesIterator<PieceEnum> CreateIterator(SquareEnum square, IBoardMap position, PieceEnum pieceEnum)
+        private PiecesIterator<PieceEnum> CreateIterator(SquareEnum square, IBoardMap boardMap, PieceEnum pieceEnum)
         {
-            var bIterator = BishopMoves.Get().GetIteratorFor(square, position, pieceEnum);
-            var rIterator = RookMoves.Get().GetIteratorFor(square, position, pieceEnum);
+            var bIterator = BishopMoves.Get().GetIteratorFor(square, boardMap, pieceEnum);
+            var rIterator = RookMoves.Get().GetIteratorFor(square, boardMap, pieceEnum);
             return new PiecesIterator<PieceEnum>(bIterator, rIterator);
         }
     }

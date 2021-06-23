@@ -24,11 +24,11 @@ namespace Chess.AF.PieceMoves
             return instance;
         }
 
-        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap position, PieceEnum pieceEnum = PieceEnum.Pawn)
-            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, GetMapFor(position, square)));
+        public PiecesIterator<PieceEnum> GetIteratorFor(SquareEnum square, IBoardMap boardMap, PieceEnum pieceEnum = PieceEnum.Pawn)
+            => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(pieceEnum, GetMapFor(boardMap, square)));
 
         // Make a map for black/white pawns, later set bits of either below or above square
-        private ulong GetMapFor(IBoardMap position, SquareEnum square)
+        private ulong GetMapFor(IBoardMap boardMap, SquareEnum square)
         {
             var mvMap = 0x0000000000000000ul;
 
@@ -43,7 +43,7 @@ namespace Chess.AF.PieceMoves
 
             ulong tkMap = MovesDictionaries.GetTakeMap(square);
 
-            return position.GetPawnMapFor(square, mvMap, tkMap);
+            return boardMap.GetPawnMapFor(square, mvMap, tkMap);
         }
     }
 }

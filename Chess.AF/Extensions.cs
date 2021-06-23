@@ -26,7 +26,7 @@ namespace Chess.AF
         public static Option<Fen> CreateFen(this string fenString)
             => Fen.Of(fenString);
 
-        public static Option<IBoard> CreatePositionAbstraction(this Option<Fen> fen)
+        public static Option<IBoard> CreateBoard(this Option<Fen> fen)
             => Board.Of(fen);
 
         internal static int Value(this PositionEnum position) { return (int)position; }
