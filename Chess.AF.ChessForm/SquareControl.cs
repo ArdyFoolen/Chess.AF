@@ -11,6 +11,8 @@ using System.Linq;
 using Chess.AF.Enums;
 using Chess.AF.Dto;
 using Chess.AF.ChessForm.Helpers;
+using Unit = System.ValueTuple;
+using static AF.Functional.F;
 
 namespace Chess.AF.ChessForm
 {
@@ -183,17 +185,18 @@ namespace Chess.AF.ChessForm
             else
                 SetEnableVisible(false);
 
-            DrawLastMove(e);
+            gameController.LastMove.Map(m => DrawLastMove(e, m));
         }
 
-        private void DrawLastMove(PaintEventArgs e)
+        private Unit DrawLastMove(PaintEventArgs e, Move move)
         {
-            if (gameController.LastMove != null && (Id == (int)gameController.LastMove.From || Id == (int)gameController.LastMove.To))
+            if (Id == (int)move.From || Id == (int)move.To)
             {
                 e.Graphics.DrawRectangle(new Pen(Color.YellowGreen, 5), this.DisplayRectangle);
                 Brush brush = new SolidBrush(Color.FromArgb(100, Color.YellowGreen));
                 e.Graphics.FillRectangle(brush, this.DisplayRectangle);
             }
+            return Unit();
         }
 
         private void SetDrawLabelsToVisible()

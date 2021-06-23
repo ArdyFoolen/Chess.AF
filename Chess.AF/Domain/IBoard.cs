@@ -20,7 +20,7 @@ namespace Chess.AF.Domain
         bool IsMate { get; }
         bool IsStaleMate { get; }
         bool IsInCheck { get; }
-        Move LastMove { get; }
+        Option<Move> LastMove { get; }
 
         Option<IBoard> Resign();
         Option<IBoard> Draw();

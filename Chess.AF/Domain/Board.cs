@@ -49,7 +49,7 @@ namespace Chess.AF.Domain
         public int MoveNumber { get; private set; }
 
         [DataMember]
-        public Move LastMove { get; private set; }
+        public Option<Move> LastMove { get; private set; } = None;
 
         #endregion
 

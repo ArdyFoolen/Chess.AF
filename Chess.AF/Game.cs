@@ -147,7 +147,7 @@ namespace Chess.AF
                 Some: s => s.Result);
         }
 
-        public Move LastMove
+        public Option<Move> LastMove
         {
             get => Board.Match(
                 None: () => null,

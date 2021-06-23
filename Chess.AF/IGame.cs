@@ -1,4 +1,5 @@
-﻿using Chess.AF.Domain;
+﻿using AF.Functional;
+using Chess.AF.Domain;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
 using System;
@@ -17,7 +18,7 @@ namespace Chess.AF
         bool IsInCheck { get; }
         bool IsStaleMate { get; }
         GameResult Result { get; }
-        Move LastMove { get; }
+        Option<Move> LastMove { get; }
         int MaterialCount { get; }
 
         void Load();
