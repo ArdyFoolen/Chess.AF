@@ -75,6 +75,7 @@ namespace Chess.AF.Domain
             this.EpSquare = board.EpSquare;
             this.PlyCount = board.PlyCount;
             this.MoveNumber = board.MoveNumber;
+            this.LastMove = board.LastMove;
         }
 
         private IBoard CreateCopy()
