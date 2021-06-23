@@ -17,6 +17,7 @@ namespace Chess.AF
         bool IsInCheck { get; }
         bool IsStaleMate { get; }
         GameResult Result { get; }
+        Move LastMove { get; }
         int MaterialCount { get; }
 
         void Load();

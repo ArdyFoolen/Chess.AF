@@ -182,6 +182,18 @@ namespace Chess.AF.ChessForm
             }
             else
                 SetEnableVisible(false);
+
+            DrawLastMove(e);
+        }
+
+        private void DrawLastMove(PaintEventArgs e)
+        {
+            if (gameController.LastMove != null && (Id == (int)gameController.LastMove.From || Id == (int)gameController.LastMove.To))
+            {
+                e.Graphics.DrawRectangle(new Pen(Color.YellowGreen, 5), this.DisplayRectangle);
+                Brush brush = new SolidBrush(Color.FromArgb(100, Color.YellowGreen));
+                e.Graphics.FillRectangle(brush, this.DisplayRectangle);
+            }
         }
 
         private void SetDrawLabelsToVisible()

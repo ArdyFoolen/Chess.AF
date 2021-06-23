@@ -33,6 +33,7 @@ namespace Chess.AF.Controllers
         bool IsStaleMate { get; }
 
         GameResult Result { get; }
+        Move LastMove { get; }
         int MaterialCount { get; }
 
         void GotoFirstMove();

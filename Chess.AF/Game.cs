@@ -147,6 +147,13 @@ namespace Chess.AF
                 Some: s => s.Result);
         }
 
+        public Move LastMove
+        {
+            get => Position.Match(
+                None: () => null,
+                Some: s => s.LastMove);
+        }
+
         public int MaterialCount
         {
             get => Position.Match(

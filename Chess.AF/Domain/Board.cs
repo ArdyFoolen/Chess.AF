@@ -48,6 +48,9 @@ namespace Chess.AF.Domain
         [DataMember]
         public int MoveNumber { get; private set; }
 
+        [DataMember]
+        public Move LastMove { get; private set; }
+
         #endregion
 
         #region ctors
@@ -109,6 +112,7 @@ namespace Chess.AF.Domain
 
         private IBoard MoveFromTo(Move move)
         {
+            LastMove = move;
             Implementor = Implementor.SetBits(move, this);
 
             SetEpSquare(move);
