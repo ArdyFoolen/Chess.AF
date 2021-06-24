@@ -31,7 +31,7 @@ namespace Chess.AF.ChessForm
 
         private PgnFile pgnFile;
 
-        public ChessFrm()
+        public ChessFrm(IGame game)
         {
             InitializeComponent();
 
@@ -39,7 +39,7 @@ namespace Chess.AF.ChessForm
             this.Size = new Size(this.Size.Width, FormHeight);
 
             IPgnController pgnController = new PgnController();
-            this.gameController = new GameController(new Game(), pgnController);
+            this.gameController = new GameController(game, pgnController);
             this.gameController.Register(this);
 
             this.boardControl = new BoardControl(this.gameController);
