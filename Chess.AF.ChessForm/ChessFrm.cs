@@ -31,15 +31,16 @@ namespace Chess.AF.ChessForm
 
         private PgnFile pgnFile;
 
-        public ChessFrm(IGame game)
+        public ChessFrm(IGameController gameController, IPgnController pgnController)
         {
             InitializeComponent();
 
             this.loadFen.Hide();
             this.Size = new Size(this.Size.Width, FormHeight);
 
-            IPgnController pgnController = new PgnController();
-            this.gameController = new GameController(game, pgnController);
+            //IPgnController pgnController = new PgnController();
+            //this.gameController = new GameController(game, pgnController);
+            this.gameController = gameController;
             this.gameController.Register(this);
 
             this.boardControl = new BoardControl(this.gameController);

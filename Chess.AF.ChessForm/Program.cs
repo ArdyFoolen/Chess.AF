@@ -22,13 +22,17 @@ namespace Chess.AF.ChessForm
         static void Main()
         {
             ConfigurationHelper.LoadFactoryTypes();
-            IGameFactory gameFactory = Container.Instance.GetInstanceOf<IGameFactory>();
-            IGame game = gameFactory.MakeGame();
+
+            Container.Instance.Register<IGameController, GameController>();
+            Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame());
+            Container.Instance.Register<IPgnController, PgnController>();
+            var gameController = Container.Instance.GetInstanceOf<IGameController>();
+            var pgnController = Container.Instance.GetInstanceOf<IPgnController>();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChessFrm(game));
+            Application.Run(new ChessFrm(gameController, pgnController));
         }
     }
 }

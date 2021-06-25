@@ -146,7 +146,8 @@ namespace AF.Bootstrapper
             }
             for (int i = 0; i < a.Length; i++)
             {
-                if (a[i].ParameterType != b[i].GetType())
+                if (a[i].ParameterType != b[i].GetType() &&
+                    !b[i].GetType().GetInterfaces().Contains(a[i].ParameterType))
                 {
                     return false;
                 }
@@ -164,7 +165,8 @@ namespace AF.Bootstrapper
             }
             for (int i = 0; i < a.Length; i++)
             {
-                if (a[i].ParameterType != b[i])
+                if (a[i].ParameterType != b[i] &&
+                    !b[i].GetInterfaces().Contains(a[i].ParameterType))
                 {
                     return false;
                 }

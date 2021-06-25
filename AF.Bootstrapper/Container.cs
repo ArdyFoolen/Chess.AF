@@ -36,9 +36,39 @@ namespace AF.Bootstrapper
 
         private object CreateInstance(Type interfaceType, Type factoryType)
         {
-            var methodInfo = GetType().GetMethod("CreateInstanceOf", BindingFlags.Instance | BindingFlags.NonPublic);
+            var methodInfo = GetType().GetMethod(nameof(CreateInstanceOf), BindingFlags.Instance | BindingFlags.NonPublic,
+                new ContainerBinder(), new Type[] { typeof(Type) }, null);
             var genericMethod = methodInfo.MakeGenericMethod(interfaceType);
             return genericMethod.Invoke(this, new[] { factoryType });
+        }
+
+        private TInterface CreateInstance<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
+            where TFactory : class
+        {
+            TFactory factory = GetInstanceOf<TFactory>();
+            return factoryMethod(factory);
+        }
+
+        private TInstance CreateInstance<TInterface, TInstance>()
+            where TInstance : class
+        {
+            var contr = typeof(TInstance).GetConstructors(BindingFlags.Public | BindingFlags.Instance)[0];
+            var parms = contr.GetParameters();
+            object[] pObjs = new object[parms.Length];
+            int i = 0;
+            foreach (var parm in parms)
+                pObjs[i++] = GetInstanceOf(parm);
+
+            return typeof(TInstance).InvokeMember(typeof(TInstance).Name, BindingFlags.CreateInstance,
+                new ContainerBinder(), null, pObjs) as TInstance;
+        }
+
+        private object GetInstanceOf(ParameterInfo parameter)
+        {
+            var methodInfo = GetType().GetMethod(nameof(GetInstanceOf), BindingFlags.Instance | BindingFlags.Public,
+                new ContainerBinder(), Type.EmptyTypes, null);
+            var genericMethod = methodInfo.MakeGenericMethod(parameter.ParameterType);
+            return genericMethod.Invoke(this, null);
         }
 
         #endregion
@@ -51,6 +81,14 @@ namespace AF.Bootstrapper
 
         public void Register(Type interfaceType, Type factoryType)
             => dict.Add(interfaceType, new Lazy<object>(() => CreateInstance(interfaceType, factoryType)));
+
+        public void Register<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
+            where TFactory : class
+            => dict.Add(typeof(TInterface), new Lazy<object>(() => CreateInstance(factoryMethod)));
+
+        public void Register<TInterface, TInstance>()
+            where TInstance : class
+            => dict.Add(typeof(TInterface), new Lazy<object>(() => CreateInstance<TInterface, TInstance>()));
 
         #endregion
     }
