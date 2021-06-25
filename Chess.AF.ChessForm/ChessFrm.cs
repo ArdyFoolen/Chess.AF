@@ -27,9 +27,9 @@ namespace Chess.AF.ChessForm
         private LoadFen loadFen = new LoadFen();
         private BoardControl boardControl;
         private IGameController gameController;
+        private IPgnController pgnController;
         private PgnControl pgnControl;
-
-        private PgnFile pgnFile;
+        private ToolstripNumericUpDown numUpDown;
 
         public ChessFrm(IGameController gameController, IPgnController pgnController)
         {
@@ -40,6 +40,7 @@ namespace Chess.AF.ChessForm
 
             this.gameController = gameController;
             this.gameController.Register(this);
+            this.pgnController = pgnController;
 
             this.boardControl = new BoardControl(this.gameController);
             this.boardControl.BackColor = Color.SaddleBrown;
@@ -47,6 +48,13 @@ namespace Chess.AF.ChessForm
             this.boardControl.Margin = new Padding(0);
             this.boardControl.Location = new Point(0, 33);
             this.boardControl.BorderStyle = BorderStyle.FixedSingle;
+
+            this.numUpDown = new ToolstripNumericUpDown(pgnController);
+            toolStrip1.Items.Insert(2, this.numUpDown);
+            this.numUpDown.Name = "numUpDown";
+            this.numUpDown.Size = new Size(23, 22);
+            this.numUpDown.Visible = false;
+            this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
 
             this.BackColor = Color.Wheat;
 
@@ -116,24 +124,13 @@ namespace Chess.AF.ChessForm
             var result = this.openFileDialog1.ShowDialog();
             if (DialogResult.OK.Equals(result))
             {
-                this.pgnFile = new PgnFile(this.openFileDialog1.FileName);
-                pgnFile.Read();
-                if (pgnFile.Count() > 0)
-                {
-                    this.gameController.SetFromPgn(ImportExport.Pgn.Import(pgnFile[0]));
-                    numUpDown.Visible = false;
-                }
-                if (pgnFile.Count() > 1)
-                {
-                    numUpDown.Minimum = 1;
-                    numUpDown.Maximum = pgnFile.Count();
-                    numUpDown.Visible = true;
-                }
+                var pgn = this.pgnController.Read(this.openFileDialog1.FileName);
+                this.gameController.SetFromPgn(pgn);
             }
         }
 
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
-            => this.gameController.SetFromPgn(ImportExport.Pgn.Import(pgnFile[numUpDown.Value - 1]));
+            => this.gameController.SetFromPgn(this.pgnController.PgnFileIndexChanged(numUpDown.Value - 1));
 
         private void BtnFirstMove_Click(object sender, EventArgs e)
             => this.gameController.GotoFirstMove();

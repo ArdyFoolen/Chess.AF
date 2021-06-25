@@ -8,6 +8,6 @@ namespace Chess.AF.Views
 {
     public interface IPgnView
     {
-        void UpdateView();
+        void UpdateFromPgn();
     }
 }

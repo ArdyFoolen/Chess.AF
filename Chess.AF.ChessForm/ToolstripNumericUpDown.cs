@@ -1,4 +1,6 @@
-﻿using Chess.AF.ImportExport;
+﻿using Chess.AF.Controllers;
+using Chess.AF.ImportExport;
+using Chess.AF.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,9 +13,15 @@ using System.Windows.Forms;
 
 namespace Chess.AF.ChessForm
 {
-    public partial class ToolstripNumericUpDown : ToolStripControlHost
+    public partial class ToolstripNumericUpDown : ToolStripControlHost, IPgnView
     {
-        public ToolstripNumericUpDown() : base(new NumericUpDown()) { }
+        private IPgnController pgnController { get; set; }
+
+        public ToolstripNumericUpDown(IPgnController pgnController) : base(new NumericUpDown())
+        {
+            this.pgnController = pgnController;
+            this.pgnController.Register(this);
+        }
 
         public NumericUpDown NumericUpDownControl { get=> Control as NumericUpDown; }
 
@@ -34,12 +42,6 @@ namespace Chess.AF.ChessForm
             get { return Convert.ToInt32(NumericUpDownControl.Value); }
             set { NumericUpDownControl.Value = value; }
         }
-
-        //public override string Text
-        //{
-        //    get { return NumericUpDownControl.Text; }
-        //    set { NumericUpDownControl.Text = value; }
-        //}
 
         protected override void OnSubscribeControlEvents(Control c)
         {
@@ -62,5 +64,18 @@ namespace Chess.AF.ChessForm
         public event EventHandler ValueChanged;
         private void OValueChanged(object sender, EventArgs e)
             => ValueChanged?.Invoke(this, e);
+
+        public void UpdateFromPgn()
+        {
+            if (pgnController.Count() > 0)
+                this.Visible = false;
+
+            if (pgnController.Count() > 1)
+            {
+                this.Minimum = 1;
+                this.Maximum = pgnController.Count();
+                this.Visible = true;
+            }
+        }
     }
 }

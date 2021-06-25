@@ -30,10 +30,10 @@ namespace Chess.AF.ChessForm
 
             this.BorderStyle = BorderStyle.FixedSingle;
             this.AutoSize = true;
-            UpdateView();
+            UpdateFromPgn();
         }
 
-        public void UpdateView()
+        public void UpdateFromPgn()
         {
             this.Controls.Clear();
             TagLabels.Clear();

@@ -1,14 +1,19 @@
-﻿using Chess.AF.Views;
+﻿using AF.Functional;
+using Chess.AF.ImportExport;
+using Chess.AF.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AF.Functional.F;
+using Unit = System.ValueTuple;
 
 namespace Chess.AF.Controllers
 {
     public class PgnController : IPgnController
     {
+        private PgnFile pgnFile;
         private List<IPgnView> views = new List<IPgnView>();
         public Dictionary<string, string> TagPairDictionary { get; private set; } = new Dictionary<string, string>();
 
@@ -27,7 +32,7 @@ namespace Chess.AF.Controllers
         private void NotifyViews()
         {
             foreach (var view in views)
-                view.UpdateView();
+                view.UpdateFromPgn();
         }
 
         public void SetTagPairDictionary(Dictionary<string, string> tagPairDictionary)
@@ -39,6 +44,44 @@ namespace Chess.AF.Controllers
         {
             this.TagPairDictionary.Clear();
             NotifyViews();
+        }
+
+        public Option<Pgn> Read(string pgnFilePath)
+        {
+            Option<Pgn> pgn = None;
+            this.pgnFile = new PgnFile(pgnFilePath);
+            pgnFile.Read();
+            if (pgnFile.Count() > 0)
+            {
+                pgn = Pgn.Import(pgnFile[0]);
+                SetTagPairDictionary(pgn);
+            }
+            else
+                NotifyViews();
+            return pgn;
+        }
+
+        public int Count()
+            => pgnFile.Count();
+
+        public Option<Pgn> PgnFileIndexChanged(int index)
+        {
+            if (index >= pgnFile.Count())
+                return None;
+
+            var pgn = Pgn.Import(pgnFile[index]);
+            SetTagPairDictionary(pgn);
+ 
+            return pgn;
+        }
+
+        private void SetTagPairDictionary(Option<Pgn> pgn)
+            => pgn.Map(p => SetTagPairDictionary(p));
+
+        private Unit SetTagPairDictionary(Pgn pgn)
+        {
+            SetTagPairDictionary(pgn.TagPairDictionary);
+            return Unit();
         }
     }
 }

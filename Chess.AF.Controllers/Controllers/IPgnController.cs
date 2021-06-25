@@ -1,4 +1,6 @@
-﻿using Chess.AF.Views;
+﻿using AF.Functional;
+using Chess.AF.ImportExport;
+using Chess.AF.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +17,9 @@ namespace Chess.AF.Controllers
 
         void SetTagPairDictionary(Dictionary<string, string> tagPairDictionary);
         void Clear();
+
+        int Count();
+        Option<Pgn> Read(string pgnFilePath);
+        Option<Pgn> PgnFileIndexChanged(int index);
     }
 }
