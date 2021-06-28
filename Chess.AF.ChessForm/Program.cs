@@ -1,4 +1,5 @@
 using AF.Bootstrapper;
+using AF.Factories;
 using Chess.AF.ChessForm.Extensions;
 using Chess.AF.ChessForm.Helpers;
 using Chess.AF.Controllers;
@@ -21,8 +22,7 @@ namespace Chess.AF.ChessForm
         [STAThread]
         static void Main()
         {
-            ConfigurationHelper.LoadFactoryTypes();
-
+            Container.Instance.Register<IGameFactory, GameFactory>();
             Container.Instance.Register<IGameController, GameController>();
             Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame());
             Container.Instance.Register<IPgnController, PgnController>();
