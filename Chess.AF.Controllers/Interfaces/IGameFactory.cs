@@ -8,6 +8,7 @@ namespace Chess.AF.Controllers.Interfaces
 {
     public interface IGameFactory
     {
-        IGame MakeGame();
+        IGame MakeGame(string gameType);
+        IEnumerable<string> AvailableGameTypes();
     }
 }

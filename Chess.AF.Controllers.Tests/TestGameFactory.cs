@@ -9,7 +9,26 @@ namespace Chess.AF.Controllers.Tests
 {
     public class TestGameFactory : IGameFactory
     {
-        public IGame MakeGame()
-            => new TestGame();
+        public const string TestChessGame = "Test Chess Game";
+
+        public const string ChessGame = "Chess Game";
+        public IEnumerable<string> AvailableGameTypes()
+        {
+            yield return ChessGame;
+            yield return TestChessGame;
+        }
+
+        public IGame MakeGame(string gameType)
+        {
+            switch(gameType)
+            {
+                case TestChessGame:
+                    return new TestGame();
+                case ChessGame:
+                    return new Game();
+            }
+
+            return null;
+        }
     }
 }

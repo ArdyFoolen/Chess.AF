@@ -11,7 +11,7 @@ namespace Chess.AF.Controllers.Tests
         public void Setup()
         {
             Container.Instance.Register<IGameFactory, TestGameFactory>();
-            Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame());
+            Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Test Chess Game"));
         }
 
         [Test]

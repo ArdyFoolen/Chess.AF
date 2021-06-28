@@ -24,7 +24,7 @@ namespace Chess.AF.ChessForm
         {
             Container.Instance.Register<IGameFactory, GameFactory>();
             Container.Instance.Register<IGameController, GameController>();
-            Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame());
+            Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
             Container.Instance.Register<IPgnController, PgnController>();
             var gameController = Container.Instance.GetInstanceOf<IGameController>();
             var pgnController = Container.Instance.GetInstanceOf<IPgnController>();
