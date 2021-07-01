@@ -28,5 +28,33 @@ namespace Chess.AF.Tests.UnitTests
                 None: () => Assert.Fail(),
                 Some: p => Assert.IsTrue(true));
         }
+
+        [Test]
+        public void Export_BuildPgn_ShouldCreateTagPairs()
+        {
+            // Act
+            var pgn = Pgn.Export(null);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p));
+        }
+
+        private const string tagPairsFormat1 = @"[Event ""Chess.AF Game""]
+[Site """"]
+[Date ""{0}""]
+[Round """"]
+[White """"]
+[Black """"]
+[Result """"]
+
+";
+
+        private void AssertTagPairs(Pgn pgn)
+        {
+            var tagPairs = string.Format(tagPairsFormat1, DateTime.Today.ToString("yyyy.MM.dd"));
+            Assert.AreEqual(tagPairs, pgn.PgnString);
+        }
     }
 }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AF.Functional;
+using static AF.Functional.F;
 
 namespace Chess.AF.ImportExport
 {
@@ -31,6 +33,13 @@ namespace Chess.AF.ImportExport
                     );
             }
 
+            private void formatTagPairsToString()
+                => PgnString = string.Join(Environment.NewLine, tagPairDict.Select(kv => formatTagPairsToString(kv))) +
+                    Environment.NewLine + Environment.NewLine;
+
+            private string formatTagPairsToString(KeyValuePair<string, string> tagPair)
+                => $"[{tagPair.Key} \"{tagPair.Value}\"]";
+
             public override void BuildPrepare()
             {
             }
@@ -46,10 +55,14 @@ namespace Chess.AF.ImportExport
                 tagPairDict.Add("White", "");
                 tagPairDict.Add("Black", "");
                 tagPairDict.Add("Result", $"{getResultFromLastCommand()}");
+
+                formatTagPairsToString();
             }
 
             public override void Build()
             {
+                var pgn = new Pgn(PgnString);
+                this.Pgn = Some(pgn);
             }
         }
     }
