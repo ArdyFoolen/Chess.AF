@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,23 +22,30 @@ namespace Chess.AF.ImportExport
 
     public partial class Pgn
     {
-        public string PgnString { get; }
+        public string PgnString { get; private set; }
         private Pgn(string pgnString) { this.PgnString = pgnString; }
+        private Pgn(IGame game) { this.Game = game; }
 
-        public Game Game { get; private set; }
+        public IGame Game { get; private set; }
         public Dictionary<string, string> TagPairDictionary { get; private set; } = new Dictionary<string, string>();
 
         public static Option<Pgn> Import(IEnumerable<string> lines)
             => Import(string.Join(Environment.NewLine, lines.ToArray()));
         public static Option<Pgn> Import(string pgnString)
         {
-            PgnBuilder builder = new PgnImportBuilder();
-            builder.PgnString = pgnString;
+            PgnBuilder builder = new PgnImportBuilder(pgnString);
             builder.BuildPrepare();
             builder.BuildTagPairs();
-            builder.BuildMoveText();
+            builder.Build();
 
             return builder.Pgn;
+        }
+
+        public static Option<Pgn> Export(IList<Command> commands)
+        {
+            PgnBuilder builder = new PgnExportBuilder(commands);
+
+            return None;
         }
     }
 }

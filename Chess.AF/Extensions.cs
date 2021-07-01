@@ -254,6 +254,14 @@ namespace Chess.AF
             return GameResult.Invalid;
         }
 
+        public static string ToDisplayString(this GameResult result)
+        {
+            var dispAttr = result.GetAttributeOfType<DisplayAttribute>();
+            if (dispAttr != null)
+                return dispAttr.Name;
+            return result.ToString();
+        }
+
         /// <summary>
         /// Gets an attribute on an enum field value
         /// </summary>

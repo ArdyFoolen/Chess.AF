@@ -51,6 +51,7 @@
     <Compile Include="Helpers\Material.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="ImportExport\IPgnTagStateContext.cs" />
+    <Compile Include="ImportExport\PgnExportBuilder.cs" />
     <Compile Include="ImportExport\PgnFile.cs" />
     <Compile Include="ImportExport\PgnTagState.cs" />
     <Compile Include="PieceMoves\KingMoves.cs" />

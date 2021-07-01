@@ -13,11 +13,10 @@ namespace Chess.AF.ImportExport
         private abstract class PgnBuilder
         {
             public Option<Pgn> Pgn { get; protected set; } = None;
-            public string PgnString { get; set; }
 
             public abstract void BuildPrepare();
             public abstract void BuildTagPairs();
-            public abstract void BuildMoveText();
+            public abstract void Build();
         }
     }
 }

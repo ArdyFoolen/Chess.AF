@@ -15,12 +15,19 @@ namespace Chess.AF.ImportExport
         {
             private bool isValid = true;
             private GameResult gameResult;
-            public Game Game { get; private set; } = new Game();
+            public IGame Game { get; private set; } = new Game();
 
             private Option<string[]> tagPairsMoveText;
             private Option<Dictionary<string, string>> tagPairDict;
+            private string PgnString { get; set; }
 
             PgnTagState IPgnTagStateContext.State { get; set; }
+
+            public PgnImportBuilder(string pgnString)
+            {
+                this.PgnString = pgnString;
+            }
+
             private void SetInitialState(IPgnTagStateContext context)
                 => context.State = new PgnTagEventState();
             public bool TryAddTagPair(IPgnTagStateContext context, Dictionary<string, string> eventTags, KeyValuePair<string, string> kv)
@@ -32,7 +39,7 @@ namespace Chess.AF.ImportExport
             public override void BuildTagPairs()
                 => tagPairDict = splitTagPairs();
 
-            public override void BuildMoveText()
+            public override void Build()
             {
                 createGameFrom();
                 if (isValid)
@@ -59,7 +66,7 @@ namespace Chess.AF.ImportExport
             private void makeMovesToGame(Option<List<string>> moves)
                 => moves.Map(m => makeMovesToGame(m));
 
-            private Game makeMovesToGame(List<string> moves)
+            private IGame makeMovesToGame(List<string> moves)
             {
                 foreach (string move in moves)
                 {
@@ -188,7 +195,7 @@ namespace Chess.AF.ImportExport
             private void loadGame()
                 => tagPairDict.Map(d => loadGame(d));
 
-            private Game loadGame(Dictionary<string, string> dict)
+            private IGame loadGame(Dictionary<string, string> dict)
             {
                 if (dict.ContainsKey("setup") && dict["setup"].Equals("1") && dict.ContainsKey("fen"))
                     Game.Load(dict["fen"]);

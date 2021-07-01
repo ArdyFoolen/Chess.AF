@@ -192,8 +192,8 @@ namespace Chess.AF.ChessForm
         {
             if (Id == (int)move.From || Id == (int)move.To)
             {
-                e.Graphics.DrawRectangle(new Pen(Color.YellowGreen, 5), this.DisplayRectangle);
-                Brush brush = new SolidBrush(Color.FromArgb(75, Color.YellowGreen));
+                e.Graphics.DrawRectangle(new Pen(Color.BlanchedAlmond, 5), this.DisplayRectangle);
+                Brush brush = new SolidBrush(Color.FromArgb(75, Color.BlanchedAlmond));
                 e.Graphics.FillRectangle(brush, this.DisplayRectangle);
             }
             return Unit();
