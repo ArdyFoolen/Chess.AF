@@ -45,7 +45,18 @@ namespace Chess.AF.ImportExport
             {
             }
 
-            private void addSetupTagPair()
+            private void addSevenTagRosterTagPairs()
+            {
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Event), "Chess.AF Game");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Site), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Date), $"{DateTime.Today.ToString("yyyy.MM.dd")}");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Round), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.White), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Black), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Result), $"{getResultFromLastCommand()}");
+            }
+
+            private void addSetupTagPairs()
             {
                 if (Commands == null || Commands.Count() == 0)
                     return;
@@ -55,12 +66,12 @@ namespace Chess.AF.ImportExport
 
             private void addSetupTagPair(Command command)
             {
-                LoadCommand l = command as LoadCommand;
-                if (l == null || l.IsDefaultFen)
+                LoadCommand loadCommand = command as LoadCommand;
+                if (loadCommand == null || loadCommand.IsDefaultFen)
                     return;
 
                 tagPairDict.Add(nameof(FenSetupEnum.Setup), "1");
-                tagPairDict.Add(nameof(FenSetupEnum.FEN), l.Fen);
+                tagPairDict.Add(nameof(FenSetupEnum.FEN), loadCommand.Fen);
             }
 
             public override void BuildPrepare()
@@ -71,14 +82,8 @@ namespace Chess.AF.ImportExport
             {
                 tagPairDict = new Dictionary<string, string>();
 
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Event), "Chess.AF Game");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Site), "");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Date), $"{DateTime.Today.ToString("yyyy.MM.dd")}");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Round), "");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.White), "");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Black), "");
-                tagPairDict.Add(nameof(SevenTagRosterEnum.Result), $"{getResultFromLastCommand()}");
-                addSetupTagPair();
+                addSevenTagRosterTagPairs();
+                addSetupTagPairs();
 
                 formatTagPairsToString();
             }
