@@ -28,6 +28,14 @@ namespace Chess.AF.Controllers.Tests
 
         public int MaterialCount => throw new NotImplementedException();
 
+        public int MoveNumber => throw new NotImplementedException();
+
+        public bool IsTake => throw new NotImplementedException();
+
+        public bool NextIsCheck => throw new NotImplementedException();
+
+        public bool NextIsMate => throw new NotImplementedException();
+
         public IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> AllMoves()
         {
             throw new NotImplementedException();

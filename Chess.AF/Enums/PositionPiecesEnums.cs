@@ -46,16 +46,22 @@ namespace Chess.AF.Enums
     public enum PieceEnum
     {
         [EnumMember]
+        [Display(Name="")]
         Pawn = 1,      // 1 8
         [EnumMember]
+        [Display(Name = "N")]
         Knight,        // 2 9
         [EnumMember]
+        [Display(Name = "B")]
         Bishop,        // 3 10
         [EnumMember]
+        [Display(Name = "R")]
         Rook,          // 4 11
         [EnumMember]
+        [Display(Name = "Q")]
         Queen,         // 5 12
         [EnumMember]
+        [Display(Name = "K")]
         King            // 6 13
     }
 

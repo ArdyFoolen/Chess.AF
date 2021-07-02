@@ -176,8 +176,6 @@ namespace Chess.AF
 
         public static char ConvertPieceToChar(IDictionary<SquareEnum, PieceOnSquare<PiecesEnum>> dictionary, SquareEnum square)
             => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
-        //public static char ConvertPieceToChar(IDictionary<SquareEnum, (PiecesEnum Piece, SquareEnum Square, bool IsSelected)> dictionary, SquareEnum square)
-        //    => ConvertPieceToChar(dictionary.ContainsKey(square) ? (int)dictionary[square].Piece : 0);
         public static char ConvertPieceToChar(int index)
             => PiecesCharEnum[index];
 
@@ -254,7 +252,7 @@ namespace Chess.AF
             return GameResult.Invalid;
         }
 
-        public static string ToDisplayString(this GameResult result)
+        public static string ToDisplayString<T>(this T result) where T : Enum
         {
             var dispAttr = result.GetAttributeOfType<DisplayAttribute>();
             if (dispAttr != null)
@@ -298,5 +296,8 @@ namespace Chess.AF
             else
                 return piece;
         }
+
+        public static string ToFileString(this SquareEnum square)
+            => square.ToDisplayString().Substring(0, 1);
     }
 }

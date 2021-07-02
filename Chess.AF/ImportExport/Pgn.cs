@@ -47,9 +47,9 @@ namespace Chess.AF.ImportExport
             return builder.Pgn;
         }
 
-        public static Option<Pgn> Export(IList<Command> commands)
+        public static Option<Pgn> Export(IGame game, IList<Command> commands)
         {
-            PgnBuilder builder = new PgnExportBuilder(commands);
+            PgnBuilder builder = new PgnExportBuilder(game, commands);
             builder.BuildPrepare();
             builder.BuildTagPairs();
             builder.Build();

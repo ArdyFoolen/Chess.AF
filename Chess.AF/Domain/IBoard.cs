@@ -30,6 +30,9 @@ namespace Chess.AF.Domain
         PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece);
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 
+        int MoveNumber { get; }
+        bool IsTake { get; }
+
         string ToFenString();
         Dictionary<int, PieceOnSquare<PiecesEnum>> ToDictionary();
     }

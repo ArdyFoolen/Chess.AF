@@ -62,7 +62,7 @@ namespace Chess.AF.Controllers
         }
 
         public int Count()
-            => pgnFile.Count();
+            => pgnFile?.Count() ?? 0;
 
         public Option<Pgn> PgnFileIndexChanged(int index)
         {
