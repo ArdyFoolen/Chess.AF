@@ -197,8 +197,8 @@ namespace Chess.AF.ImportExport
 
             private IGame loadGame(Dictionary<string, string> dict)
             {
-                if (dict.ContainsKey("setup") && dict["setup"].Equals("1") && dict.ContainsKey("fen"))
-                    Game.Load(dict["fen"]);
+                if (dict.ContainsKey(nameof(FenSetupEnum.Setup).ToLowerInvariant()) && dict[nameof(FenSetupEnum.Setup).ToLowerInvariant()].Equals("1") && dict.ContainsKey(nameof(FenSetupEnum.FEN).ToLowerInvariant()))
+                    Game.Load(dict[nameof(FenSetupEnum.FEN).ToLowerInvariant()]);
                 else
                     Game.Load();
                 return Game;

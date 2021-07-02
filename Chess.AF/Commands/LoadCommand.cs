@@ -10,12 +10,10 @@ namespace Chess.AF.Commands
     {
         private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-        private string Fen { get; set; }
+        public string Fen { get; private set; }
+        public bool IsDefaultFen { get; } = false;
 
-        public LoadCommand()
-        {
-            this.Fen = DefaultFen;
-        }
+        public LoadCommand() : this(DefaultFen) { IsDefaultFen = true; }
 
         public LoadCommand(string fen)
         {

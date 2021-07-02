@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AF.Functional;
 using static AF.Functional.F;
+using Chess.AF.Domain;
 
 namespace Chess.AF.ImportExport
 {
@@ -40,6 +41,28 @@ namespace Chess.AF.ImportExport
             private string formatTagPairsToString(KeyValuePair<string, string> tagPair)
                 => $"[{tagPair.Key} \"{tagPair.Value}\"]";
 
+            private void CreateMoveText()
+            {
+            }
+
+            private void addSetupTagPair()
+            {
+                if (Commands == null || Commands.Count() == 0)
+                    return;
+
+                addSetupTagPair(Commands[0]);
+            }
+
+            private void addSetupTagPair(Command command)
+            {
+                LoadCommand l = command as LoadCommand;
+                if (l == null || l.IsDefaultFen)
+                    return;
+
+                tagPairDict.Add(nameof(FenSetupEnum.Setup), "1");
+                tagPairDict.Add(nameof(FenSetupEnum.FEN), l.Fen);
+            }
+
             public override void BuildPrepare()
             {
             }
@@ -55,6 +78,7 @@ namespace Chess.AF.ImportExport
                 tagPairDict.Add(nameof(SevenTagRosterEnum.White), "");
                 tagPairDict.Add(nameof(SevenTagRosterEnum.Black), "");
                 tagPairDict.Add(nameof(SevenTagRosterEnum.Result), $"{getResultFromLastCommand()}");
+                addSetupTagPair();
 
                 formatTagPairsToString();
             }
@@ -62,6 +86,7 @@ namespace Chess.AF.ImportExport
             public override void Build()
             {
                 var pgn = new Pgn(PgnString);
+                CreateMoveText();
                 this.Pgn = Some(pgn);
             }
         }

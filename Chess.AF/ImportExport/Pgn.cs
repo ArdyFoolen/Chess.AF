@@ -20,6 +20,12 @@ namespace Chess.AF.ImportExport
         Result
     }
 
+    public enum FenSetupEnum
+    {
+        Setup,
+        FEN
+    }
+
     public partial class Pgn
     {
         public string PgnString { get; private set; }
