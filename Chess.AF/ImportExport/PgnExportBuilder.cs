@@ -48,13 +48,13 @@ namespace Chess.AF.ImportExport
             {
                 tagPairDict = new Dictionary<string, string>();
 
-                tagPairDict.Add("Event", "Chess.AF Game");
-                tagPairDict.Add("Site", "");
-                tagPairDict.Add("Date", $"{DateTime.Today.ToString("yyyy.MM.dd")}");
-                tagPairDict.Add("Round", "");
-                tagPairDict.Add("White", "");
-                tagPairDict.Add("Black", "");
-                tagPairDict.Add("Result", $"{getResultFromLastCommand()}");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Event), "Chess.AF Game");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Site), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Date), $"{DateTime.Today.ToString("yyyy.MM.dd")}");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Round), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.White), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Black), "");
+                tagPairDict.Add(nameof(SevenTagRosterEnum.Result), $"{getResultFromLastCommand()}");
 
                 formatTagPairsToString();
             }
