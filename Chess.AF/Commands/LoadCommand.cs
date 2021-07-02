@@ -13,10 +13,11 @@ namespace Chess.AF.Commands
         public string Fen { get; private set; }
         public bool IsDefaultFen { get; } = false;
 
-        public LoadCommand() : this(DefaultFen) { IsDefaultFen = true; }
+        public LoadCommand() : this(DefaultFen) { }
 
         public LoadCommand(string fen)
         {
+            IsDefaultFen = DefaultFen.Equals(fen);
             this.Fen = fen;
         }
 
