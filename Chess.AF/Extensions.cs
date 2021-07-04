@@ -299,5 +299,8 @@ namespace Chess.AF
 
         public static string ToFileString(this SquareEnum square)
             => square.ToDisplayString().Substring(0, 1);
+
+        public static string ToRowString(this SquareEnum square)
+            => (8 - square.Row()).ToString();
     }
 }

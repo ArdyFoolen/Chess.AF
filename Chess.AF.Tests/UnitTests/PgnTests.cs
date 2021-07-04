@@ -152,13 +152,6 @@ namespace Chess.AF.Tests.UnitTests
                 Some: p => AssertTagPairs(p, moveTextFormat2, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Draw.ToDisplayString(), fenString2));
         }
 
-        // Tests Moves                          Ok
-        // Long short rokade, black and white   Ok
-        // Pawn other pieces                    Ok
-        // Take or none take                    Ok
-        // Promote different pieces             Ok
-        // Show check and mate                  Ok
-
         [Test]
         public void Export_BuildPgnWithMoves_ShouldCreateMoveText()
         {
@@ -232,7 +225,6 @@ namespace Chess.AF.Tests.UnitTests
                 Some: p => AssertTagPairs(p, moveTextFormat3, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.BlackWins.ToDisplayString()));
         }
 
-
         [Test]
         public void Export_BuildPgnWithMovesLongRokadeAndPromote_ShouldCreateMoveText()
         {
@@ -260,21 +252,120 @@ namespace Chess.AF.Tests.UnitTests
                 Some: p => AssertTagPairs(p, moveTextFormat4, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString3));
         }
 
-        // Tests File Moves
-        // Pawn other pieces
-        // Take or none take
-        // Promote different pieces
-        // Show check and mate
+        [TestCase(PieceEnum.Pawn, SquareEnum.a7, PieceEnum.Queen, SquareEnum.b8, "axb8=Q+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a7, PieceEnum.Rook, SquareEnum.b8, "axb8=R+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a7, PieceEnum.Bishop, SquareEnum.b8, "axb8=B")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a7, PieceEnum.Knight, SquareEnum.b8, "axb8=N")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c7, PieceEnum.Queen, SquareEnum.b8, "cxb8=Q+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c7, PieceEnum.Rook, SquareEnum.b8, "cxb8=R+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c7, PieceEnum.Bishop, SquareEnum.b8, "cxb8=B")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c7, PieceEnum.Knight, SquareEnum.b8, "cxb8=N")]
+        [TestCase(PieceEnum.Knight, SquareEnum.a6, PieceEnum.Knight, SquareEnum.b8, "Naxb8")]
+        [TestCase(PieceEnum.Knight, SquareEnum.c6, PieceEnum.Knight, SquareEnum.b8, "Ncxb8")]
+        public void Export_BuildPgnWithFileWhiteMoves_ShouldCreateMoveText(PieceEnum piece, SquareEnum from, PieceEnum promote, SquareEnum to, string move)
+        {
+            // Arrange
+            Game game = new Game();
+            game.Load(fenString4);
+            MakeMove(game, (piece, from, promote, to));
 
-        // Tests Row Moves
-        // Pawn other pieces
-        // Take or none take
-        // Show check and mate
+            var commands = GetCommandsFrom(game);
 
-        // Tests FileRow Moves
-        // other pieces
-        // Take or none take
-        // Show check and mate
+            // Act
+            var pgn = Pgn.Export(game, commands);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p, moveTextFormat5, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString4, move));
+        }
+
+        [TestCase(PieceEnum.Pawn, SquareEnum.a2, PieceEnum.Queen, SquareEnum.b1, "axb1=Q+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a2, PieceEnum.Rook, SquareEnum.b1, "axb1=R+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a2, PieceEnum.Bishop, SquareEnum.b1, "axb1=B")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.a2, PieceEnum.Knight, SquareEnum.b1, "axb1=N")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c2, PieceEnum.Queen, SquareEnum.b1, "cxb1=Q+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c2, PieceEnum.Rook, SquareEnum.b1, "cxb1=R+")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c2, PieceEnum.Bishop, SquareEnum.b1, "cxb1=B")]
+        [TestCase(PieceEnum.Pawn, SquareEnum.c2, PieceEnum.Knight, SquareEnum.b1, "cxb1=N")]
+        [TestCase(PieceEnum.Knight, SquareEnum.a3, PieceEnum.Knight, SquareEnum.b1, "Naxb1")]
+        [TestCase(PieceEnum.Knight, SquareEnum.c3, PieceEnum.Knight, SquareEnum.b1, "Ncxb1")]
+        public void Export_BuildPgnWithFileBlackMoves_ShouldCreateMoveText(PieceEnum piece, SquareEnum from, PieceEnum promote, SquareEnum to, string move)
+        {
+            // Arrange
+            Game game = new Game();
+            game.Load(fenString5);
+            MakeMove(game, (piece, from, promote, to));
+
+            var commands = GetCommandsFrom(game);
+
+            // Act
+            var pgn = Pgn.Export(game, commands);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p, moveTextFormat6, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString5, move));
+        }
+
+        [TestCase(PieceEnum.Bishop, SquareEnum.a7, PieceEnum.Bishop, SquareEnum.d4, "Bad4")]
+        [TestCase(PieceEnum.Bishop, SquareEnum.f2, PieceEnum.Bishop, SquareEnum.d4, "Bfd4")]
+        public void Export_BuildPgnWithFileNoneTakeMoves_ShouldCreateMoveText(PieceEnum piece, SquareEnum from, PieceEnum promote, SquareEnum to, string move)
+        {
+            // Arrange
+            Game game = new Game();
+            game.Load(fenString6);
+            MakeMove(game, (piece, from, promote, to));
+
+            var commands = GetCommandsFrom(game);
+
+            // Act
+            var pgn = Pgn.Export(game, commands);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p, moveTextFormat5, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString6, move));
+        }
+
+        [TestCase(PieceEnum.Knight, SquareEnum.e8, PieceEnum.Knight, SquareEnum.g7, "N8xg7")]
+        [TestCase(PieceEnum.Knight, SquareEnum.e6, PieceEnum.Knight, SquareEnum.g7, "N6xg7")]
+        public void Export_BuildPgnWithRowMoves_ShouldCreateMoveText(PieceEnum piece, SquareEnum from, PieceEnum promote, SquareEnum to, string move)
+        {
+            // Arrange
+            Game game = new Game();
+            game.Load(fenString7);
+            MakeMove(game, (piece, from, promote, to));
+
+            var commands = GetCommandsFrom(game);
+
+            // Act
+            var pgn = Pgn.Export(game, commands);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p, moveTextFormat5, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString7, move));
+        }
+
+        [TestCase(PieceEnum.Knight, SquareEnum.b7, PieceEnum.Knight, SquareEnum.c5, "Nb7xc5")]
+        public void Export_BuildPgnWithFileRowMoves_ShouldCreateMoveText(PieceEnum piece, SquareEnum from, PieceEnum promote, SquareEnum to, string move)
+        {
+            // Arrange
+            Game game = new Game();
+            game.Load(fenString8);
+            MakeMove(game, (piece, from, promote, to));
+
+            var commands = GetCommandsFrom(game);
+
+            // Act
+            var pgn = Pgn.Export(game, commands);
+
+            // Assert
+            pgn.Match(
+                None: () => Assert.Fail(),
+                Some: p => AssertTagPairs(p, moveTextFormat5, DateTime.Today.ToString("yyyy.MM.dd"), GameResult.Ongoing.ToDisplayString(), fenString8, move));
+        }
 
         private void MakeMove(IGame game, (PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To) move)
         {
@@ -288,6 +379,11 @@ namespace Chess.AF.Tests.UnitTests
         private const string fenString1 = "r1q4k/1P6/8/8/8/8/8/R5K1 w - - 0 1";
         private const string fenString2 = "r1q4k/1P6/8/8/8/8/8/R5K1 b - - 0 1";
         private const string fenString3 = "r3k3/6PP/8/8/8/8/3P2pp/R3K3 b Qq - 0 1";
+        private const string fenString4 = "1b5k/P1P5/N1N5/8/8/n1n5/p1p5/1B5K w - - 0 1";
+        private const string fenString5 = "1b5k/P1P5/N1N5/8/8/n1n5/p1p5/1B5K b - - 0 1";
+        private const string fenString6 = "7k/B5q1/8/8/8/8/5B2/5K2 w - - 0 1";
+        private const string fenString7 = "3BN2k/6q1/4N3/8/7B/8/8/7K w - - 0 1";
+        private const string fenString8 = "7k/1N1N4/8/2p5/8/1N6/8/7K w - - 0 1";
         private const string defaultFenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         private const string tagPairsFormat0 = @"[Event ""Chess.AF Game""]
@@ -377,6 +473,34 @@ namespace Chess.AF.Tests.UnitTests
 [FEN ""{2}""]
 
 1... O-O-O 2. O-O-O g1=Q 3. h8=R Rxh8 4. xh8=N Qxd1+ 5. Kxd1 h1=B {1}
+
+";
+
+        private const string moveTextFormat5 = @"[Event ""Chess.AF Game""]
+[Site """"]
+[Date ""{0}""]
+[Round """"]
+[White """"]
+[Black """"]
+[Result ""{1}""]
+[Setup ""1""]
+[FEN ""{2}""]
+
+1. {3} {1}
+
+";
+
+        private const string moveTextFormat6 = @"[Event ""Chess.AF Game""]
+[Site """"]
+[Date ""{0}""]
+[Round """"]
+[White """"]
+[Black """"]
+[Result ""{1}""]
+[Setup ""1""]
+[FEN ""{2}""]
+
+1... {3} {1}
 
 ";
 

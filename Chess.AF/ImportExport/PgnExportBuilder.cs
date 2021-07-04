@@ -118,7 +118,7 @@ namespace Chess.AF.ImportExport
             /// </summary>
             /// <param name="move"></param>
             private void showRowMoveText(Move move)
-                => PgnString += $"{move.Piece.ToDisplayString()}{move.From.Row()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
+                => PgnString += $"{move.Piece.ToDisplayString()}{move.From.ToRowString()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
 
             /// <summary>
             /// Show Piece + from + IsTake + To
@@ -166,10 +166,10 @@ namespace Chess.AF.ImportExport
                 if (Game.AllMoves().Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.File() == w.Square.File()).Count() == 1)
                     showFileMoveText(move);
                 else
-                    tryShowRowMoveTExt(move);
+                    tryShowRowMoveText(move);
             }
 
-            private void tryShowRowMoveTExt(Move move)
+            private void tryShowRowMoveText(Move move)
             {
                 if (Game.AllMoves().Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.Row() == w.Square.Row()).Count() == 1)
                     showRowMoveText(move);
