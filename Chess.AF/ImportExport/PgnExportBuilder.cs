@@ -74,143 +74,17 @@ namespace Chess.AF.ImportExport
                 tagPairDict.Add(nameof(FenSetupEnum.FEN), loadCommand.Fen);
             }
 
-            private void setIfFirstIsBlackMove(bool whiteToMove)
-            {
-                if (whiteToMove)
-                    return;
-
-                PgnString += "1... ";
-            }
-
-            private void CreateResultText()
-                => PgnString += $"{getResultFromLastCommand()}{Environment.NewLine}{Environment.NewLine}";
-
-            private void setMoveNumber()
-                => PgnString += $"{Game.MoveNumber}. ";
-
-            private string showTake()
-                => Game.IsTake ? "x" : string.Empty;
-
-            private void showRokadeText(Move move)
-            {
-                if (move.Piece.IsKingsideRokadeMove(move.From, move.To))
-                    PgnString += $"O-O ";
-                else
-                    PgnString += $"O-O-O ";
-            }
-
-            /// <summary>
-            /// AllMoves contains no more than one where Piece == Piece, Show Piece + IsTake + To
-            /// </summary>
-            /// <param name="move"></param>
-            private void showMoveText(Move move)
-                => PgnString += $"{move.Piece.ToDisplayString()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
-
-            /// <summary>
-            /// AllMoves contains no more than one where Piece == Piece AND File is equal, Show Piece + file + IsTake + To
-            /// </summary>
-            /// <param name="move"></param>
-            private void showFileMoveText(Move move)
-                => PgnString += $"{move.Piece.ToDisplayString()}{move.From.ToFileString()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
-
-            /// <summary>
-            /// AllMoves contains no more than one where Piece == Piece AND Row is equal, Show Piece + row + IsTake + To
-            /// </summary>
-            /// <param name="move"></param>
-            private void showRowMoveText(Move move)
-                => PgnString += $"{move.Piece.ToDisplayString()}{move.From.ToRowString()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
-
-            /// <summary>
-            /// Show Piece + from + IsTake + To
-            /// </summary>
-            /// <param name="move"></param>
-            private void showFileRowMoveTExt(Move move)
-                => PgnString += $"{move.Piece.ToDisplayString()}{move.From.ToDisplayString()}{showTake()}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate()} ";
-
-            private string showCheckOrMate()
-            {
-                if (Game.NextIsMate)
-                    return "#";
-                if (Game.NextIsCheck)
-                    return "+";
-
-                return string.Empty;
-            }
-
-            private string showPromoteText(Move move)
-            {
-                if (PieceEnum.Pawn.Equals(move.Piece) && !PieceEnum.Pawn.Equals(move.Promote))
-                    return $"={move.Promote.ToDisplayString()}";
-
-                return string.Empty;
-            }
-
-            private void tryShowRokadeTExt(Move move)
-            {
-                if (move.Piece.IsRokadeMove(move.From, move.To))
-                    showRokadeText(move);
-                else
-                    tryShowMoveTExt(move);
-            }
-
-            private void tryShowMoveTExt(Move move)
-            {
-                if (Game.AllMoves().Where(w => FilterOnPieceAndTo(w, move)).Count() == 1)
-                    showMoveText(move);
-                else
-                    tryShowFileMoveText(move);
-            }
-
-            private void tryShowFileMoveText(Move move)
-            {
-                if (Game.AllMoves().Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.File() == w.Square.File()).Count() == 1)
-                    showFileMoveText(move);
-                else
-                    tryShowRowMoveText(move);
-            }
-
-            private void tryShowRowMoveText(Move move)
-            {
-                if (Game.AllMoves().Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.Row() == w.Square.Row()).Count() == 1)
-                    showRowMoveText(move);
-                else
-                    showFileRowMoveTExt(move);
-            }
-
-            private static Func<(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To), Move, bool> FilterOnPieceAndTo =
-                (tuple, move) => move.Piece.Equals(tuple.Piece) && move.To.Equals(tuple.To) && move.Promote.Equals(tuple.Promoted);
-
-
-            private void CreateMoveText(Command command)
-            {
-                var move = command as MoveCommand;
-                if (move == null)
-                    return;
-
-                if (this.Game.IsWhiteToMove)
-                    setMoveNumber();
-
-                tryShowRokadeTExt(move.Move);
-            }
-
             private void CreateMoveText()
             {
                 if (Commands == null || Commands.Count() == 0)
                     return;
 
-                this.Game.GotoFirstMove();
-                int plyNbr = 1;
-                setIfFirstIsBlackMove(this.Game.IsWhiteToMove);
+                var visitor = new PgnCommandVisitor();
 
-                for (int i = plyNbr; i < Commands.Count(); i++)
-                {
-                    CreateMoveText(Commands[i]);
+                foreach (var command in Commands)
+                    command.Accept(visitor);
 
-                    this.Game.GotoNextMove();
-                    plyNbr += 1;
-                }
-
-                CreateResultText();
+                PgnString += visitor.PgnString;
             }
 
             public override void BuildPrepare()

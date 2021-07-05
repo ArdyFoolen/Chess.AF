@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.AF.ImportExport;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,8 @@ namespace Chess.AF.Commands
 
         public override void Execute()
             => Board = Fen.CreateFen().CreateBoard();
+
+        internal override void Accept(ICommandVisitor visitor)
+            => visitor.Visit(this);
     }
 }

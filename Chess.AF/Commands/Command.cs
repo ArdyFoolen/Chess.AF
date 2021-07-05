@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Domain;
+using Chess.AF.ImportExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,6 @@ namespace Chess.AF.Commands
         }
 
         public abstract void Execute();
+        internal abstract void Accept(ICommandVisitor visitor);
     }
 }

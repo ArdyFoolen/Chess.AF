@@ -1,5 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Domain;
+using Chess.AF.ImportExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,8 @@ namespace Chess.AF.Commands
 
         public override void Execute()
             => Board = Board.Bind(p => p.Draw());
+
+        internal override void Accept(ICommandVisitor visitor)
+            => visitor.Visit(this);
     }
 }

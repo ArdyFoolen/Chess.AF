@@ -6,19 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chess.AF.ImportExport;
 
 namespace Chess.AF.Commands
 {
     internal class MoveCommand : Command
     {
+        public Option<IBoard> Previous { get; private set; }
         public Move Move { get; private set; }
 
         public MoveCommand(Option<IBoard> board, Move move) : base(board)
         {
+            this.Previous = board;
             this.Move = move;
         }
 
         public override void Execute()
             => Board = Board.Bind(p => p.Move(Move));
+
+        internal override void Accept(ICommandVisitor visitor)
+            => visitor.Visit(this);
     }
 }
