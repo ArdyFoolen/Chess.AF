@@ -22,10 +22,6 @@ namespace Chess.AF
         int MaterialCount { get; }
 
         int MoveNumber { get; }
-        
-        bool IsTake { get; }
-        bool NextIsCheck { get; }
-        bool NextIsMate { get; }
 
         void Load();
         void Load(string fenString);

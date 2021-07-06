@@ -24,15 +24,6 @@ namespace Chess.AF
                 return this.Commands[this.CurrentCommand].Board;
             }
         }
-        private Option<IBoard> NextBoard
-        {
-            get
-            {
-                if (this.CurrentCommand < 0 || (this.CurrentCommand + 1) == this.Commands.Count())
-                    return None;
-                return this.Commands[this.CurrentCommand + 1].Board;
-            }
-        }
         private List<Command> Commands = new List<Command>();
         private int CurrentCommand = -1;
 
@@ -169,27 +160,6 @@ namespace Chess.AF
             get => Board.Match(
                 None: () => 0,
                 Some: s => s.MoveNumber);
-        }
-
-        public bool IsTake
-        {
-            get => NextBoard.Match(
-                None: () => false,
-                Some: s => s.IsTake);
-        }
-
-        public bool NextIsCheck
-        {
-            get => NextBoard.Match(
-                None: () => false,
-                Some: s => s.IsInCheck);
-        }
-
-        public bool NextIsMate
-        {
-            get => NextBoard.Match(
-                None: () => false,
-                Some: s => s.IsMate);
         }
 
         public int MaterialCount
