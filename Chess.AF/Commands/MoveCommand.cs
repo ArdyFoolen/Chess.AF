@@ -22,7 +22,7 @@ namespace Chess.AF.Commands
         }
 
         public override void Execute()
-            => Board = Board.Bind(p => p.Move(Move));
+            => Board = Previous.Bind(p => p.Move(Move));
 
         internal override void Accept(ICommandVisitor visitor)
             => visitor.Visit(this);
