@@ -93,45 +93,39 @@ namespace Chess.AF.ImportExport
                     pgnString += $"O-O-O ";
             }
 
+            private void setPgnString(MoveCommand command, string fromText = "")
+            {
+                Move move = command.Move;
+                pgnString += $"{move.Piece.ToDisplayString()}{fromText}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
+            }
+
             /// <summary>
             /// AllMoves contains no more than one where Piece == Piece, Show Piece + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void showMoveText(MoveCommand command)
-            {
-                Move move = command.Move;
-                pgnString += $"{move.Piece.ToDisplayString()}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
-            }
+            private void setMoveText(MoveCommand command)
+                => setPgnString(command);
 
             /// <summary>
             /// AllMoves contains no more than one where Piece == Piece AND File is equal, Show Piece + file + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void showFileMoveText(MoveCommand command)
-            {
-                Move move = command.Move;
-                pgnString += $"{move.Piece.ToDisplayString()}{move.From.ToFileString()}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
-            }
+            private void setFileMoveText(MoveCommand command)
+                => setPgnString(command, command.Move.From.ToFileString());
 
             /// <summary>
             /// AllMoves contains no more than one where Piece == Piece AND Row is equal, Show Piece + row + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void showRowMoveText(MoveCommand command)
-            {
-                Move move = command.Move;
-                pgnString += $"{move.Piece.ToDisplayString()}{move.From.ToRowString()}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
-            }
+            private void setRowMoveText(MoveCommand command)
+                => setPgnString(command, command.Move.From.ToRowString());
 
             /// <summary>
             /// Show Piece + from + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void showFileRowMoveTExt(MoveCommand command)
-            {
-                Move move = command.Move;
-                pgnString += $"{move.Piece.ToDisplayString()}{move.From.ToDisplayString()}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
-            }
+            private void setFileRowMoveTExt(MoveCommand command)
+                => setPgnString(command, command.Move.From.ToDisplayString());
 
             private string showCheckOrMate(MoveCommand command)
                 => command.Board.Match(
@@ -164,7 +158,7 @@ namespace Chess.AF.ImportExport
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Count() == 1)
-                    showMoveText(command);
+                    setMoveText(command);
                 else
                     tryShowFileMoveText(command);
             }
@@ -173,7 +167,7 @@ namespace Chess.AF.ImportExport
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.File() == w.Square.File()).Count() == 1)
-                    showFileMoveText(command);
+                    setFileMoveText(command);
                 else
                     tryShowRowMoveText(command);
             }
@@ -182,9 +176,9 @@ namespace Chess.AF.ImportExport
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.Row() == w.Square.Row()).Count() == 1)
-                    showRowMoveText(command);
+                    setRowMoveText(command);
                 else
-                    showFileRowMoveTExt(command);
+                    setFileRowMoveTExt(command);
             }
 
             private static Func<(PieceEnum Piece, SquareEnum From, PieceEnum Promoted, SquareEnum To), Move, bool> FilterOnPieceAndTo =
