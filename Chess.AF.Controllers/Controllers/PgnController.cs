@@ -61,6 +61,9 @@ namespace Chess.AF.Controllers
             return pgn;
         }
 
+        public void Write(Option<Pgn> pgn, string pgnFilePath)
+            => pgn.Map(p => write(p, pgnFilePath));
+
         public int Count()
             => pgnFile?.Count() ?? 0;
 
@@ -73,6 +76,15 @@ namespace Chess.AF.Controllers
             SetTagPairDictionary(pgn);
  
             return pgn;
+        }
+
+        private Unit write(Pgn pgn, string pgnFilePath)
+        {
+            this.pgnFile = new PgnFile(pgnFilePath);
+            this.pgnFile.Write(pgn);
+            SetTagPairDictionary(pgn);
+
+            return Unit();
         }
 
         private void SetTagPairDictionary(Option<Pgn> pgn)

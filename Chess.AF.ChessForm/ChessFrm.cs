@@ -25,6 +25,7 @@ namespace Chess.AF.ChessForm
         private Label lblCount = new Label();
 
         private LoadFen loadFen = new LoadFen();
+        private PgnDialog pgnDialog;
         private BoardControl boardControl;
         private IGameController gameController;
         private IPgnController pgnController;
@@ -55,6 +56,8 @@ namespace Chess.AF.ChessForm
             this.numUpDown.Size = new Size(23, 22);
             this.numUpDown.Visible = false;
             this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
+
+            this.pgnDialog = new PgnDialog(gameController, pgnController);
 
             this.BackColor = Color.Wheat;
 
@@ -116,18 +119,7 @@ namespace Chess.AF.ChessForm
         }
 
         private void BtnLoadPgn_Click(object sender, EventArgs e)
-        {
-            this.openFileDialog1 = new OpenFileDialog();
-            this.openFileDialog1.Filter = "pgn files (*.pgn)|*.pgn|All files (*.*)|*.*";
-            this.openFileDialog1.FilterIndex = 0;
-            this.openFileDialog1.Title = "Browse Portable Game Notation files";
-            var result = this.openFileDialog1.ShowDialog();
-            if (DialogResult.OK.Equals(result))
-            {
-                var pgn = this.pgnController.Read(this.openFileDialog1.FileName);
-                this.gameController.SetFromPgn(pgn);
-            }
-        }
+            => this.pgnDialog.ShowDialog();
 
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
             => this.gameController.SetFromPgn(this.pgnController.PgnFileIndexChanged(numUpDown.Value - 1));

@@ -151,7 +151,6 @@ namespace Chess.AF.ChessForm
             catch (Exception) { }
         }
 
-        private string path
-        { get { return $"{Environment.CurrentDirectory}\\FenHistory.txt"; } }
+        private string path { get { return $"{Environment.CurrentDirectory}\\FenHistory.txt"; } }
     }
 }

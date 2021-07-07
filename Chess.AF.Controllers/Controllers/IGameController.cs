@@ -50,6 +50,7 @@ namespace Chess.AF.Controllers
         void LoadFen(string fen);
         void Select(int square);
         void Promote(int moveSquare, int piece);
+        Option<Pgn> Export();
         string ToFenString();
     }
 }

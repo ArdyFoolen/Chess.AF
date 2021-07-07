@@ -144,6 +144,9 @@ namespace Chess.AF.Controllers
             NotifyViews();
         }
 
+        public Option<Pgn> Export()
+            => game.Export();
+
         public string ToFenString()
             => game.ToFenString();
 

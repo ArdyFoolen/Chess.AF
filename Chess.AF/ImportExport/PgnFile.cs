@@ -27,6 +27,15 @@ namespace Chess.AF.ImportExport
             this.pgnFiles = pgnFiles.Map(p => $"[Event{p}").ToArray();
         }
 
+        public void Write(Pgn pgn)
+        {
+            pgnFiles = new string[1]
+            {
+                pgn.PgnString
+            };
+            Using(new StreamWriter(filePath), writer => writer.Write(pgn.PgnString));
+        }
+
         public string this[int index] { get => pgnFiles[index]; }
 
         public int Count()

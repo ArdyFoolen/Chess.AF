@@ -44,7 +44,6 @@ namespace Chess.AF.ChessForm
             this.btnReverseBoard = new System.Windows.Forms.ToolStripButton();
             this.btnResign = new System.Windows.Forms.ToolStripButton();
             this.btnDraw = new System.Windows.Forms.ToolStripButton();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -152,10 +151,6 @@ namespace Chess.AF.ChessForm
             this.btnDraw.Size = new System.Drawing.Size(23, 22);
             this.btnDraw.Text = "Draw Game";
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // ChessFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -186,7 +181,6 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.ToolStripButton btnDraw;
         private System.Windows.Forms.ToolStripSeparator toolStripSep1;
         private System.Windows.Forms.ToolStripSeparator toolStripSep2;
-        private OpenFileDialog openFileDialog1;
     }
 }
 
