@@ -107,6 +107,7 @@ namespace Chess.AF.ImportExport
 
                 var pgn = new Pgn(PgnString);
                 pgn.Game = this.Game;
+                pgn.TagPairDictionary = tagPairDict;
                 this.Pgn = Some(pgn);
             }
         }
