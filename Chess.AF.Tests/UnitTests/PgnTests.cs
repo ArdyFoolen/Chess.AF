@@ -52,10 +52,9 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(fenString1);
-            var commands = GetCommandsFrom(game);
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -69,10 +68,9 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(defaultFenString);
-            IList<Command> commands = GetCommandsFrom(game);
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -86,11 +84,10 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(fenString1);
-            var commands = GetCommandsFrom(game);
             game.Resign();
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -104,11 +101,10 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(fenString1);
-            var commands = GetCommandsFrom(game);
             game.Draw();
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -122,11 +118,10 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(fenString2);
-            var commands = GetCommandsFrom(game);
             game.Resign();
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -140,11 +135,10 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             Game game = new Game();
             game.Load(fenString2);
-            var commands = GetCommandsFrom(game);
             game.Draw();
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -214,10 +208,9 @@ namespace Chess.AF.Tests.UnitTests
             MakeMove(game, (PieceEnum.Bishop, SquareEnum.f7, PieceEnum.Bishop, SquareEnum.c4));
             MakeMove(game, (PieceEnum.Knight, SquareEnum.c3, PieceEnum.Knight, SquareEnum.e2));
             MakeMove(game, (PieceEnum.Queen, SquareEnum.h2, PieceEnum.Queen, SquareEnum.h1));
-            var commands = GetCommandsFrom(game);
 
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -241,10 +234,8 @@ namespace Chess.AF.Tests.UnitTests
             MakeMove(game, (PieceEnum.King, SquareEnum.c1, PieceEnum.King, SquareEnum.d1));
             MakeMove(game, (PieceEnum.Pawn, SquareEnum.h2, PieceEnum.Bishop, SquareEnum.h1));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -269,10 +260,8 @@ namespace Chess.AF.Tests.UnitTests
             game.Load(fenString4);
             MakeMove(game, (piece, from, promote, to));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -297,10 +286,8 @@ namespace Chess.AF.Tests.UnitTests
             game.Load(fenString5);
             MakeMove(game, (piece, from, promote, to));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -317,10 +304,8 @@ namespace Chess.AF.Tests.UnitTests
             game.Load(fenString6);
             MakeMove(game, (piece, from, promote, to));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -337,10 +322,8 @@ namespace Chess.AF.Tests.UnitTests
             game.Load(fenString7);
             MakeMove(game, (piece, from, promote, to));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -356,10 +339,8 @@ namespace Chess.AF.Tests.UnitTests
             game.Load(fenString8);
             MakeMove(game, (piece, from, promote, to));
 
-            var commands = GetCommandsFrom(game);
-
             // Act
-            var pgn = Pgn.Export(game, commands);
+            var pgn = game.Export();
 
             // Assert
             pgn.Match(
@@ -372,9 +353,6 @@ namespace Chess.AF.Tests.UnitTests
             var toMove = AF.Dto.Move.Of(move.Piece, move.From, move.To, move.Promoted);
             toMove.Map(m => { game.Move(m); return Unit(); });
         }
-
-        private static IList<Command> GetCommandsFrom(Game game)
-            => game.GetType().GetField("Commands", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(game) as IList<Command>;
 
         private const string fenString1 = "r1q4k/1P6/8/8/8/8/8/R5K1 w - - 0 1";
         private const string fenString2 = "r1q4k/1P6/8/8/8/8/8/R5K1 b - - 0 1";

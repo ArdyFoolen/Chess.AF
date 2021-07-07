@@ -2,6 +2,7 @@
 using Chess.AF.Domain;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
+using Chess.AF.ImportExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +82,11 @@ namespace Chess.AF.Controllers.Tests
         }
 
         public void Resign()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Option<Pgn> Export()
         {
             throw new NotImplementedException();
         }

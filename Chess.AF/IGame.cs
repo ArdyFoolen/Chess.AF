@@ -1,7 +1,9 @@
 ﻿using AF.Functional;
+using Chess.AF.Commands;
 using Chess.AF.Domain;
 using Chess.AF.Dto;
 using Chess.AF.Enums;
+using Chess.AF.ImportExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +40,7 @@ namespace Chess.AF
         IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> AllMoves();
         void Map(Func<IBoard, IBoard> func);
 
+        Option<Pgn> Export();
         string ToFenString();
     }
 }

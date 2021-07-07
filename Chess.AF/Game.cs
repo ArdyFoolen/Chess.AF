@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
+using Chess.AF.ImportExport;
 
 namespace Chess.AF
 {
@@ -90,6 +91,9 @@ namespace Chess.AF
 
         public void GotoLastMove()
             => this.CurrentCommand = this.Commands.Count() - 1;
+
+        public Option<Pgn> Export()
+            => Pgn.Export(this, Commands);
 
         public string ToFenString()
             => Board.Match(
