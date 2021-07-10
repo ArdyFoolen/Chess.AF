@@ -23,27 +23,33 @@ namespace Chess.AF.ImportExport
             }
 
             private GameResult result;
+            private int moveNumberCount;
 
             #region Public Methods
 
             public void Visit(LoadCommand command)
             {
+                moveNumberCount = 0;
                 setFirstIfBlackMoveNumber(command.Board);
             }
 
             public void Visit(MoveCommand command)
             {
                 setMoveNumber(command.Previous);
-                tryShowRokadeTExt(command);
+                tryShowRokadeText(command);
                 setResult(command);
             }
 
             public void Visit(DrawCommand command)
             {
+                setMoveNumber(command.Previous);
+                tryShowRokadeText(command);
                 setResult(command);
             }
             public void Visit(ResignCommand command)
             {
+                setMoveNumber(command.Previous);
+                tryShowRokadeText(command);
                 setResult(command);
             }
 
@@ -69,14 +75,20 @@ namespace Chess.AF.ImportExport
             private void setMoveNumber(Option<IBoard> board)
                 => pgnString += board.Match(
                     None: () => string.Empty,
-                    Some: b =>
-                    {
-                        if (b.IsWhiteToMove)
-                            return $"{b.MoveNumber}. ";
-                        return string.Empty;
-                    });
+                    Some: b => setMoveNumberText(b));
 
-            private string showTake(MoveCommand command)
+            private string setMoveNumberText(IBoard board)
+            {
+                if (!board.IsWhiteToMove)
+                    return string.Empty;
+
+                string newLine = (moveNumberCount > 0 && moveNumberCount % 8 == 0) ? Environment.NewLine : string.Empty;
+                moveNumberCount += 1;
+
+                return $"{newLine}{board.MoveNumber}. ";
+            }
+
+            private string showTake(IMoveCommand command)
                 => command.Board.Match(
                     None: () => string.Empty,
                     Some: b =>
@@ -87,13 +99,13 @@ namespace Chess.AF.ImportExport
 
             private void showRokadeText(Move move)
             {
-                if (move.Piece.IsKingsideRokadeMove(move.From, move.To))
+                if (RokadeEnum.KingSide.Equals(move.Rokade) || move.Piece.IsKingsideRokadeMove(move.From, move.To))
                     pgnString += $"O-O ";
                 else
                     pgnString += $"O-O-O ";
             }
 
-            private void setPgnString(MoveCommand command, string fromText = "")
+            private void setPgnString(IMoveCommand command, string fromText = "")
             {
                 Move move = command.Move;
                 pgnString += $"{move.Piece.ToDisplayString()}{fromText}{showTake(command)}{move.To.ToDisplayString()}{showPromoteText(move)}{showCheckOrMate(command)} ";
@@ -103,31 +115,31 @@ namespace Chess.AF.ImportExport
             /// AllMoves contains no more than one where Piece == Piece, Show Piece + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void setMoveText(MoveCommand command)
+            private void setMoveText(IMoveCommand command)
                 => setPgnString(command);
 
             /// <summary>
             /// AllMoves contains no more than one where Piece == Piece AND File is equal, Show Piece + file + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void setFileMoveText(MoveCommand command)
+            private void setFileMoveText(IMoveCommand command)
                 => setPgnString(command, command.Move.From.ToFileString());
 
             /// <summary>
             /// AllMoves contains no more than one where Piece == Piece AND Row is equal, Show Piece + row + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void setRowMoveText(MoveCommand command)
+            private void setRowMoveText(IMoveCommand command)
                 => setPgnString(command, command.Move.From.ToRowString());
 
             /// <summary>
             /// Show Piece + from + IsTake + To
             /// </summary>
             /// <param name="move"></param>
-            private void setFileRowMoveTExt(MoveCommand command)
+            private void setFileRowMoveTExt(IMoveCommand command)
                 => setPgnString(command, command.Move.From.ToDisplayString());
 
-            private string showCheckOrMate(MoveCommand command)
+            private string showCheckOrMate(IMoveCommand command)
                 => command.Board.Match(
                     None: () => string.Empty,
                     Some: b =>
@@ -145,16 +157,16 @@ namespace Chess.AF.ImportExport
                 return string.Empty;
             }
 
-            private void tryShowRokadeTExt(MoveCommand command)
+            private void tryShowRokadeText(IMoveCommand command)
             {
                 Move move = command.Move;
-                if (move.Piece.IsRokadeMove(move.From, move.To))
+                if (PieceEnum.King.Equals(move.Piece) && !RokadeEnum.None.Equals(move.Rokade) || move.Piece.IsRokadeMove(move.From, move.To))
                     showRokadeText(move);
                 else
-                    tryShowMoveTExt(command);
+                    tryShowMoveText(command);
             }
 
-            private void tryShowMoveTExt(MoveCommand command)
+            private void tryShowMoveText(IMoveCommand command)
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Count() == 1)
@@ -163,7 +175,7 @@ namespace Chess.AF.ImportExport
                     tryShowFileMoveText(command);
             }
 
-            private void tryShowFileMoveText(MoveCommand command)
+            private void tryShowFileMoveText(IMoveCommand command)
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.File() == w.Square.File()).Count() == 1)
@@ -172,7 +184,7 @@ namespace Chess.AF.ImportExport
                     tryShowRowMoveText(command);
             }
 
-            private void tryShowRowMoveText(MoveCommand command)
+            private void tryShowRowMoveText(IMoveCommand command)
             {
                 Move move = command.Move;
                 if (AllMoves(command.Previous).Where(w => FilterOnPieceAndTo(w, move)).Where(w => move.From.Row() == w.Square.Row()).Count() == 1)

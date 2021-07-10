@@ -40,10 +40,10 @@ namespace Chess.AF
             => ExecuteCommand(new MoveCommand(Board, move));
 
         public void Resign()
-            => ReplaceCommand(new ResignCommand(Board));
+            => ReplaceCommand(new ResignCommand(GetLastCommand()));
 
         public void Draw()
-            => ReplaceCommand(new DrawCommand(Board));
+            => ReplaceCommand(new DrawCommand(GetLastCommand()));
 
         private void ReplaceCommand(Command command)
         {
@@ -51,6 +51,9 @@ namespace Chess.AF
                 this.CurrentCommand -= 1;
             ExecuteCommand(command);
         }
+
+        private IMoveCommand GetLastCommand()
+            => this.Commands[this.CurrentCommand] as IMoveCommand;
 
         private void LoadCommand(Command command)
         {

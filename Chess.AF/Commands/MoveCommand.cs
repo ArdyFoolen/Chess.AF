@@ -10,7 +10,7 @@ using Chess.AF.ImportExport;
 
 namespace Chess.AF.Commands
 {
-    internal class MoveCommand : Command
+    internal class MoveCommand : Command, IMoveCommand
     {
         public Option<IBoard> Previous { get; private set; }
         public Move Move { get; private set; }
