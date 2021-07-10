@@ -10,7 +10,7 @@ using Chess.AF.ImportExport;
 
 namespace Chess.AF.Commands
 {
-    internal class MoveCommand : Command, IMoveCommand
+    public class MoveCommand : Command, IMoveCommand
     {
         public Option<IBoard> Previous { get; private set; }
         public Move Move { get; private set; }
@@ -24,7 +24,7 @@ namespace Chess.AF.Commands
         public override void Execute()
             => Board = Previous.Bind(p => p.Move(Move));
 
-        internal override void Accept(ICommandVisitor visitor)
+        public override void Accept(ICommandVisitor visitor)
             => visitor.Visit(this);
     }
 }

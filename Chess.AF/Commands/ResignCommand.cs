@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.Commands
 {
-    internal class ResignCommand : Command, IMoveCommand
+    public class ResignCommand : Command, IMoveCommand
     {
         public Option<IBoard> Previous { get => Command.Previous; }
         public Move Move { get => Command.Move; }
@@ -25,7 +25,7 @@ namespace Chess.AF.Commands
         public override void Execute()
             => Board = Board.Bind(p => p.Resign());
 
-        internal override void Accept(ICommandVisitor visitor)
+        public override void Accept(ICommandVisitor visitor)
             => visitor.Visit(this);
     }
 }

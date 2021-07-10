@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.Commands
 {
-    internal class LoadCommand : Command
+    public class LoadCommand : Command
     {
         private static readonly string DefaultFen = @"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -25,7 +25,7 @@ namespace Chess.AF.Commands
         public override void Execute()
             => Board = Fen.CreateFen().CreateBoard();
 
-        internal override void Accept(ICommandVisitor visitor)
+        public override void Accept(ICommandVisitor visitor)
             => visitor.Visit(this);
     }
 }

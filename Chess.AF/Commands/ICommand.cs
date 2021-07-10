@@ -1,6 +1,6 @@
 ﻿using AF.Functional;
 using Chess.AF.Domain;
-using Chess.AF.Dto;
+using Chess.AF.ImportExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.Commands
 {
-    public interface IMoveCommand : ICommand
+    public interface ICommand
     {
-        Option<IBoard> Previous { get; }
-        Move Move { get; }
+        Option<IBoard> Board { get; }
+        void Execute();
+        void Accept(ICommandVisitor visitor);
     }
 }

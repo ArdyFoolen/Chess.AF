@@ -34,19 +34,15 @@ namespace Chess.AF.ImportExport
             }
 
             public void Visit(MoveCommand command)
-            {
-                setMoveNumber(command.Previous);
-                tryShowRokadeText(command);
-                setResult(command);
-            }
+                => CreateMoveText(command);
 
             public void Visit(DrawCommand command)
-            {
-                setMoveNumber(command.Previous);
-                tryShowRokadeText(command);
-                setResult(command);
-            }
+                => CreateMoveText(command);
+
             public void Visit(ResignCommand command)
+                => CreateMoveText(command);
+
+            private void CreateMoveText(IMoveCommand command)
             {
                 setMoveNumber(command.Previous);
                 tryShowRokadeText(command);
@@ -57,7 +53,7 @@ namespace Chess.AF.ImportExport
 
             #region Private Methods
 
-            private void setResult(Command command)
+            private void setResult(ICommand command)
                 => result = command.Board.Match(
                     None: () => GameResult.Ongoing,
                     Some: b => b.Result);

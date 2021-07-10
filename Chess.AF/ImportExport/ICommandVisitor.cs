@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.ImportExport
 {
-    internal interface ICommandVisitor
+    public interface ICommandVisitor
     {
         void Visit(LoadCommand command);
         void Visit(MoveCommand command);

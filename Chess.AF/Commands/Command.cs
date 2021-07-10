@@ -10,7 +10,7 @@ using static AF.Functional.F;
 
 namespace Chess.AF.Commands
 {
-    public abstract class Command
+    public abstract class Command : ICommand
     {
         public Option<IBoard> Board { get; protected set; }
 
@@ -25,6 +25,6 @@ namespace Chess.AF.Commands
         }
 
         public abstract void Execute();
-        internal abstract void Accept(ICommandVisitor visitor);
+        public abstract void Accept(ICommandVisitor visitor);
     }
 }
