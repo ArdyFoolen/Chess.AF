@@ -68,33 +68,63 @@ namespace Chess.AF.ChessForm
             }
         }
 
-        private void btnExport_Click(object sender, EventArgs e)
+        private void btnExportNew_Click(object sender, EventArgs e)
+        {
+            if (!trySetAndValidateHistory())
+                return;
+
+            writeOrAddPgn((p, f) => this.pgnController.Write(p, f));
+        }
+
+        private void btnExportAdd_Click(object sender, EventArgs e)
+        {
+            if (!trySetAndValidateHistory())
+                return;
+
+            writeOrAddPgn((p, f) => this.pgnController.WriteAndAdd(p, f));
+        }
+
+        private void writeOrAddPgn(Action<Option<Pgn>, string> writeOrAdd)
+        {
+            this.saveFileDialog1 = new SaveFileDialog();
+            this.saveFileDialog1.Filter = "pgn files (*.pgn)|*.pgn|All files (*.*)|*.*";
+            this.saveFileDialog1.FilterIndex = 0;
+            this.saveFileDialog1.Title = "Save Portable Game Notation file";
+            this.saveFileDialog1.FileName = cmbHistory.SelectedItem.ToString();
+            var result = this.saveFileDialog1.ShowDialog();
+            if (DialogResult.OK.Equals(result))
+            {
+                var pgn = this.gameController.Export();
+                writeOrAdd(pgn, this.saveFileDialog1.FileName);
+                AddToHistory(this.saveFileDialog1.FileName);
+            }
+
+            this.DialogResult = DialogResult.Yes;
+            Close();
+        }
+
+        private bool trySetAndValidateHistory()
+        {
+            setHistoryFromTextIfNotSet();
+            return ValidateHistory();
+        }
+
+        private bool ValidateHistory()
         {
             if (cmbHistory.SelectedItem == null)
             {
                 MessageBox.Show("No file path selected", "Export Game to Pgn file", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-                return;
+                return false;
             }
-
             if (ValidatePath(cmbHistory.SelectedItem.ToString()))
-            {
-                this.saveFileDialog1 = new SaveFileDialog();
-                this.saveFileDialog1.Filter = "pgn files (*.pgn)|*.pgn|All files (*.*)|*.*";
-                this.saveFileDialog1.FilterIndex = 0;
-                this.saveFileDialog1.Title = "Save Portable Game Notation file";
-                this.saveFileDialog1.FileName = cmbHistory.SelectedItem.ToString();
-                var result = this.saveFileDialog1.ShowDialog();
-                if (DialogResult.OK.Equals(result))
-                {
-                    var pgn = this.gameController.Export();
-                    this.pgnController.Write(pgn, this.saveFileDialog1.FileName);
-                    AddToHistory(this.saveFileDialog1.FileName);
-                }
+                return true;
+            return false;
+        }
 
-                this.DialogResult = DialogResult.Yes;
-                Close();
-                return;
-            }
+        private void setHistoryFromTextIfNotSet()
+        {
+            if (cmbHistory.SelectedItem == null)
+                cmbHistory.SelectedItem = cmbHistory.Text;
         }
 
         private void cmbHistory_KeyUp(object sender, KeyEventArgs e)

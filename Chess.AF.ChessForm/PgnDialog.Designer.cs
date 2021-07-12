@@ -30,13 +30,14 @@ namespace Chess.AF.ChessForm
         private void InitializeComponent()
         {
             this.btnImport = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.btnExportNew = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.cmbHistory = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOpenFileDialog = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.btnExportAdd = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnImport
@@ -49,19 +50,19 @@ namespace Chess.AF.ChessForm
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
-            // btnExport
+            // btnExportNew
             // 
-            this.btnExport.Location = new System.Drawing.Point(94, 41);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 23);
-            this.btnExport.TabIndex = 1;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            this.btnExportNew.Location = new System.Drawing.Point(94, 41);
+            this.btnExportNew.Name = "btnExport";
+            this.btnExportNew.Size = new System.Drawing.Size(82, 23);
+            this.btnExportNew.TabIndex = 1;
+            this.btnExportNew.Text = "Export New";
+            this.btnExportNew.UseVisualStyleBackColor = true;
+            this.btnExportNew.Click += new System.EventHandler(this.btnExportNew_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(175, 41);
+            this.btnCancel.Location = new System.Drawing.Point(263, 41);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -101,16 +102,27 @@ namespace Chess.AF.ChessForm
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // btnExportAdd
+            // 
+            this.btnExportAdd.Location = new System.Drawing.Point(182, 41);
+            this.btnExportAdd.Name = "btnExportAdd";
+            this.btnExportAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnExportAdd.TabIndex = 6;
+            this.btnExportAdd.Text = "Export Add";
+            this.btnExportAdd.UseVisualStyleBackColor = true;
+            this.btnExportAdd.Click += new System.EventHandler(this.btnExportAdd_Click);
+            // 
             // PgnDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(683, 78);
+            this.Controls.Add(this.btnExportAdd);
             this.Controls.Add(this.btnOpenFileDialog);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbHistory);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnExport);
+            this.Controls.Add(this.btnExportNew);
             this.Controls.Add(this.btnImport);
             this.Name = "PgnDialog";
             this.Text = "Pgn import/export dialog";
@@ -122,12 +134,13 @@ namespace Chess.AF.ChessForm
         #endregion
 
         private System.Windows.Forms.Button btnImport;
-        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnExportNew;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ComboBox cmbHistory;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOpenFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button btnExportAdd;
     }
 }

@@ -21,6 +21,7 @@ namespace Chess.AF.Controllers
         int Count();
         Option<Pgn> Read(string pgnFilePath);
         void Write(Option<Pgn> pgn, string pgnFilePath);
+        void WriteAndAdd(Option<Pgn> pgn, string pgnFilePath);
         Option<Pgn> PgnFileIndexChanged(int index);
     }
 }

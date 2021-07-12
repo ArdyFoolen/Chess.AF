@@ -13,7 +13,7 @@ namespace Chess.AF.ImportExport
     {
         private string filePath { get; }
         private string pgnFileString { get; set; }
-        private string[] pgnFiles;
+        private List<string> pgnFiles;
 
         public PgnFile(string filePath)
         {
@@ -24,21 +24,26 @@ namespace Chess.AF.ImportExport
         {
             Using(new StreamReader(filePath), reader => pgnFileString = reader.ReadToEnd());
             var pgnFiles = pgnFileString.Split(new string[] { "[Event" }, StringSplitOptions.RemoveEmptyEntries);
-            this.pgnFiles = pgnFiles.Map(p => $"[Event{p}").ToArray();
+            this.pgnFiles = pgnFiles.Map(p => $"[Event{p}").ToList();
         }
 
         public void Write(Pgn pgn)
         {
-            pgnFiles = new string[1]
-            {
-                pgn.PgnString
-            };
+            pgnFiles = new List<string>();
+            pgnFiles.Add(pgn.PgnString);
             Using(new StreamWriter(filePath), writer => writer.Write(pgn.PgnString));
+        }
+
+        public void WriteAndAdd(Pgn pgn)
+        {
+            pgnFiles.Add(pgn.PgnString);
+            var pgnJoin = string.Join(string.Empty, pgnFiles);
+            Using(new StreamWriter(filePath), writer => writer.Write(pgnJoin));
         }
 
         public string this[int index] { get => pgnFiles[index]; }
 
         public int Count()
-            => pgnFiles.Length;
+            => pgnFiles.Count();
     }
 }
