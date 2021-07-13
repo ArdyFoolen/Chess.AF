@@ -29,6 +29,7 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnImport = new System.Windows.Forms.Button();
             this.btnExportNew = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -38,6 +39,9 @@ namespace Chess.AF.ChessForm
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.btnExportAdd = new System.Windows.Forms.Button();
+            this.popupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.popupMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnImport
@@ -53,7 +57,7 @@ namespace Chess.AF.ChessForm
             // btnExportNew
             // 
             this.btnExportNew.Location = new System.Drawing.Point(94, 41);
-            this.btnExportNew.Name = "btnExport";
+            this.btnExportNew.Name = "btnExportNew";
             this.btnExportNew.Size = new System.Drawing.Size(82, 23);
             this.btnExportNew.TabIndex = 1;
             this.btnExportNew.Text = "Export New";
@@ -78,6 +82,7 @@ namespace Chess.AF.ChessForm
             this.cmbHistory.Size = new System.Drawing.Size(562, 23);
             this.cmbHistory.TabIndex = 3;
             this.cmbHistory.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbHistory_KeyUp);
+            this.cmbHistory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cmbHistory_MouseDown);
             // 
             // label1
             // 
@@ -112,6 +117,20 @@ namespace Chess.AF.ChessForm
             this.btnExportAdd.UseVisualStyleBackColor = true;
             this.btnExportAdd.Click += new System.EventHandler(this.btnExportAdd_Click);
             // 
+            // popupMenu
+            // 
+            this.popupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+            this.popupMenu.Name = "contextMenuStrip1";
+            this.popupMenu.Size = new System.Drawing.Size(181, 48);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
             // PgnDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -126,6 +145,7 @@ namespace Chess.AF.ChessForm
             this.Controls.Add(this.btnImport);
             this.Name = "PgnDialog";
             this.Text = "Pgn import/export dialog";
+            this.popupMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,5 +162,7 @@ namespace Chess.AF.ChessForm
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button btnExportAdd;
+        private System.Windows.Forms.ContextMenuStrip popupMenu;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

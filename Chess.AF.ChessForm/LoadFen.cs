@@ -36,6 +36,8 @@ namespace Chess.AF.ChessForm
             toolTip5.SetToolTip(nbrFen1, TooltipFen5);
             toolTip6.SetToolTip(nbrFen2, TooltipFen6);
             toolTip7.SetToolTip(cmbFenHistory, TooltipFenHistory);
+
+            this.StartPosition = FormStartPosition.CenterParent;
         }
 
         /// <summary>

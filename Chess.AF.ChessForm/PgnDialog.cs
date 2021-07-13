@@ -30,6 +30,8 @@ namespace Chess.AF.ChessForm
             this.pgnController = pgnController;
 
             ReadHistory();
+
+            this.StartPosition = FormStartPosition.CenterParent;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -168,5 +170,25 @@ namespace Chess.AF.ChessForm
         }
 
         private string path { get { return $"{Environment.CurrentDirectory}\\PgnFilePathHistory.txt"; } }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setHistoryFromTextIfNotSet();
+            if (cmbHistory.SelectedItem == null)
+                return;
+
+            cmbHistory.Items.Remove(cmbHistory.SelectedItem);
+            SaveHistory();
+            cmbHistory.SelectedItem = null;
+        }
+
+        private void cmbHistory_MouseDown(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Right) == MouseButtons.Right)
+            {
+                cmbHistory.ContextMenuStrip = popupMenu;
+                popupMenu.Show();
+            }
+        }
     }
 }
