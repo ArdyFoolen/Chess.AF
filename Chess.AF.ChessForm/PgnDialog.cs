@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.ChessForm.Helpers;
 using Chess.AF.Controllers;
 using Chess.AF.ImportExport;
 using System;
@@ -21,10 +22,13 @@ namespace Chess.AF.ChessForm
         private IPgnController pgnController;
 
         public Option<Pgn> Pgn { get; private set; } = None;
+        private ContextMenuStrip popupMenu { get; }
 
         public PgnDialog(IGameController gameController, IPgnController pgnController)
         {
             InitializeComponent();
+
+            this.popupMenu = ControlsFactory.CreateComboPopupMenu(new EventHandler(this.deleteToolStripMenuItem_Click));
 
             this.gameController = gameController;
             this.pgnController = pgnController;

@@ -1,4 +1,5 @@
-﻿using Chess.AF.Enums;
+﻿using Chess.AF.ChessForm.Helpers;
+using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,9 +19,13 @@ namespace Chess.AF.ChessForm
 {
     public partial class LoadFen : Form
     {
+        private ContextMenuStrip popupMenu { get; }
+
         public LoadFen()
         {
             InitializeComponent();
+
+            this.popupMenu = ControlsFactory.CreateComboPopupMenu(new EventHandler(this.deleteToolStripMenuItem_Click));
 
             var squares = Enum.GetNames(typeof(SquareEnum)).ToList();
             squares.Insert(0, "-");
@@ -116,9 +121,6 @@ namespace Chess.AF.ChessForm
             cmbFen3.SelectedItem = splits[3];
             nbrFen1.Value = int.Parse(splits[4]);
             nbrFen2.Value = int.Parse(splits[5]);
-
-            cmbFenHistory.SelectedItem = null;
-            cmbFenHistory.Text = string.Empty;
         }
 
         private void cmbFenHistory_KeyUp(object sender, KeyEventArgs e)
@@ -153,6 +155,25 @@ namespace Chess.AF.ChessForm
             catch (Exception) { }
         }
 
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cmbFenHistory.SelectedItem == null)
+                return;
+
+            cmbFenHistory.Items.Remove(cmbFenHistory.SelectedItem);
+            SaveHistory();
+            cmbFenHistory.SelectedItem = null;
+        }
+
         private string path { get { return $"{Environment.CurrentDirectory}\\FenHistory.txt"; } }
+
+        private void cmbFenHistory_MouseDown(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Right) == MouseButtons.Right)
+            {
+                cmbFenHistory.ContextMenuStrip = popupMenu;
+                popupMenu.Show();
+            }
+        }
     }
 }

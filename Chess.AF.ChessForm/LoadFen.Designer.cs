@@ -179,6 +179,7 @@ namespace Chess.AF.ChessForm
             this.cmbFenHistory.TabIndex = 18;
             this.cmbFenHistory.SelectedIndexChanged += new System.EventHandler(this.cmbFenHistory_SelectedIndexChanged);
             this.cmbFenHistory.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbFenHistory_KeyUp);
+            this.cmbFenHistory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cmbFenHistory_MouseDown);
             // 
             // lblHistory
             // 
