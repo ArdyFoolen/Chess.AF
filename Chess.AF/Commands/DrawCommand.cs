@@ -7,19 +7,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AF.Functional.F;
 
 namespace Chess.AF.Commands
 {
     public class DrawCommand : Command, IMoveCommand
     {
-        public Option<IBoard> Previous { get => Command.Previous; }
-        public Move Move { get => Command.Move; }
+        public Option<IBoard> Previous { get => Command != null ? Command.Previous : None; }
+        public Option<Move> Move { get => Command != null ? Command.Move : None; }
 
         public IMoveCommand Command { get; private set; }
 
-        public DrawCommand(IMoveCommand command) : base(command.Board)
+        public DrawCommand(ICommand command) : base(command.Board)
         {
-            this.Command = command;
+            if (command is IMoveCommand)
+                this.Command = command as IMoveCommand;
         }
 
         public override void Execute()

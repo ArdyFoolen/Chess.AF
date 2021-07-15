@@ -13,7 +13,7 @@ namespace Chess.AF.Commands
     public class MoveCommand : Command, IMoveCommand
     {
         public Option<IBoard> Previous { get; private set; }
-        public Move Move { get; private set; }
+        public Option<Move> Move { get; private set; }
 
         public MoveCommand(Option<IBoard> board, Move move) : base(board)
         {
@@ -22,7 +22,7 @@ namespace Chess.AF.Commands
         }
 
         public override void Execute()
-            => Board = Previous.Bind(p => p.Move(Move));
+            => Move.Map(m => Board = Previous.Bind(p => p.Move(m)));
 
         public override void Accept(ICommandVisitor visitor)
             => visitor.Visit(this);

@@ -185,7 +185,23 @@ namespace Chess.AF.ChessForm
             else
                 SetEnableVisible(false);
 
-            gameController.LastMove.Map(m => DrawLastMove(e, m));
+            //gameController.LastMove.Map(m => DrawLastMove(e, m));
+            PaintRectangles(e);
+        }
+
+        private void PaintRectangles(PaintEventArgs e)
+        {
+            foreach (var item in gameController.LoosePieceSquares)
+            {
+                if (Id == (int)item)
+                {
+                    var color = Color.FromArgb(255, 192, 0);
+                    var alpha = Color.FromArgb(125, color);
+                    e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
+                    Brush brush = new SolidBrush(alpha);
+                    e.Graphics.FillRectangle(brush, this.DisplayRectangle);
+                }
+            }
         }
 
         private Unit DrawLastMove(PaintEventArgs e, Move move)

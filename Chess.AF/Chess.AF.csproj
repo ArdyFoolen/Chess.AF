@@ -46,6 +46,9 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\IMoveCommand.cs" />
+    <Compile Include="Domain\BoardMapVisitor.cs" />
+    <Compile Include="Domain\IBoardMapVisitor.cs" />
+    <Compile Include="Domain\LoosePiecesVisitor.cs" />
     <Compile Include="Dto\PieceMap.cs" />
     <Compile Include="Dto\PieceOnSquare.cs" />
     <Compile Include="Enums\PositionPiecesEnums.cs" />

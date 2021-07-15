@@ -12,6 +12,6 @@ namespace Chess.AF.Commands
     public interface IMoveCommand : ICommand
     {
         Option<IBoard> Previous { get; }
-        Move Move { get; }
+        Option<Move> Move { get; }
     }
 }

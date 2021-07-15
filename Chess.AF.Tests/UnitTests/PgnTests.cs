@@ -436,7 +436,10 @@ namespace Chess.AF.Tests.UnitTests
 [Black """"]
 [Result ""{1}""]
 
-1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O Nf6 5. d4 xd4 6. c3 O-O 7. xd4 Bb4 8. Ng5 d6 9. Bxf7+ Rxf7 10. Nxf7 Kxf7 11. Qb3+ Kf8 12. d5 Nd4 13. Qxb4 Nc2 14. Qe1 Nxa1 15. f4 Nc2 16. Qe2 Nd4 17. Qd3 c5 18. xc6 Nxc6 19. Nc3 Be6 20. f5 Bf7 21. Rf3 Qe7 22. Bf4 Ne5 23. Bxe5 Qxe5 24. Rf1 Re8 25. Re1 Ng4 26. Qf3 Qxh2+ 27. Kf1 Bc4+ 28. Ne2 Qh1# {1}
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O Nf6 5. d4 xd4 6. c3 O-O 7. xd4 Bb4 8. Ng5 d6 
+9. Bxf7+ Rxf7 10. Nxf7 Kxf7 11. Qb3+ Kf8 12. d5 Nd4 13. Qxb4 Nc2 14. Qe1 Nxa1 15. f4 Nc2 16. Qe2 Nd4 
+17. Qd3 c5 18. xc6 Nxc6 19. Nc3 Be6 20. f5 Bf7 21. Rf3 Qe7 22. Bf4 Ne5 23. Bxe5 Qxe5 24. Rf1 Re8 
+25. Re1 Ng4 26. Qf3 Qxh2+ 27. Kf1 Bc4+ 28. Ne2 Qh1# {1}
 
 ";
 

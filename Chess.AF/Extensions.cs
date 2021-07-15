@@ -47,6 +47,12 @@ namespace Chess.AF
         public static PiecesEnum ToPieces(this PieceEnum pieceEnum, bool isWhiteToMove)
             => (PiecesEnum)(isWhiteToMove ? ((int)pieceEnum + 7) : (int)pieceEnum);
 
+        public static bool IsWhitePiece(this PiecesEnum piecesEnum)
+            => ((int)piecesEnum) >= 8;
+
+        public static bool IsBlackPiece(this PiecesEnum piecesEnum)
+            => ((int)piecesEnum) < 8;
+
         public static SquareEnum GetKingRokadeSquare(this RokadeEnum rokade, bool isWhiteToMove)
         {
             if (RokadeEnum.KingSide.Equals(rokade))

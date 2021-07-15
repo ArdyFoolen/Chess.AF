@@ -55,6 +55,7 @@
     <Compile Include="UnitTests\FenRegexTests.cs" />
     <Compile Include="UnitTests\GameResultTests.cs" />
     <Compile Include="UnitTests\KingMovesTests.cs" />
+    <Compile Include="UnitTests\LoosePieceVisitorTests.cs" />
     <Compile Include="UnitTests\PawnMovesTests.cs" />
     <Compile Include="UnitTests\PgnTests.cs" />
     <Compile Include="UnitTests\QueenMovesTests.cs" />

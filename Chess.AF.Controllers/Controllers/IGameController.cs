@@ -51,6 +51,10 @@ namespace Chess.AF.Controllers
         void Select(int square);
         void Promote(int moveSquare, int piece);
         Option<Pgn> Export();
+
+        void SetLoosePiecesIterator(bool on);
+        IEnumerable<SquareEnum> LoosePieceSquares { get; }
+
         string ToFenString();
     }
 }

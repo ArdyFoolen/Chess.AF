@@ -35,5 +35,7 @@ namespace Chess.AF.Domain
 
         string ToFenString();
         Dictionary<int, PieceOnSquare<PiecesEnum>> ToDictionary();
+
+        void Accept(IBoardMapVisitor visitor);
     }
 }

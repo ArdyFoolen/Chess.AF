@@ -82,5 +82,16 @@ namespace Chess.AF.Tests.Helpers
                     Move.Of(PieceEnum.Rook, SquareEnum.h8, SquareEnum.h7, PieceEnum.Rook));
             }
         }
+
+        public static IEnumerable<(string FenString, SquareEnum[] Squares)> LoosePieceTestCases
+        {
+            get
+            {
+                yield return ("4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1", new SquareEnum[] { SquareEnum.d5, SquareEnum.e4 });
+                yield return ("3qk3/8/8/3p4/4P3/8/8/4K3 w - - 0 1", new SquareEnum[] { SquareEnum.e4 });
+                yield return ("3qk3/8/8/3p4/4P3/8/8/3QK3 w - - 0 1", new SquareEnum[] { SquareEnum.e4 });
+                yield return ("3qk3/8/8/3p4/4P3/3Q4/8/4K3 w - - 0 1", new SquareEnum[] { });
+            }
+        }
     }
 }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.Domain
 {
-    internal partial class BoardMap
+    public partial class BoardMap
     {
-        public static class BoardFactory
+        internal static class BoardFactory
         {
             public static IBoardMap Create(Fen fen, IBoard abstraction)
             {

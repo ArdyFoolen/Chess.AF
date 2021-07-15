@@ -14,7 +14,7 @@ using Chess.AF.Exceptions;
 
 namespace Chess.AF.Domain
 {
-    internal partial class BoardMap : IBoardMap
+    public partial class BoardMap : IBoardMap
     {
         #region Properties
 
@@ -45,7 +45,8 @@ namespace Chess.AF.Domain
 
         #region public methods
 
-        private bool IsWhiteToMove { get => Abstraction.IsWhiteToMove; }
+        private bool opponentToMove { get; set; } = false;
+        private bool IsWhiteToMove { get => opponentToMove ? !Abstraction.IsWhiteToMove : Abstraction.IsWhiteToMove; }
 
         public SquareEnum KingSquare { get => this.Maps[(int)PieceEnum.King.ToPieces(IsWhiteToMove)].GetSquareFrom(); }
 
@@ -119,6 +120,9 @@ namespace Chess.AF.Domain
         }
 
         #endregion
+
+        public void Accept(IBoardMapVisitor visitor)
+            => visitor.Visit(this);
 
         public PiecesIterator<PieceEnum> GetIteratorFor(PieceEnum piece)
             => new PiecesIterator<PieceEnum>(new PieceMap<PieceEnum>(piece, GetMapFor(piece)));
@@ -367,6 +371,17 @@ namespace Chess.AF.Domain
         }
 
         private bool IsSquareAttacked(SquareEnum square)
+            => IsSquareAttackedOrDefended(square);
+
+        private bool IsSquareDefended(SquareEnum square)
+        {
+            opponentToMove = true;
+            bool result = IsSquareAttackedOrDefended(square);
+            opponentToMove = false;
+            return result;
+        }
+
+        private bool IsSquareAttackedOrDefended(SquareEnum square)
         {
             PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
             ulong opponentKnightMap = Maps[(int)opponentKnight];

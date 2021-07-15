@@ -292,6 +292,13 @@ namespace Chess.AF.Domain
 
         #endregion
 
+        #region Visitor
+
+        public void Accept(IBoardMapVisitor visitor)
+            => Implementor.Accept(visitor);
+
+        #endregion
+
         #region ToStrings
 
         public string ToFenString()

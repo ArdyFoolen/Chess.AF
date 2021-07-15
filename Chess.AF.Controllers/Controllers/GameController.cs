@@ -132,6 +132,7 @@ namespace Chess.AF.Controllers
             selectedSquare = null;
             if (boardDictionary.ContainsKey(square) && IsFromMove(square))
                 SetSelectedSquare(square);
+            SetIterators();
             NotifyViews();
         }
 
@@ -141,7 +142,13 @@ namespace Chess.AF.Controllers
                 Move(SelectedMovesTo(moveSquare).Single(s => s.Promoted == (PieceEnum)(piece % 7)));
 
             boardDictionary.Keys.Where(w => boardDictionary[w].IsSelected).ForEach(f => UnSelect(f));
+            SetIterators();
             NotifyViews();
+        }
+
+        private void SetIterators()
+        {
+            SetLoosePiecesIterator();
         }
 
         public Option<Pgn> Export()
@@ -190,7 +197,7 @@ namespace Chess.AF.Controllers
             game.GotoFirstMove();
             ResetController();
         }
-        
+
         public void GotoPreviousMove()
         {
             game.GotoPreviousMove();
@@ -208,6 +215,33 @@ namespace Chess.AF.Controllers
             game.GotoLastMove();
             ResetController();
         }
+
+        public void SetLoosePiecesIterator(bool on)
+        {
+            IsSetLoosePieceSquares = on;
+            SetLoosePiecesIterator();
+            NotifyViews();
+        }
+
+        private void SetLoosePiecesIterator()
+        {
+            if (IsSetLoosePieceSquares)
+                game.Map(SetLoosePiecesIterator);
+            else
+                LoosePieceSquares = Enumerable.Empty<SquareEnum>();
+        }
+
+        private IBoard SetLoosePiecesIterator(IBoard board)
+        {
+            var visitor = BoardMap.GetLoosePiecesVisitor();
+            board.Accept(visitor);
+            LoosePieceSquares = visitor.Iterator;
+
+            return board;
+        }
+
+        private bool IsSetLoosePieceSquares { get; set; } = false;
+        public IEnumerable<SquareEnum> LoosePieceSquares { get; private set; } = Enumerable.Empty<SquareEnum>();
 
         private void SetSelectedSquare(int square)
         {

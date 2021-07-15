@@ -26,5 +26,13 @@ namespace Chess.AF.ChessForm.Helpers
             Font f = new Font(lbl.Font.Name, fontSize, FontStyle.Regular);
             lbl.Font = f;
         }
+
+        public static void Check_Paint(object sender, PaintEventArgs e)
+        {
+            CheckBox lbl = sender as CheckBox;
+            float fontSize = NewFontSize(e.Graphics, lbl.Bounds.Size, lbl.Font, lbl.Text);
+            Font f = new Font(lbl.Font.Name, fontSize, FontStyle.Regular);
+            lbl.Font = f;
+        }
     }
 }

@@ -28,5 +28,7 @@ namespace Chess.AF.Domain
         ulong GetMinMap(ulong map);
         ulong GetMaxMap(ulong map);
         ulong GetPawnMapFor(SquareEnum square, ulong mvMap, ulong tkMap);
+
+        void Accept(IBoardMapVisitor visitor);
     }
 }

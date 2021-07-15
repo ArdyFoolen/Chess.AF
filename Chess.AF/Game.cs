@@ -52,8 +52,8 @@ namespace Chess.AF
             ExecuteCommand(command);
         }
 
-        private IMoveCommand GetLastCommand()
-            => this.Commands[this.CurrentCommand] as IMoveCommand;
+        private Command GetLastCommand()
+            => this.Commands[this.CurrentCommand];
 
         private void LoadCommand(Command command)
         {
