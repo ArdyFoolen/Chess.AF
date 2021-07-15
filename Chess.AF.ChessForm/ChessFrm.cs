@@ -16,12 +16,13 @@ using static AF.Functional.F;
 using Chess.AF.Enums;
 using Chess.AF.ChessForm.Helpers;
 using Chess.AF.ImportExport;
+using Chess.AF.Domain;
 
 namespace Chess.AF.ChessForm
 {
     public partial class ChessFrm : Form, IBoardView
     {
-        private CheckBox chkLoose = new CheckBox();
+        private CheckBoxControl chkLooseControl;
 
         private Label lblResult = new Label();
         private Label lblCount = new Label();
@@ -60,40 +61,36 @@ namespace Chess.AF.ChessForm
             this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
 
             this.pgnDialog = new PgnDialog(gameController, pgnController);
+            this.chkLooseControl = new CheckBoxControl(gameController);
 
             this.BackColor = Color.Wheat;
 
-            chkLoose.Text = "Loose";
-            chkLoose.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            chkLoose.Location = new Point(570, 43);
-            chkLoose.Size = new Size(66, 46);
-            chkLoose.Margin = new Padding(1);
-            chkLoose.Appearance = Appearance.Button;
-            chkLoose.Paint += FontHelper.Check_Paint;
-            chkLoose.Click += chkLoose_Click;
-
             lblResult.Text = string.Empty;
             lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            lblResult.Location = new Point(570, 99);
+            lblResult.Location = new Point(570, 43);
             lblResult.Size = new Size(200, 23);
             lblResult.Paint += FontHelper.Label_Paint;
 
             lblCount.Text = string.Empty;
             lblCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            lblCount.Location = new Point(570, 132);
+            lblCount.Location = new Point(570, 76);
             lblCount.Size = new Size(200, 23);
             lblCount.Paint += FontHelper.Label_Paint;
 
+            chkLooseControl.Location = new Point(570, 99);
+            chkLooseControl.Size = new Size(230, 40);
+
             pgnControl = new PgnControl(pgnController)
             {
-                Location = new Point(570, 165),
+                Location = new Point(570, 149),
                 Size = new Size(200, 400)
             };
 
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
-            this.Controls.Add(chkLoose);
+            //this.Controls.Add(chkLoose);
+            this.Controls.Add(chkLooseControl);
             this.Controls.Add(lblResult);
             this.Controls.Add(lblCount);
             this.Controls.Add(this.pgnControl);
@@ -120,9 +117,6 @@ namespace Chess.AF.ChessForm
             this.btnDraw.Image = Draw50();
             UpdateView();
         }
-
-        private void chkLoose_Click(object sender, EventArgs e)
-            => gameController.SetLoosePiecesIterator(chkLoose.Checked);
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
         {

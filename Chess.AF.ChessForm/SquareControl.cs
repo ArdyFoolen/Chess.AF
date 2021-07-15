@@ -191,16 +191,13 @@ namespace Chess.AF.ChessForm
 
         private void PaintRectangles(PaintEventArgs e)
         {
-            foreach (var item in gameController.LoosePieceSquares)
+            if (gameController.LoosePieceSquares.Any(a => (int)a == Id))
             {
-                if (Id == (int)item)
-                {
-                    var color = Color.FromArgb(255, 192, 0);
-                    var alpha = Color.FromArgb(125, color);
-                    e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
-                    Brush brush = new SolidBrush(alpha);
-                    e.Graphics.FillRectangle(brush, this.DisplayRectangle);
-                }
+                var color = Color.FromArgb(255, 192, 0);
+                var alpha = Color.FromArgb(125, color);
+                e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
+                Brush brush = new SolidBrush(alpha);
+                e.Graphics.FillRectangle(brush, this.DisplayRectangle);
             }
         }
 

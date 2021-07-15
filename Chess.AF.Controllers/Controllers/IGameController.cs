@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chess.AF.Domain;
 
 namespace Chess.AF.Controllers
 {
@@ -52,7 +53,7 @@ namespace Chess.AF.Controllers
         void Promote(int moveSquare, int piece);
         Option<Pgn> Export();
 
-        void SetLoosePiecesIterator(bool on);
+        void UseLoosePiecesIterator(bool on, FilterFlags flags = FilterFlags.Both);
         IEnumerable<SquareEnum> LoosePieceSquares { get; }
 
         string ToFenString();

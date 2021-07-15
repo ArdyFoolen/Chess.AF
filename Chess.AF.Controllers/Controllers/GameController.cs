@@ -84,6 +84,8 @@ namespace Chess.AF.Controllers
 
         private void NotifyViews()
         {
+            RefreshIterators();
+
             foreach (var view in views)
                 view.UpdateView();
         }
@@ -132,7 +134,6 @@ namespace Chess.AF.Controllers
             selectedSquare = null;
             if (boardDictionary.ContainsKey(square) && IsFromMove(square))
                 SetSelectedSquare(square);
-            SetIterators();
             NotifyViews();
         }
 
@@ -142,13 +143,12 @@ namespace Chess.AF.Controllers
                 Move(SelectedMovesTo(moveSquare).Single(s => s.Promoted == (PieceEnum)(piece % 7)));
 
             boardDictionary.Keys.Where(w => boardDictionary[w].IsSelected).ForEach(f => UnSelect(f));
-            SetIterators();
             NotifyViews();
         }
 
-        private void SetIterators()
+        private void RefreshIterators()
         {
-            SetLoosePiecesIterator();
+            RefreshLoosePiecesIterator();
         }
 
         public Option<Pgn> Export()
@@ -216,32 +216,48 @@ namespace Chess.AF.Controllers
             ResetController();
         }
 
-        public void SetLoosePiecesIterator(bool on)
+        public void UseLoosePiecesIterator(bool on, FilterFlags flags = FilterFlags.Both)
         {
             IsSetLoosePieceSquares = on;
-            SetLoosePiecesIterator();
+            loosePiecesFlags = flags;
             NotifyViews();
         }
 
-        private void SetLoosePiecesIterator()
+        private void RefreshLoosePiecesIterator()
         {
             if (IsSetLoosePieceSquares)
                 game.Map(SetLoosePiecesIterator);
-            else
-                LoosePieceSquares = Enumerable.Empty<SquareEnum>();
         }
 
         private IBoard SetLoosePiecesIterator(IBoard board)
         {
-            var visitor = BoardMap.GetLoosePiecesVisitor();
-            board.Accept(visitor);
-            LoosePieceSquares = visitor.Iterator;
-
+            board.Accept(LoosePiecesVisitor);
             return board;
         }
 
+        private ILoosePiecesVisitor loosePiecesVisitor = null;
+        private ILoosePiecesVisitor LoosePiecesVisitor
+        {
+            get
+            {
+                if (loosePiecesVisitor == null)
+                    loosePiecesVisitor = BoardMap.GetLoosePiecesVisitor();
+                loosePiecesVisitor.Flags = loosePiecesFlags;
+                return loosePiecesVisitor;
+            }
+        }
         private bool IsSetLoosePieceSquares { get; set; } = false;
-        public IEnumerable<SquareEnum> LoosePieceSquares { get; private set; } = Enumerable.Empty<SquareEnum>();
+        private FilterFlags loosePiecesFlags { get; set; } = FilterFlags.Both;
+        public IEnumerable<SquareEnum> LoosePieceSquares
+        {
+            get
+            {
+                if (IsSetLoosePieceSquares)
+                    return loosePiecesVisitor.Iterator;
+
+                return Enumerable.Empty<SquareEnum>();
+            }
+        }
 
         private void SetSelectedSquare(int square)
         {
