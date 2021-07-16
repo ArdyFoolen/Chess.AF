@@ -59,33 +59,33 @@ namespace Chess.AF.ChessForm
         public static Image BlackQueen()
             => GetPiece(1, true, 3);
         public static Image WhiteQueenSmall()
-            => GetPiece(1, false, 3, true);
+            => GetPiece(1, false, 3, 5, halfSize: true);
         public static Image BlackQueenSmall()
-            => GetPiece(1, true, 3, true);
+            => GetPiece(1, true, 3, halfSize: true);
         public static Image WhiteBishop()
             => GetPiece(2, false, 5);
         public static Image BlackBishop()
             => GetPiece(2, true, 5);
         public static Image WhiteBishopSmall()
-            => GetPiece(2, false, 5, true);
+            => GetPiece(2, false, 5, halfSize: true);
         public static Image BlackBishopSmall()
-            => GetPiece(2, true, 5, true);
+            => GetPiece(2, true, 5, halfSize: true);
         public static Image WhiteKnight()
             => GetPiece(3, false, 6);
         public static Image BlackKnight()
             => GetPiece(3, true, 6);
         public static Image WhiteKnightSmall()
-            => GetPiece(3, false, 6, true);
+            => GetPiece(3, false, 6, halfSize: true);
         public static Image BlackKnightSmall()
-            => GetPiece(3, true, 6, true);
+            => GetPiece(3, true, 6, halfSize: true);
         public static Image WhiteRook()
             => GetPiece(4, false, 8);
         public static Image BlackRook()
             => GetPiece(4, true, 8);
         public static Image WhiteRookSmall()
-            => GetPiece(4, false, 8, true);
+            => GetPiece(4, false, 8, halfSize: true);
         public static Image BlackRookSmall()
-            => GetPiece(4, true, 8, true);
+            => GetPiece(4, true, 8, halfSize: true);
         public static Image WhitePawn()
             => GetPiece(5, false, 9);
         public static Image BlackPawn()
@@ -174,7 +174,7 @@ namespace Chess.AF.ChessForm
         /// <param name="index"></param>
         /// <param name="blackPiece"></param>
         /// <returns></returns>
-        private static Image GetPiece(int index, bool blackPiece, int correct = 0, bool halfSize = false)
+        private static Image GetPiece(int index, bool blackPiece, int xCorrect = 0, int yCorrect = 0, bool halfSize = false)
         {
             int width = PieceWidth;
             int key = index + (blackPiece ? 6 : 0);
@@ -184,16 +184,17 @@ namespace Chess.AF.ChessForm
                 width /= 2;
             }
             if (!PiecesDict.ContainsKey(key))
-                PiecesDict.Add(key, LoadPieceImage(index, blackPiece, correct, width));
+                PiecesDict.Add(key, LoadPieceImage(index, blackPiece, xCorrect, yCorrect, width));
 
             return PiecesDict[key];
         }
 
-        private static Image LoadPieceImage(int index, bool blackPiece, int correct, int? width = null)
+        private static Image LoadPieceImage(int index, bool blackPiece, int xCorrect, int yCorrect, int? width = null)
         {
             width = width ?? PieceWidth;
             int y = blackPiece ? 90 : 0;
-            int x = (500 / 6) * index + correct;
+            y += yCorrect;
+            int x = (500 / 6) * index + xCorrect;
             Rectangle source = new Rectangle(new Point(x, y), new Size(500 / 6, 90));
             return ResizeImage(CropImage(ChessPieces, source), width.Value, width.Value);
         }

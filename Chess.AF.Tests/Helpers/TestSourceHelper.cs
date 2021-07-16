@@ -113,5 +113,22 @@ namespace Chess.AF.Tests.Helpers
                 yield return ("3qk3/8/8/3p4/4P3/3Q4/8/4K3 w - - 0 1", FilterFlags.Both, new SquareEnum[] { });
             }
         }
+
+        public static IEnumerable<(string FenString, SquareEnum[] Squares)> LoosePieceXRayDefendedTestCases
+        {
+            get
+            {
+                yield return ("4k3/8/8/Rr1B4/8/8/8/4K3 w - - 0 1", new SquareEnum[] { SquareEnum.a5, SquareEnum.b5 });
+                yield return ("4k3/8/3B4/2b5/8/R7/8/4K3 w - - 0 1", new SquareEnum[] { SquareEnum.c5, SquareEnum.d6 });
+            }
+        }
+
+        public static IEnumerable<(string FenString, SquareEnum[] Squares)> LoosePieceExcludeKingTestCases
+        {
+            get
+            {
+                yield return ("4k3/4r3/8/8/8/8/8/4K3 w - - 0 1", new SquareEnum[] {  });
+            }
+        }
     }
 }

@@ -386,19 +386,19 @@ namespace Chess.AF.Domain
             PiecesEnum opponentKnight = PieceEnum.Knight.ToPieces(!IsWhiteToMove);
             ulong opponentKnightMap = Maps[(int)opponentKnight];
 
-            bool knightChecks = (MovesDictionaries.KnightMovesDictionary[square] & opponentKnightMap) != 0x0ul;
+            bool knightAttacks = (MovesDictionaries.KnightMovesDictionary[square] & opponentKnightMap) != 0x0ul;
 
             PiecesEnum opponentBishop = PieceEnum.Bishop.ToPieces(!IsWhiteToMove);
             ulong opponentBishopMap = Maps[(int)opponentBishop];
             PiecesEnum opponentQueen = PieceEnum.Queen.ToPieces(!IsWhiteToMove);
             ulong opponentQueenMap = Maps[(int)opponentQueen];
 
-            bool bishopChecks = (MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
+            bool bishopAttacks = (MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentBishopMap | MovesDictionaries.GetBishopMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
 
             PiecesEnum opponentRook = PieceEnum.Rook.ToPieces(!IsWhiteToMove);
             ulong opponentRookMap = Maps[(int)opponentRook];
 
-            bool rookChecks = (MovesDictionaries.GetRookMovesMapFor(this, square) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
+            bool rookAttacks = (MovesDictionaries.GetRookMovesMapFor(this, square) & opponentRookMap | MovesDictionaries.GetRookMovesMapFor(this, square) & opponentQueenMap) != 0x0ul;
 
             PiecesEnum opponentPawn = PieceEnum.Pawn.ToPieces(!IsWhiteToMove);
             ulong opponentPawnMap = Maps[(int)opponentPawn];
@@ -406,9 +406,14 @@ namespace Chess.AF.Domain
             ulong takeMap = MovesDictionaries.GetTakeMap(square);
             takeMap &= IsWhiteToMove ? square.DownBitsOff() : square.UpBitsOff();
 
-            bool pawnChecks = (takeMap & opponentPawnMap) != 0x0ul;
+            bool pawnAttacks = (takeMap & opponentPawnMap) != 0x0ul;
 
-            return knightChecks || bishopChecks || rookChecks || pawnChecks;
+            PiecesEnum opponentKing = PieceEnum.King.ToPieces(!IsWhiteToMove);
+            ulong opponentKingMap = Maps[(int)opponentKing];
+
+            bool kingAttacks = (MovesDictionaries.KingMovesDictionary[square] & opponentKingMap) != 0x0ul;
+
+            return knightAttacks || bishopAttacks || rookAttacks || pawnAttacks || kingAttacks;
         }
 
         #endregion

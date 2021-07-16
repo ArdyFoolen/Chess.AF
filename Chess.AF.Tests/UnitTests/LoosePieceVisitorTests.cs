@@ -32,6 +32,24 @@ namespace Chess.AF.Tests.UnitTests
                     Some: p => { AssertIterator(p, expected.Flags, expected.Squares); return true; });
         }
 
+        [TestCaseSource(typeof(TestSourceHelper), "LoosePieceXRayDefendedTestCases")]
+        public void Iterator_XrayDefended_IsValid((string FenString, SquareEnum[] Squares) expected)
+        {
+            Fen.Of(expected.FenString).CreateBoard()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { AssertIterator(p, expected.Squares); return true; });
+        }
+
+        [TestCaseSource(typeof(TestSourceHelper), "LoosePieceExcludeKingTestCases")]
+        public void Iterator_ExcludeKingAsLoosePiece_IsValid((string FenString, SquareEnum[] Squares) expected)
+        {
+            Fen.Of(expected.FenString).CreateBoard()
+                .Match(
+                    None: () => { Assert.Fail(); return true; },
+                    Some: p => { AssertIterator(p, expected.Squares); return true; });
+        }
+
         private void AssertIterator(IBoard board, SquareEnum[] squares)
             => AssertIterator(board, FilterFlags.Both, squares);
 

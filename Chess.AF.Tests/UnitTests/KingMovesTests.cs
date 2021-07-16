@@ -39,5 +39,12 @@ namespace Chess.AF.Tests.UnitTests
             AssertMovesHelper helper = new AssertMovesHelper();
             helper.AssertMovesFor(fenString, PieceEnum.King, expected);
         }
+
+        [TestCase("8/8/8/8/8/8/6k1/4K2R w K - 0 1", new SquareEnum[] { SquareEnum.d1, SquareEnum.d2, SquareEnum.e2 })]
+        public void KingMoves_KingAttacksRokadeSquare_NotValid(string fenString, SquareEnum[] expected)
+        {
+            AssertMovesHelper helper = new AssertMovesHelper();
+            helper.AssertMovesFor(fenString, PieceEnum.King, expected);
+        }
     }
 }

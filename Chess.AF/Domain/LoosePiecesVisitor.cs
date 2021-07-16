@@ -77,8 +77,10 @@ namespace Chess.AF.Domain
                 if (!map.IsWhiteToMove && pieceOnSquare.Piece.IsWhitePiece() ||
                     map.IsWhiteToMove && pieceOnSquare.Piece.IsBlackPiece())
                     return WhitePieceWhiteNotToMoveFilter(map, pieceOnSquare.Square);
-                else
+                else if (!PieceEnum.King.IsEqual(pieceOnSquare.Piece))
                     return WhitePieceWhiteToMoveFilter(map, pieceOnSquare.Square);
+ 
+                return false;
             }
 
             private bool shouldFilter(PiecesEnum piece)
