@@ -62,6 +62,8 @@ namespace Chess.AF.ChessForm
             => GetPiece(1, false, 3, 5, halfSize: true);
         public static Image BlackQueenSmall()
             => GetPiece(1, true, 3, halfSize: true);
+        public static Image BlackWhiteQueenSmall()
+            => CombineImages(GetPiece(1, true, 3, halfSize: true), GetPiece(1, false, 3, 5, halfSize: true));
         public static Image WhiteBishop()
             => GetPiece(2, false, 5);
         public static Image BlackBishop()
@@ -229,6 +231,37 @@ namespace Chess.AF.ChessForm
             return destImage;
         }
 
+        /// <summary>
+        /// Images left & right are the same size
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        private static Bitmap CombineImages(Image left, Image right)
+        {
+            Rectangle destination = new Rectangle(Point.Empty, new Size(left.Width, left.Height));
+            var destImage = new Bitmap(destination.Width, destination.Height);
+
+            var lRect = new Rectangle(new Point(), new Size(left.Width / 2, left.Height));
+            var rRect = new Rectangle(new Point(left.Width / 2, 0), new Size(left.Width / 2, left.Height));
+
+            var l = CropImage(left, lRect);
+            var r = CropImage(right, rRect);
+            var sRect = new Rectangle(new Point(), l.Size);
+
+            Using(Graphics.FromImage(destImage), g => g.DrawImage(l, lRect, sRect, GraphicsUnit.Pixel));
+            Using(Graphics.FromImage(destImage), g => g.DrawImage(r, rRect, sRect, GraphicsUnit.Pixel));
+
+            return destImage;
+        }
+
+        private static ValueTuple CombineImages(Image left, Image right, Rectangle leftRect, Rectangle rightRect, Graphics graphics)
+        {
+            Using(new ImageAttributes(), w => DrawImage(left, leftRect, leftRect, graphics, w));
+            Using(new ImageAttributes(), w => DrawImage(right, rightRect, rightRect, graphics, w));
+            return new ValueTuple();
+        }
+
         private static void ResizeImage(Image image, Rectangle destRect, Graphics graphics)
         {
             graphics.CompositingMode = CompositingMode.SourceCopy;
@@ -244,6 +277,12 @@ namespace Chess.AF.ChessForm
         {
             wrapMode.SetWrapMode(WrapMode.TileFlipXY);
             graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+        }
+
+        private static void DrawImage(Image image, Rectangle destRect, Rectangle srcRect, Graphics graphics, ImageAttributes wrapMode)
+        {
+            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+            graphics.DrawImage(image, destRect, 0, 0, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, wrapMode);
         }
 
         private static Image ReadEmbeddedRessourceImage(string resourceName)

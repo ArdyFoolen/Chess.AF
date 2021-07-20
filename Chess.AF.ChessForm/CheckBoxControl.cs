@@ -31,7 +31,7 @@ namespace Chess.AF.ChessForm
 
             chkBoth.Size = new Size(33, 33);
             chkBoth.Location = new Point(110, 5);
-            chkBoth.Image = ImageHelper.BlackQueenSmall();
+            chkBoth.Image = ImageHelper.BlackWhiteQueenSmall();
             chkBoth.Click += chkBoth_Click;
 
             chkWhite.Size = new Size(33, 33);
