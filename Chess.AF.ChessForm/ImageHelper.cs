@@ -247,10 +247,9 @@ namespace Chess.AF.ChessForm
 
             var l = CropImage(left, lRect);
             var r = CropImage(right, rRect);
-            var sRect = new Rectangle(new Point(), l.Size);
 
-            Using(Graphics.FromImage(destImage), g => g.DrawImage(l, lRect, sRect, GraphicsUnit.Pixel));
-            Using(Graphics.FromImage(destImage), g => g.DrawImage(r, rRect, sRect, GraphicsUnit.Pixel));
+            Using(Graphics.FromImage(destImage), g => g.DrawImage(l, lRect, lRect, GraphicsUnit.Pixel));
+            Using(Graphics.FromImage(destImage), g => g.DrawImage(r, rRect, lRect, GraphicsUnit.Pixel));
 
             return destImage;
         }
