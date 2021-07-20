@@ -254,13 +254,6 @@ namespace Chess.AF.ChessForm
             return destImage;
         }
 
-        private static ValueTuple CombineImages(Image left, Image right, Rectangle leftRect, Rectangle rightRect, Graphics graphics)
-        {
-            Using(new ImageAttributes(), w => DrawImage(left, leftRect, leftRect, graphics, w));
-            Using(new ImageAttributes(), w => DrawImage(right, rightRect, rightRect, graphics, w));
-            return new ValueTuple();
-        }
-
         private static void ResizeImage(Image image, Rectangle destRect, Graphics graphics)
         {
             graphics.CompositingMode = CompositingMode.SourceCopy;
