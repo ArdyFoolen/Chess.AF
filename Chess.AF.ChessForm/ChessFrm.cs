@@ -61,7 +61,12 @@ namespace Chess.AF.ChessForm
             this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
 
             this.pgnDialog = new PgnDialog(gameController, pgnController);
+
             this.chkLooseControl = new CheckBoxControl(gameController);
+            this.chkLooseControl.BlackWhiteImage = ImageHelper.BlackWhiteQueenSmall();
+            this.chkLooseControl.WhiteImage = ImageHelper.WhiteQueenSmall();
+            this.chkLooseControl.BlackImage = ImageHelper.BlackQueenSmall();
+            this.chkLooseControl.ClickHandler = (on, flags) => gameController.UseLoosePiecesIterator(on, flags);
 
             this.BackColor = Color.Wheat;
 

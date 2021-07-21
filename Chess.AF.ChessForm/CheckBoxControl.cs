@@ -71,7 +71,13 @@ namespace Chess.AF.ChessForm
                 chkWhite.Checked = false;
             if (!chkBlack.Name.Equals(chk.Name))
                 chkBlack.Checked = false;
-            gameController.UseLoosePiecesIterator(chk.Checked, flags);
+            ClickHandler?.Invoke(chk.Checked, flags);
         }
+
+        public Action<bool, FilterFlags> ClickHandler { private get; set; }
+
+        public Image BlackWhiteImage { set { chkBoth.Image = value; } }
+        public Image WhiteImage { set { chkWhite.Image = value; } }
+        public Image BlackImage { set { chkBlack.Image = value; } }
     }
 }
