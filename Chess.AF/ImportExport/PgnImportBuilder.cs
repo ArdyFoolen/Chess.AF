@@ -178,7 +178,7 @@ namespace Chess.AF.ImportExport
             }
 
             private string sanitizeHalfMove(string halfMove)
-                => halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty);
+                => halfMove.Replace("x", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty).Replace("#", string.Empty);
 
             private string sanitizeHalfMove(string halfMove, Option<PieceEnum> piece)
                 => piece.Match(

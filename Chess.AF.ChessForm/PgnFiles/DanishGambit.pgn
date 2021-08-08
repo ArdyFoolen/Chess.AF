@@ -1,0 +1,71 @@
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. d4 xd4 3. c3 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. d4 xd4 3. c3 xc3 4. Bc4 xb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Bxf7+ Kxf7 8. Qxd8 Bb4+ 
+9. Qd2 Bxd2+ 10. Nxd2 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. d4 xd4 3. c3 d5 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "0-1"]
+
+1. e4 e5 2. d4 xd4 3. c3 xc3 4. Bc4 d6 5. Nxc3 Nd7 6. Nf3 Nb6 7. O-O Nxc4 8. Qa4+ c6 
+9. Qxc4 Be6 10. Qe2 Nf6 11. Bg5 Be7 12. Rfd1 O-O 13. Nd4 Bg4 14. f3 Bd7 15. e5 xe5 16. Qxe5 Re8 
+17. Nf5 Bf8 18. Qg3 Nh5 19. Qg4 Qb6+ 20. Kh1 Bxf5 21. Qxf5 Qxb2 22. Ne4 Qe5 23. Qxe5 Rxe5 24. g4 f5 
+25. xf5 Rxf5 26. Rd7 h6 27. Be3 Rxf3 28. Bc5 Bxc5 29. Nxc5 b6 30. Ne4 Re8 31. Kg2 Ra3 32. Re1 Rxa2+ 
+33. Kh3 c5 34. Ng5 Ra3+ 35. Kg2 Nf4+ 36. Kf2 Rf8 0-1
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. d4 xd4 3. c3 xc3 4. Bc4 xb2 5. Bxb2 d6 6. Ne2 Nc6 7. O-O Be6 8. Bd5 Nf6 
+9. Qb3 Qc8 10. Nf4 Nd8 11. Bxf6 xf6 12. Nh5 c6 13. Re1 Be7 14. Qf3 Rg8 15. Nxf6+ Bxf6 16. Qxf6 xd5 
+17. xd5 Rg6 18. Qh8+ Kd7 19. Nc3 Bxd5 20. Qe8+ Kc7 21. Nxd5+ Kb8 22. Rac1 Nc6 23. Rxc6 xc6 24. Rb1# 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.08"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. d4 xd4 3. c3 xc3 4. Bc4 xb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nc3 Be7 8. Qb3 O-O 
+9. Rd1 Qe8 10. Nge2 Nbd7 11. Ng3 c6 12. Bc4 Ne5 13. Be2 Be6 14. Qc2 Nc4 15. Bc1 Rd8 16. O-O Rxd1 
+17. Rxd1 Nb6 18. h3 Qc8 19. Kh2 Rd8 20. Rf1 Qb8 21. f4 Bc4 22. e5 Nfd5 23. Nxd5 xd5 24. Bb2 Bf8 
+25. Bd4 Bxe2 26. Qxe2 Nc4 27. Qg4 Re8 28. Nh5 Re6 29. Nf6+ Kh8 30. Nd7 Qe8 31. Nxf8 Qxf8 32. f5 Nxe5 
+33. Qg3 Nc6 34. xe6 Nxd4 35. Rxf7 Qg8 36. Qd6 Nb5 37. Qe7 Qb8+ 38. Kh1 Kg8 39. Rxg7+ 1-0
+
