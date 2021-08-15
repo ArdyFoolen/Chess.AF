@@ -1,0 +1,61 @@
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Bc4 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Bc4 Nf6 3. d3 c6 4. Nf3 d5 5. Bb3 Bd6 6. Nc3 xe4 7. Ng5 O-O 8. Ncxe4 Nxe4 
+9. Nxe4 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. Bc4 Nf6 3. d3 c6 4. Nf3 d5 5. Bb3 Bd6 6. xd5 Nxd5 7. O-O O-O 8. Re1 Bg4 
+9. h3 Bh5 10. g4 Bg6 11. Nxe5 Bxe5 12. Rxe5 Nd7 13. Re1 Qh4 14. Qf3 Rae8 15. Rf1 h5 16. Nc3 Nxc3 
+17. xc3 Kh7 18. xh5 Qxh5 19. Qxh5+ Bxh5 20. Ba3 Rh8 21. Rfe1 Ne5 22. Kg2 Nf3 23. Re3 Nh4+ 24. Kf1 Nf3 
+25. Bd6 g5 26. d4 Kg6 27. c4 Nxd4 28. c5 Bf3 29. Ke1 Nf5 30. Rxe8 Rxe8+ 31. Kd2 Re2+ 32. Kd3 Rxf2 
+33. Re1 Bg2 34. Re8 Bxh3 35. Rg8+ Kf6 36. Bc7 Rf3+ 37. Kd2 g4 38. Bd8+ Ke5 39. Bc7+ Kd4 40. Bd6 g3 
+41. Rd8 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1/2-1/2"]
+
+1. e4 e5 2. Bc4 Nf6 3. d3 c6 4. Nf3 d5 5. Bb3 Bd6 6. Nc3 xe4 7. Ng5 O-O 8. Ncxe4 Nxe4 
+9. Nxe4 Bf5 10. Qf3 Bxe4 11. xe4 Nd7 12. c3 a5 13. a4 Nc5 14. Bc2 b5 15. O-O Qc7 16. Rd1 Rab8 
+17. xb5 xb5 18. g3 b4 19. xb4 Rxb4 20. Bd2 Rxb2 1/2-1/2
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "0-1"]
+
+1. e4 e5 2. Bc4 Nf6 3. d3 c6 4. Nf3 d5 5. Bb3 Bd6 6. Nc3 xe4 7. Ng5 O-O 8. Ncxe4 Nxe4 
+9. Nxe4 a5 10. Qh5 Bb4+ 11. Kf1 Be7 12. a4 Nd7 13. h4 Nc5 14. Nxc5 Bxc5 15. Qxe5 Bd4 16. Qg5 Qb6 
+17. Be3 Be6 18. Ra3 Rfe8 19. Kg1 h6 20. Qf4 Rad8 21. Rh3 Qb4 22. Bxe6 Rxe6 23. Bxd4 Rxd4 24. Qb8+ Kh7 
+25. Rb3 Qe1+ 26. Kh2 Qxf2 27. Qg3 Qxc2 28. Rc3 Qxb2 29. Rc4 Rg6 30. Qf3 Rxd3 0-1
+

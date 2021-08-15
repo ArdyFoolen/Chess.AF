@@ -1,0 +1,79 @@
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nc3 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 Nxe4 4. Qh5 Nd6 5. Bb3 Nc6 6. Nb5 g6 7. Qf3 f5 8. Qd5 Qe7 
+9. Nxc7+ Kd8 10. Nxa8 b6 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 Nc6 4. d3 Bb4 5. Bg5 h6 6. Bxf6 Bxc3+ 7. xc3 Qxf6 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. Nc3 Nc6 3. Bc4 Bc5 4. Qg4 Qf6 5. Nd5 Bxf2+ 6. Kf1 Qd6 7. Qxg7 Bb6 8. Qxh8 Qg6 
+9. Nf3 Kf8 10. d3 d6 11. Nh4 Qg4 12. Bh6+ Ke8 13. Nf6+ 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. Nc3 Nf6 3. g3 Bb4 4. Bg2 O-O 5. Nge2 c6 6. O-O d5 7. xd5 xd5 8. d4 xd4 
+9. Nxd4 Bxc3 10. xc3 Nbd7 11. Bf4 Nb6 12. Nb5 Bf5 13. Nd6 Be4 14. Bh3 Nc4 15. Nxe4 Nxe4 16. Qd4 Qa5 
+17. Rfe1 Rae8 18. Bf1 Na3 19. Bd3 Re6 20. f3 Nc5 21. Bf5 Rf6 22. Qxd5 Qxc3 23. Rad1 Rxf5 24. Qxf5 Nxc2 
+25. Be5 Qc4 26. Bxg7 Kxg7 27. Qg5+ Kh8 28. Rd8 Nd7 29. Ree8 Qd4+ 30. Kg2 Qg7 31. Qe7 Qg8 32. Qxd7 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.08.15"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "0-1"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 Nxe4 4. Qh5 Nd6 5. Bb3 Nc6 6. Nb5 g6 7. Qf3 f5 8. Qd5 Qe7 
+9. Nxc7+ Kd8 10. Nxa8 b6 11. d3 Bb7 12. h4 f4 13. Qf3 Bh6 14. Qg4 e4 15. Bxf4 xd3+ 16. Kf1 Bxf4 
+17. Qxf4 Rf8 18. Qg3 Ne4 19. Qc7+ Ke8 20. Nh3 Nxf2 21. Nxf2 Qe2+ 22. Kg1 Qxf2+ 23. Kh2 Qxh4+ 24. Kg1 Qd4+ 
+25. Kh2 Ne5 26. Rhf1 Ng4+ 27. Kh3 Qe3+ 28. Kxg4 h5+ 29. Kh4 g5+ 30. Kxh5 Rh8+ 31. Kg6 Be4+ 32. Rf5 Bxf5+ 
+33. Kxf5 Rf8+ 34. Kg6 Qe4+ 35. Kg7 Qe7+ 36. Kg6 Qf6+ 37. Kh5 Qh8+ 38. Kg4 Qh4# 0-1
+

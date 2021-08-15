@@ -145,7 +145,7 @@ namespace Chess.AF.ImportExport
                 if (from[0] >= 'a' && from[0] <= 'h')
                     return iter.Where(w => w.Square.File() == ((int)from[0] - (int)('a')));
                 if (from[0] >= '1' && from[0] <= '8')
-                    return iter.Where(w => w.Square.Row() == ((int)from[0] - (int)('1')));
+                    return iter.Where(w => w.Square.Row() == (7 - ((int)from[0] - (int)('1'))));
                 return Enumerable.Empty<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)>();
             }
 
