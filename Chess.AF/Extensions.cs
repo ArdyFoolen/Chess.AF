@@ -69,6 +69,18 @@ namespace Chess.AF
                 return (isWhiteToMove ? SquareEnum.a1 : SquareEnum.a8, (SquareEnum)((int)kingMoveSquare + 1));
         }
 
+        public static bool IsKingsideRokade(this RokadeEnum rokade)
+            => ((byte)rokade & (byte)RokadeEnum.KingSide) != 0;
+
+        public static bool IsQueensideRokade(this RokadeEnum rokade)
+            => ((byte)rokade & (byte)RokadeEnum.QueenSide) != 0;
+
+        public static SquareEnum GetRookRokadeOnKingsideSquare(this RokadeEnum rokade, bool isWhiteToMove)
+            => isWhiteToMove ? SquareEnum.h1 : SquareEnum.h8;
+
+        public static SquareEnum GetRookRokadeOnQueensideSquare(this RokadeEnum rokade, bool isWhiteToMove)
+            => isWhiteToMove ? SquareEnum.a1 : SquareEnum.a8;
+
         public static bool Is(this PieceEnum pieceEnum, PieceEnum compare)
             => pieceEnum == compare;
 

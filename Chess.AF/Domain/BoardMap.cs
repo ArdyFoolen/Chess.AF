@@ -28,6 +28,8 @@ namespace Chess.AF.Domain
 
         #region ctors
 
+        public BoardMap() { }
+
         public BoardMap(IBoard abstraction, ulong[] maps)
         {
             Abstraction = abstraction;
@@ -316,6 +318,9 @@ namespace Chess.AF.Domain
         #endregion
 
         #region private methods
+
+        private void Clear()
+            => Maps = new ulong[14];
 
         private int GetIndexAllPiecesFor(bool isWhiteToMove)
             => (int)(isWhiteToMove ? PositionEnum.WhitePieces : PositionEnum.BlackPieces);

@@ -46,7 +46,10 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\IMoveCommand.cs" />
+    <Compile Include="Domain\BoardBuilder.cs" />
+    <Compile Include="Domain\BoardMapBuilder.cs" />
     <Compile Include="Domain\BoardMapVisitor.cs" />
+    <Compile Include="Domain\IBoardBuilder.cs" />
     <Compile Include="Domain\IBoardMapVisitor.cs" />
     <Compile Include="Domain\LoosePiecesVisitor.cs" />
     <Compile Include="Dto\PieceMap.cs" />
@@ -71,7 +74,7 @@
     <Compile Include="PieceMoves\MovesFactory.cs" />
     <Compile Include="Domain\PiecesIterator.cs" />
     <Compile Include="Domain\Board.cs" />
-    <Compile Include="Domain\BoardFactory.cs" />
+    <Compile Include="Domain\BoardMapFactory.cs" />
     <Compile Include="Domain\BoardMap.cs" />
     <Compile Include="Commands\ResignCommand.cs" />
     <Compile Include="Commands\MoveCommand.cs" />

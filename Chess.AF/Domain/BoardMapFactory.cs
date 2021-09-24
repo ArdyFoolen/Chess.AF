@@ -10,7 +10,7 @@ namespace Chess.AF.Domain
 {
     public partial class BoardMap
     {
-        internal static class BoardFactory
+        internal static class BoardMapFactory
         {
             public static IBoardMap Create(Fen fen, IBoard abstraction)
             {

@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
-using static Chess.AF.Domain.BoardMap.BoardFactory;
+using static Chess.AF.Domain.BoardMap.BoardMapFactory;
 
 namespace Chess.AF.Domain
 {
@@ -54,6 +54,8 @@ namespace Chess.AF.Domain
         #endregion
 
         #region ctors
+
+        public Board() { }
 
         private Board(Fen fen)
         {
