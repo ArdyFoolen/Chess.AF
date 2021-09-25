@@ -52,6 +52,7 @@
     <Compile Include="Helpers\FenString.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\TestSourceHelper.cs" />
+    <Compile Include="UnitTests\BoardBuilderTests.cs" />
     <Compile Include="UnitTests\FenRegexTests.cs" />
     <Compile Include="UnitTests\GameResultTests.cs" />
     <Compile Include="UnitTests\KingMovesTests.cs" />

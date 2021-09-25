@@ -1,4 +1,5 @@
-﻿using Chess.AF.Enums;
+﻿using AF.Functional;
+using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,27 @@ namespace Chess.AF.Domain
 {
     public partial class Board
     {
-        public class BoardBuilder : IBoardBuilder
+        public static IBoardBuilder CreateBuilder()
+            => new BoardBuilder(CreateValidator());
+
+        private static IBoardValidator CreateValidator()
+            => new BoardValidator();
+
+        public class BoardBuilder : IBoardBuilder, IBoardBuild
         {
             #region Properties
 
             private Board board;
             private BoardMapBuilder boardMapBuilder;
+            private IBoardValidator validator;
 
             #endregion
 
             #region ctor
 
-            public BoardBuilder()
+            public BoardBuilder(IBoardValidator validator)
             {
+                this.validator = validator;
                 boardMapBuilder = new BoardMapBuilder();
                 board = new Board();
                 Default();
@@ -103,58 +112,25 @@ namespace Chess.AF.Domain
 
             #region Validation
 
-            // Validate King, only 1 for white and black
-            // (Done) Validate rokade
-            //      Black/White: King on king square
-            //                   King Rokade Rook on Kingside rook square
-            //                   Queen Rokade Rook on Queenside rook square
-            // Validate EpSquare
-            //      EpSquare on row 2 or 5
-            //      if on 2 then pawn on row 3
-            //      if on 5 then pawn on row 4
-
-            private bool IsKingSideRokadePossible(bool isWhiteToMove)
-                => isWhiteToMove ? board.WhiteRokade.IsKingsideRokade() : board.BlackRokade.IsKingsideRokade();
-
-            private bool IsQueenSideRokadePossible(bool isWhiteToMove)
-                => isWhiteToMove ? board.WhiteRokade.IsQueensideRokade() : board.BlackRokade.IsQueensideRokade();
-
-            private bool IsValidWhiteRookRokade()
-                => (!IsKingSideRokadePossible(true) ||
-                    IsKingSideRokadePossible(true) && boardMapBuilder.ValidRookOnRookSquare(true, board.WhiteRokade.GetRookRokadeOnKingsideSquare(true))) &&
-                   (!IsQueenSideRokadePossible(true) ||
-                    IsQueenSideRokadePossible(true) && boardMapBuilder.ValidRookOnRookSquare(true, board.WhiteRokade.GetRookRokadeOnQueensideSquare(true)));
-
-            private bool IsValidBlackRookRokade()
-                => (!IsKingSideRokadePossible(false) ||
-                    IsKingSideRokadePossible(false) && boardMapBuilder.ValidRookOnRookSquare(false, board.BlackRokade.GetRookRokadeOnKingsideSquare(false))) &&
-                   (!IsQueenSideRokadePossible(false) ||
-                    IsQueenSideRokadePossible(false) && boardMapBuilder.ValidRookOnRookSquare(false, board.WhiteRokade.GetRookRokadeOnQueensideSquare(false)));
-
-            private bool IsRokadePossible(bool isWhiteToMove)
-                => isWhiteToMove ?
-                    !RokadeEnum.None.Equals(board.WhiteRokade) :
-                    !RokadeEnum.None.Equals(board.BlackRokade);
-
-            private bool IsValidWhiteKingRokade()
-                => !IsRokadePossible(true) ||
-                    IsRokadePossible(true) && boardMapBuilder.ValidKingOnKingSquare(true, board.WhiteRokade.GetKingRokadeSquare(true));
-
-            private bool IsValidBlackKingRokade()
-                => !IsRokadePossible(false) ||
-                    IsRokadePossible(false) && boardMapBuilder.ValidKingOnKingSquare(false, board.BlackRokade.GetKingRokadeSquare(false));
-
-            private bool IsValidRokade()
-                => IsValidWhiteKingRokade() && IsValidBlackKingRokade() && IsValidWhiteRookRokade() && IsValidBlackRookRokade();
+            private bool IsValid()
+            {
+                validator.SetBoard(board);
+                validator.SetBoardMap(board.Implementor);
+                return validator.Validate();
+            }
 
             #endregion
 
             #region Build
 
-            public IBoard Build()
+            public Option<IBoard> Build()
             {
                 boardMapBuilder.WithBoard(board);
                 board.Implementor = boardMapBuilder.Build();
+
+                if (!IsValid())
+                    return None;
+
                 return board;
             }
 

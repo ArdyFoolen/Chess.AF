@@ -49,8 +49,11 @@
     <Compile Include="Domain\BoardBuilder.cs" />
     <Compile Include="Domain\BoardMapBuilder.cs" />
     <Compile Include="Domain\BoardMapVisitor.cs" />
+    <Compile Include="Domain\BoardValidator.cs" />
+    <Compile Include="Domain\IBoardBuild.cs" />
     <Compile Include="Domain\IBoardBuilder.cs" />
     <Compile Include="Domain\IBoardMapVisitor.cs" />
+    <Compile Include="Domain\IBoardValidator.cs" />
     <Compile Include="Domain\LoosePiecesVisitor.cs" />
     <Compile Include="Dto\PieceMap.cs" />
     <Compile Include="Dto\PieceOnSquare.cs" />

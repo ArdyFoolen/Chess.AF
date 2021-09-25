@@ -51,15 +51,17 @@ namespace Chess.AF.Domain
 
             public BoardMapBuilder Off(SquareEnum square)
             {
-                boardMap.Maps[(int)piece].SetBitOff((int)square);
-                boardMap.Maps[boardMap.GetIndexAllPiecesFor(IsWhiteToMove)].SetBitOff((int)square);
+                boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBitOff((int)square);
+                int allPieces = boardMap.GetIndexAllPiecesFor(IsWhiteToMove);
+                boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBitOff((int)square);
                 return this;
             }
 
             public BoardMapBuilder On(SquareEnum square)
             {
-                boardMap.Maps[(int)piece].SetBit((int)square);
-                boardMap.Maps[boardMap.GetIndexAllPiecesFor(IsWhiteToMove)].SetBit((int)square);
+                boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBit((int)square);
+                int allPieces = boardMap.GetIndexAllPiecesFor(IsWhiteToMove);
+                boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBit((int)square);
                 return this;
             }
 
