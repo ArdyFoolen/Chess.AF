@@ -59,9 +59,13 @@ namespace Chess.AF.Domain
 
             public BoardMapBuilder On(SquareEnum square)
             {
-                boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBit((int)square);
                 int allPieces = boardMap.GetIndexAllPiecesFor(IsWhiteToMove);
-                boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBit((int)square);
+                clearKingMaps(allPieces);
+                if (!isPawnOnRow1Or8(square))
+                {
+                    boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBit((int)square);
+                    boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBit((int)square);
+                }
                 return this;
             }
 
@@ -70,16 +74,25 @@ namespace Chess.AF.Domain
 
             #endregion
 
-            #region Validation
+            #region Private
 
-            internal bool ValidKingOnKingSquare(bool isWhiteToMove, SquareEnum kingSquare)
-                => isBitOn(PieceEnum.King.ToPieces(isWhiteToMove), kingSquare);
+            private void clearKingMaps(int indexAllPieces)
+            {
+                if (isKing())
+                {
+                    boardMap.Maps[(int)piece] = 0ul;
+                    boardMap.Maps[indexAllPieces] = 0ul;
+                }
+            }
 
-            internal bool ValidRookOnRookSquare(bool isWhiteToMove, SquareEnum rookSquare)
-                => isBitOn(PieceEnum.Rook.ToPieces(isWhiteToMove), rookSquare);
+            private bool isPawnOnRow1Or8(SquareEnum square)
+                => isPawn() && (square.Row() == 0 || square.Row() == 7);
 
-            private bool isBitOn(PiecesEnum piece, SquareEnum square)
-                => boardMap.Maps[(int)piece].IsBitOn((int)square);
+            private bool isKing()
+                => PiecesEnum.BlackKing.Is(piece) || PiecesEnum.WhiteKing.Is(piece);
+
+            private bool isPawn()
+                => PiecesEnum.BlackPawn.Is(piece) || PiecesEnum.WhitePawn.Is(piece);
 
             #endregion
 

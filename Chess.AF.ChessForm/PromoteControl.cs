@@ -16,14 +16,14 @@ namespace Chess.AF.ChessForm
     public partial class PromoteControl : Panel
     {
         public int Id { get; private set; }
-        private IGameController boardController;
+        private IGameController gameController;
 
-        public PromoteControl(int id, IGameController boardController, bool isBlackToMove)
+        public PromoteControl(int id, IGameController gameController, bool isBlackToMove)
         {
             InitializeComponent();
 
             this.Id = id;
-            this.boardController = boardController;
+            this.gameController = gameController;
             IsBlackToMove = isBlackToMove;
             AddPromoteButtons();
 
@@ -79,7 +79,7 @@ namespace Chess.AF.ChessForm
         protected void promote_Click(object sender, EventArgs e)
         {
             PromoteButton panel = (PromoteButton)sender;
-            boardController.Promote(Id, panel.Id);
+            gameController.Promote(Id, panel.Id);
         }
     }
 }

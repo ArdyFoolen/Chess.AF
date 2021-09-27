@@ -29,7 +29,7 @@ namespace Chess.AF.Domain
                 => this.boardMap = boardMap as BoardMap;
 
             public bool Validate()
-                => ValidateKings() && ValidateRokade() && ValidateEpSquare();
+                => ValidateKings() && ValidateRokade() && ValidateEpSquare() && ValidatePawns();
 
             #endregion
 
@@ -106,7 +106,10 @@ namespace Chess.AF.Domain
                     );
 
             private bool ValidateEpSquare(SquareEnum square)
-                => IsEpSquare(square) && (ValidateWhitePawnOnSquare(square) || ValidateBlackPawnOnSquare(square));
+                => IsEpSquare(square) &&
+                    ValidateWhiteToMoveEpSquare(square) &&
+                    ValidateBlackToMoveEpSquare(square) &&
+                    (ValidateWhitePawnOnSquare(square) || ValidateBlackPawnOnSquare(square));
 
             private bool ValidateWhitePawnOnSquare(SquareEnum square)
                 => !IsWhiteEpSquare(square) ||
@@ -115,6 +118,12 @@ namespace Chess.AF.Domain
             private bool ValidateBlackPawnOnSquare(SquareEnum square)
                 => !IsBlackEpSquare(square) ||
                     IsBlackEpSquare(square) && IsPieceOnSquare(PiecesEnum.BlackPawn, GetBlackPawnSquare(square));
+
+            private bool ValidateWhiteToMoveEpSquare(SquareEnum square)
+                => !(IsWhiteEpSquare(square) && board.IsWhiteToMove);
+
+            private bool ValidateBlackToMoveEpSquare(SquareEnum square)
+                => !(IsBlackEpSquare(square) && !board.IsWhiteToMove);
 
             private bool IsEpSquare(SquareEnum square)
                 => IsWhiteEpSquare(square) || IsBlackEpSquare(square);
@@ -130,6 +139,16 @@ namespace Chess.AF.Domain
 
             private SquareEnum GetBlackPawnSquare(SquareEnum square)
                 => (SquareEnum)((int)square) + 8;
+
+            #endregion
+
+            #region ValidatePawn
+
+            private bool ValidatePawns()
+                => !IsPawnOnRow1Or8(PiecesEnum.BlackPawn) && !IsPawnOnRow1Or8(PiecesEnum.WhitePawn);
+
+            private bool IsPawnOnRow1Or8(PiecesEnum piece)
+                => GetIteratorFor(piece).Any(ps => ps.Square.Row() == 0 || ps.Square.Row() == 7);
 
             #endregion
         }

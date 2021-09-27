@@ -27,7 +27,7 @@ namespace Chess.AF.ChessForm
         private bool IsReverse { get; set; } = false;
 
         public int Id { get; private set; }
-        public bool AbleToMoveTo
+        private bool AbleToMoveTo
         {
             get
             {
@@ -185,33 +185,30 @@ namespace Chess.AF.ChessForm
             else
                 SetEnableVisible(false);
 
-            //gameController.LastMove.Map(m => DrawLastMove(e, m));
+            gameController.LastMove.Map(m => DrawLastMove(e, m));
             PaintRectangles(e);
         }
 
         private void PaintRectangles(PaintEventArgs e)
         {
             if (gameController.LoosePieceSquares.Any(a => (int)a == Id))
-            {
-                var color = Color.FromArgb(255, 192, 0);
-                var alpha = Color.FromArgb(125, color);
-                e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
-                Brush brush = new SolidBrush(alpha);
-                e.Graphics.FillRectangle(brush, this.DisplayRectangle);
-            }
+                DrawRectangle(e);
         }
 
         private Unit DrawLastMove(PaintEventArgs e, Move move)
         {
             if (Id == (int)move.From || Id == (int)move.To)
-            {
-                var color = Color.FromArgb(255, 192, 0);
-                var alpha = Color.FromArgb(125, color);
-                e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
-                Brush brush = new SolidBrush(alpha);
-                e.Graphics.FillRectangle(brush, this.DisplayRectangle);
-            }
+                DrawRectangle(e);
             return Unit();
+        }
+
+        private void DrawRectangle(PaintEventArgs e)
+        {
+            var color = Color.FromArgb(255, 192, 0);
+            var alpha = Color.FromArgb(125, color);
+            e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
+            Brush brush = new SolidBrush(alpha);
+            e.Graphics.FillRectangle(brush, this.DisplayRectangle);
         }
 
         private void SetDrawLabelsToVisible()
