@@ -17,6 +17,7 @@ using Chess.AF.Enums;
 using Chess.AF.ChessForm.Helpers;
 using Chess.AF.ImportExport;
 using Chess.AF.Domain;
+using Chess.AF.ChessForm.Factories;
 
 namespace Chess.AF.ChessForm
 {
@@ -46,7 +47,8 @@ namespace Chess.AF.ChessForm
             this.gameController.Register(this);
             this.pgnController = pgnController;
 
-            this.boardControl = new BoardControl(this.gameController);
+            var squareControlFactory = new SquareControlFactory(this.gameController);
+            this.boardControl = new BoardControl(squareControlFactory);
             this.boardControl.BackColor = Color.SaddleBrown;
             this.boardControl.Size = new Size(BoardWidth, BoardWidth);
             this.boardControl.Margin = new Padding(0);

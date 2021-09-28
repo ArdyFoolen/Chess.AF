@@ -1,4 +1,5 @@
-﻿using Chess.AF.Controllers;
+﻿using Chess.AF.ChessForm.Factories;
+using Chess.AF.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,28 +15,27 @@ namespace Chess.AF.ChessForm
 {
     public partial class BoardControl : UserControl
     {
-        private IGameController gameController;
+        private ISquareControlFactory squareControlFactory;
 
         public bool IsReverse { get; private set; } = false;
 
-
-        public BoardControl(IGameController gameController)
+        public BoardControl(ISquareControlFactory squareControlFactory)
         {
             InitializeComponent();
 
-            this.gameController = gameController;
+            this.squareControlFactory = squareControlFactory;
             this.Controls.AddRange(GetSquares().ToArray());
         }
 
-        private IEnumerable<SquareControl> GetSquares()
+        private IEnumerable<Control> GetSquares()
         {
             foreach (int id in Enumerable.Range(0, 64))
                 yield return CreateSquareControl(id);
         }
 
-        private SquareControl CreateSquareControl(int id)
+        private Control CreateSquareControl(int id)
         {
-            var control = new SquareControl(id, gameController);
+            var control = squareControlFactory.Create(id);
             control.Relocate(this.IsReverse);
             control.Margin = new Padding(0);
             control.Size = new Size(SquareWidth, SquareWidth);
