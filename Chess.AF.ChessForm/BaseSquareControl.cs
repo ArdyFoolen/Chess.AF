@@ -22,18 +22,20 @@ namespace Chess.AF.ChessForm
         private DrawLabel lblFileAorH;
         private DrawLabel lblRow8or1;
 
-        private IGameController gameController;
+        protected ISquareController squareController;
         protected bool IsReverse { get; private set; } = false;
+
+        protected Color ImageBackColor { get { return btnImage.BackColor; } set { btnImage.BackColor = value; } }
 
         public int Id { get; private set; }
 
-        public BaseSquareControl(int id, IGameController gameController)
+        public BaseSquareControl(int id, ISquareController squareController)
         {
             InitializeComponent();
 
             this.Id = id;
-            this.gameController = gameController;
-            this.gameController.Register(this);
+            this.squareController = squareController;
+            this.squareController.Register(this);
 
             SetBackColor();
             DrawFileOrRowLabel();
@@ -41,6 +43,29 @@ namespace Chess.AF.ChessForm
 
             SetImage();
         }
+
+        public void Relocate(bool isReverse)
+        {
+            this.IsReverse = isReverse;
+            if (this.lblFileAorH != null)
+                this.lblFileAorH.IsReverse = IsReverse;
+            if (this.lblRow8or1 != null)
+                this.lblRow8or1.IsReverse = IsReverse;
+            SetDrawLabelsToVisible();
+            this.Location = GetLocation(this.Id);
+        }
+
+        private Point GetLocation(int id)
+            => new Point(GetX(id) * SquareWidth, GetY(id) * SquareWidth);
+
+        private int GetX(int id)
+            => GetRelativeLocation(id) % 8;
+
+        private int GetY(int id)
+            => GetRelativeLocation(id) / 8;
+
+        private int GetRelativeLocation(int id)
+            => IsReverse ? 63 - id : id;
 
         private void SetBackColor()
             => this.BackColor = (Id % 2 == 0 && (Id / 8) % 2 == 0 ||
@@ -108,41 +133,48 @@ namespace Chess.AF.ChessForm
         }
 
         private void btnImage_MouseLeave(object sender, EventArgs e)
-           => SetBackColorToImage(false);
+           => MouseLeaveImage(sender, e);
 
         private void btnImage_MouseEnter(object sender, EventArgs e)
-            => SetBackColorToImage(false);
+           => MouseEnterImage(sender, e);
 
         private void btnImage_MouseClick(object sender, MouseEventArgs e)
-            => gameController.Select(Id);
+           => MouseClickImage(sender, e);
 
-        private void SetImage()
+        protected void SetImage()
         {
             this.Invalidate(true);
-            gameController[Id].Match(
-                None: () => { btnImage.Image = null; SetBackColorToImage(false); },
+            squareController[Id].Match(
+                None: () => { btnImage.Image = null; SetBackColorToImage(); },
                 Some: s => SetImage(s)
                 );
         }
 
-        private void SetImage(PieceOnSquare<PiecesEnum> pieceOnSquare)
+        protected void SetBackColorToImage(Color? backColor = null)
         {
-            btnImage.Image = GetPieceDict[(int)pieceOnSquare.Piece]();
-            SetBackColorToImage(false);
-        }
-
-        #region Virtual methods
-
-        protected virtual void PaintButtonImage(object sender, PaintEventArgs e) { }
-
-        protected virtual void SetBackColorToImage(bool isSelected)
-        {
-            btnImage.BackColor = this.BackColor;
+            btnImage.BackColor = backColor.HasValue ? backColor.Value : this.BackColor;
             if (lblFileAorH != null)
                 lblFileAorH.BackColor = btnImage.BackColor;
             if (lblRow8or1 != null)
                 lblRow8or1.BackColor = btnImage.BackColor;
         }
+
+        #region Virtual methods
+
+        protected virtual void MouseLeaveImage(object sender, EventArgs e) { }
+
+        protected virtual void MouseEnterImage(object sender, EventArgs e) { }
+
+        protected virtual void MouseClickImage(object sender, EventArgs e)
+            => squareController.Select(Id);
+
+        protected virtual void SetImage(PieceOnSquare<PiecesEnum> pieceOnSquare)
+        {
+            btnImage.Image = GetPieceDict[(int)pieceOnSquare.Piece]();
+            SetBackColorToImage();
+        }
+
+        protected virtual void PaintButtonImage(object sender, PaintEventArgs e) { }
 
         public virtual void UpdateView()
             => SetImage();

@@ -12,15 +12,8 @@ using Chess.AF.Domain;
 
 namespace Chess.AF.Controllers
 {
-    public interface IGameController
+    public interface IGameController : ISquareController
     {
-        void Register(IBoardView view);
-        void UnRegister(IBoardView view);
-        Option<PieceOnSquare<PiecesEnum>> this[int index]
-        {
-            get;
-        }
-
         IEnumerable<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare)> SelectedMoves
         {
             get;
@@ -49,7 +42,6 @@ namespace Chess.AF.Controllers
 
         void LoadFen();
         void LoadFen(string fen);
-        void Select(int square);
         void Promote(int moveSquare, int piece);
         Option<Pgn> Export();
 
