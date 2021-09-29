@@ -23,7 +23,7 @@ namespace Chess.AF.ChessForm
 {
     public partial class ChessFrm : Form, IBoardView
     {
-        private CheckBoxControl chkLooseControl;
+        private CheckBoxesControl chkLooseControl;
 
         private Label lblResult = new Label();
         private Label lblCount = new Label();
@@ -66,11 +66,11 @@ namespace Chess.AF.ChessForm
             this.pgnDialog = new PgnDialog(gameController, pgnController);
             this.setupPosition = new SetupPosition(setupPositionController);
 
-            this.chkLooseControl = new CheckBoxControl();
-            this.chkLooseControl.BlackWhiteImage = ImageHelper.BlackWhiteQueenSmall();
-            this.chkLooseControl.WhiteImage = ImageHelper.WhiteQueenSmall();
-            this.chkLooseControl.BlackImage = ImageHelper.BlackQueenSmall();
-            this.chkLooseControl.ClickHandler = (on, flags) => gameController.UseLoosePiecesIterator(on, flags);
+            this.chkLooseControl = new CheckBoxesControl();
+            this.chkLooseControl.SetLabelText("Loose pieces");
+            this.chkLooseControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true));
+            this.chkLooseControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true, FilterFlags.White));
+            this.chkLooseControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true, FilterFlags.Black));
 
             this.BackColor = Color.Wheat;
 
@@ -87,7 +87,6 @@ namespace Chess.AF.ChessForm
             lblCount.Paint += FontHelper.Label_Paint;
 
             chkLooseControl.Location = new Point(570, 99);
-            chkLooseControl.Size = new Size(230, 40);
 
             pgnControl = new PgnControl(pgnController)
             {
@@ -98,7 +97,6 @@ namespace Chess.AF.ChessForm
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
-            //this.Controls.Add(chkLoose);
             this.Controls.Add(chkLooseControl);
             this.Controls.Add(lblResult);
             this.Controls.Add(lblCount);
