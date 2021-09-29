@@ -15,12 +15,10 @@ namespace Chess.AF.ChessForm
 {
     public partial class CheckBoxControl : UserControl
     {
-        private IGameController gameController { get; set; }
-        public CheckBoxControl(IGameController gameController)
+        public CheckBoxControl()
         {
             InitializeComponent();
 
-            this.gameController = gameController;
             this.Size = new Size(300, 33);
 
             lblDescription.Text = "Loose pieces";

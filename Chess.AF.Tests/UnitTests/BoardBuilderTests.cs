@@ -449,5 +449,68 @@ namespace Chess.AF.Tests.UnitTests
                             .Any()
                 ));
         }
+
+        [Test]
+        public void WithPieceOn_ReplaceBlackPieceByWhitePiece_ShouldReturnWhitePiece()
+        {
+            // Arrange
+            IBoardBuilder builder = Board.CreateBuilder();
+            var build = builder as IBoardBuild;
+
+            // Act
+            builder
+                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.e4);
+
+            // Assert
+            var piece = builder.GetPieceOn(SquareEnum.e4);
+
+            Assert.IsTrue(piece.Match(
+                None: () => false,
+                Some: p => PiecesEnum.WhitePawn.Is(p.Piece)
+                ));
+        }
+
+        [Test]
+        public void WithPieceOn_ReplaceBlackPawnByBlackRook_ShouldReturnBlackRook()
+        {
+            // Arrange
+            IBoardBuilder builder = Board.CreateBuilder();
+            var build = builder as IBoardBuild;
+
+            // Act
+            builder
+                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .WithPiece(PiecesEnum.BlackRook).On(SquareEnum.e4);
+
+            // Assert
+            var piece = builder.GetPieceOn(SquareEnum.e4);
+
+            Assert.IsTrue(piece.Match(
+                None: () => false,
+                Some: p => PiecesEnum.BlackRook.Is(p.Piece)
+                ));
+        }
+
+        [Test]
+        public void WithPieceOff_ReplacePiece_ShouldReturnNone()
+        {
+            // Arrange
+            IBoardBuilder builder = Board.CreateBuilder();
+            var build = builder as IBoardBuild;
+
+            // Act
+            builder
+                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .WithPiece(PiecesEnum.BlackRook).Off(SquareEnum.e4);
+
+            // Assert
+            var piece = builder.GetPieceOn(SquareEnum.e4);
+
+            Assert.IsTrue(piece.Match(
+                None: () => true,
+                Some: p => false
+                ));
+        }
     }
 }

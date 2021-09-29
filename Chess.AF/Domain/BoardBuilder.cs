@@ -1,4 +1,5 @@
 ﻿using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,9 @@ namespace Chess.AF.Domain
             #endregion
 
             #region IBoardBuilder
+
+            public Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square)
+                => boardMapBuilder.GetPieceOn(square);
 
             public IBoardBuilder Default()
             {

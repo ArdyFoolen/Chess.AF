@@ -1,4 +1,6 @@
-﻿using Chess.AF.Enums;
+﻿using AF.Functional;
+using Chess.AF.Dto;
+using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace Chess.AF.Domain
         IBoardBuilder WithBlackRokade(RokadeEnum rokade);
         IBoardBuilder WithEpSquare(SquareEnum epSquare);
 
+        Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square);
         IBoardBuilder Clear();
         IBoardBuilder WithPiece(PiecesEnum piece);
         IBoardBuilder Off(SquareEnum square);

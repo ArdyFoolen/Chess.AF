@@ -106,6 +106,9 @@ namespace Chess.AF
         public static Option<PieceEnum> ToPiece(this string piece)
             => pieceDict.ContainsKey(piece) ? Some(pieceDict[piece]) : None;
 
+        public static ulong SquareToMap(this SquareEnum square)
+            => 1ul << (63 - ((int)square));
+
         // A8: 0 / 8 = 0
         // H8: 7 / 8 = 0;
         // A1: 56 / 8 = 7;

@@ -49,6 +49,11 @@ namespace AF.Bootstrapper
             return factoryMethod(factory);
         }
 
+        private TInterface CreateInstance<TInterface>(Func<TInterface> factoryMethod)
+        {
+            return factoryMethod();
+        }
+
         private TInstance CreateInstance<TInterface, TInstance>()
             where TInstance : class
         {
@@ -84,6 +89,9 @@ namespace AF.Bootstrapper
 
         public void Register<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
             where TFactory : class
+            => dict.Add(typeof(TInterface), new Lazy<object>(() => CreateInstance(factoryMethod)));
+
+        public void Register<TInterface>(Func<TInterface> factoryMethod)
             => dict.Add(typeof(TInterface), new Lazy<object>(() => CreateInstance(factoryMethod)));
 
         public void Register<TInterface, TInstance>()

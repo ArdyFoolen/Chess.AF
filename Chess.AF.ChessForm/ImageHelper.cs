@@ -21,6 +21,7 @@ namespace Chess.AF.ChessForm
         private static readonly Image FenPgnImage;
         private static readonly Image ResignImage;
         private static readonly Image Draw50Image;
+        private static readonly Image SetupPositionImage;
 
         static ImageHelper()
         {
@@ -30,6 +31,7 @@ namespace Chess.AF.ChessForm
             FenPgnImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.FenPgn843x162.png");
             ResignImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Resign200x200.png");
             Draw50Image = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.Draw291x189.png");
+            SetupPositionImage = ReadEmbeddedRessourceImage("Chess.AF.ChessForm.Images.PositionSetup280x280.png");
         }
 
         #region public Chess Image Helpers
@@ -109,6 +111,13 @@ namespace Chess.AF.ChessForm
             Rectangle source = new Rectangle(new Point(x, 0), new Size(421, 162));
             return CropImage(FenPgnImage, source);
         }
+
+        #endregion
+
+        #region SetupPostion
+
+        public static Image SetupPosition()
+            => SetupPositionImage;
 
         #endregion
 

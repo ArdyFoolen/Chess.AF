@@ -30,13 +30,14 @@ namespace Chess.AF.ChessForm
 
         private LoadFen loadFen = new LoadFen();
         private PgnDialog pgnDialog;
+        private SetupPosition setupPosition;
         private BoardControl boardControl;
         private IGameController gameController;
         private IPgnController pgnController;
         private PgnControl pgnControl;
         private ToolstripNumericUpDown numUpDown;
 
-        public ChessFrm(IGameController gameController, IPgnController pgnController)
+        public ChessFrm(IGameController gameController, IPgnController pgnController, ISetupPositionController setupPositionController)
         {
             InitializeComponent();
 
@@ -63,8 +64,9 @@ namespace Chess.AF.ChessForm
             this.numUpDown.ToolTipText = "Change Loaded Pgn Game";
 
             this.pgnDialog = new PgnDialog(gameController, pgnController);
+            this.setupPosition = new SetupPosition(setupPositionController);
 
-            this.chkLooseControl = new CheckBoxControl(gameController);
+            this.chkLooseControl = new CheckBoxControl();
             this.chkLooseControl.BlackWhiteImage = ImageHelper.BlackWhiteQueenSmall();
             this.chkLooseControl.WhiteImage = ImageHelper.WhiteQueenSmall();
             this.chkLooseControl.BlackImage = ImageHelper.BlackQueenSmall();
@@ -104,6 +106,7 @@ namespace Chess.AF.ChessForm
 
             this.btnLoadFen.Click += BtnLoadFen_Click;
             this.btnLoadPgn.Click += BtnLoadPgn_Click;
+            this.btnSetupPosition.Click += btnSetupPosition_Click;
             this.numUpDown.ValueChanged += NumUpDown_ValueChanged;
             this.btnFirstMove.Click += BtnFirstMove_Click;
             this.btnPreviousMove.Click += BtnPreviousMove_Click;
@@ -115,6 +118,7 @@ namespace Chess.AF.ChessForm
 
             this.btnLoadFen.Image = Fen();
             this.btnLoadPgn.Image = Pgn();
+            this.btnSetupPosition.Image = SetupPosition();
             this.btnFirstMove.Image = FirstMove(23, 22);
             this.btnPreviousMove.Image = PreviousMove(23, 22);
             this.btnNextMove.Image = NextMove(23, 22);
@@ -136,6 +140,13 @@ namespace Chess.AF.ChessForm
 
         private void BtnLoadPgn_Click(object sender, EventArgs e)
             => this.pgnDialog.ShowDialog();
+
+        private void btnSetupPosition_Click(object sender, EventArgs e)
+        {
+            var result = this.setupPosition.ShowDialog();
+            if (DialogResult.OK.Equals(result))
+                gameController.LoadFen(this.setupPosition.Board.ToFenString());
+        }
 
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
             => this.gameController.SetFromPgn(this.pgnController.PgnFileIndexChanged(numUpDown.Value - 1));

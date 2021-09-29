@@ -1,9 +1,12 @@
-﻿using Chess.AF.Enums;
+﻿using AF.Functional;
+using Chess.AF.Dto;
+using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AF.Functional.F;
 
 namespace Chess.AF.Domain
 {
@@ -31,6 +34,15 @@ namespace Chess.AF.Domain
 
             #region IBoardBuilder
 
+            public Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square)
+            {
+                ulong sm = square.SquareToMap();
+                var pm = boardMap.Maps.Select((s, i) => new { Map = s, Piece = i }).Where((m, i) => i != 0 && i != 7).FirstOrDefault(f => (f.Map & sm) != 0ul);
+                if (pm != null)
+                    return Some(new PieceOnSquare<PiecesEnum>((PiecesEnum)pm.Piece, square));
+                return None;
+            }
+
             public BoardMapBuilder Clear()
             {
                 boardMap.Clear();
@@ -51,9 +63,7 @@ namespace Chess.AF.Domain
 
             public BoardMapBuilder Off(SquareEnum square)
             {
-                boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBitOff((int)square);
-                int allPieces = boardMap.GetIndexAllPiecesFor(IsWhiteToMove);
-                boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBitOff((int)square);
+                ClearSquareAllMaps(square);
                 return this;
             }
 
@@ -63,6 +73,7 @@ namespace Chess.AF.Domain
                 clearKingMaps(allPieces);
                 if (!isPawnOnRow1Or8(square))
                 {
+                    ClearSquareAllMaps(square);
                     boardMap.Maps[(int)piece] = boardMap.Maps[(int)piece].SetBit((int)square);
                     boardMap.Maps[allPieces] = boardMap.Maps[allPieces].SetBit((int)square);
                 }
@@ -76,12 +87,18 @@ namespace Chess.AF.Domain
 
             #region Private
 
+            private void ClearSquareAllMaps(SquareEnum square)
+            {
+                ulong sm = ~square.SquareToMap();
+                boardMap.Maps = boardMap.Maps.Select(m => m & sm).ToArray();
+            }
+
             private void clearKingMaps(int indexAllPieces)
             {
                 if (isKing())
                 {
+                    boardMap.Maps[indexAllPieces] = boardMap.Maps[indexAllPieces] & ~boardMap.Maps[(int)piece];
                     boardMap.Maps[(int)piece] = 0ul;
-                    boardMap.Maps[indexAllPieces] = 0ul;
                 }
             }
 

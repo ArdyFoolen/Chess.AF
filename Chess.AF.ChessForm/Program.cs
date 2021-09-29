@@ -1,16 +1,11 @@
 using AF.Bootstrapper;
 using AF.Factories;
-using Chess.AF.ChessForm.Extensions;
-using Chess.AF.ChessForm.Helpers;
 using Chess.AF.Controllers;
 using Chess.AF.Controllers.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Chess.AF.Domain;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Chess.AF.Domain.Board;
 
 namespace Chess.AF.ChessForm
 {
@@ -25,14 +20,19 @@ namespace Chess.AF.ChessForm
             Container.Instance.Register<IGameFactory, GameFactory>();
             Container.Instance.Register<IGameController, GameController>();
             Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
+            Container.Instance.Register(() => Board.CreateBuilder());
+
             Container.Instance.Register<IPgnController, PgnController>();
+            Container.Instance.Register<ISetupPositionController, SetupPositionController>();
+
             var gameController = Container.Instance.GetInstanceOf<IGameController>();
             var pgnController = Container.Instance.GetInstanceOf<IPgnController>();
+            var setupPositionController = Container.Instance.GetInstanceOf<ISetupPositionController>();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChessFrm(gameController, pgnController));
+            Application.Run(new ChessFrm(gameController, pgnController, setupPositionController));
         }
     }
 }
