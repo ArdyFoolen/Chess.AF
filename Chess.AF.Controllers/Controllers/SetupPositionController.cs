@@ -44,6 +44,8 @@ namespace Chess.AF.Controllers
                 view.UpdateView();
         }
 
+        public PiecesEnum CurrentPiece { get => boardBuilder.CurrentPiece; }
+
         public void Select(int square)
         {
             boardBuilder.On((SquareEnum)square);

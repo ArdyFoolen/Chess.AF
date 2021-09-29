@@ -88,8 +88,6 @@ namespace Chess.AF.ChessForm
 
             chkLooseControl.Location = new Point(570, 99);
 
-            //chkLooseControl.CheckBoxSize = new Size(80, 80);
-
             pgnControl = new PgnControl(pgnController)
             {
                 Location = new Point(570, 149),

@@ -34,6 +34,8 @@ namespace Chess.AF.Domain
 
             #region IBoardBuilder
 
+            public PiecesEnum CurrentPiece { get => piece; }
+
             public Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square)
             {
                 ulong sm = square.SquareToMap();

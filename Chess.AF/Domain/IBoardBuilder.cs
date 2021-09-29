@@ -17,6 +17,7 @@ namespace Chess.AF.Domain
         IBoardBuilder WithBlackRokade(RokadeEnum rokade);
         IBoardBuilder WithEpSquare(SquareEnum epSquare);
 
+        PiecesEnum CurrentPiece { get; }
         Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square);
         IBoardBuilder Clear();
         IBoardBuilder WithPiece(PiecesEnum piece);

@@ -43,6 +43,8 @@ namespace Chess.AF.Domain
 
             #region IBoardBuilder
 
+            public PiecesEnum CurrentPiece { get => boardMapBuilder.CurrentPiece; }
+
             public Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square)
                 => boardMapBuilder.GetPieceOn(square);
 

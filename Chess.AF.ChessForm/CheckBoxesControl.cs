@@ -16,6 +16,7 @@ namespace Chess.AF.ChessForm
     public partial class CheckBoxesControl : UserControl
     {
         private List<CheckBox> checkBoxes = new List<CheckBox>();
+        private CheckBoxesControl linkedControl;
 
         public CheckBoxesControl()
         {
@@ -29,6 +30,9 @@ namespace Chess.AF.ChessForm
             lblDescription.Paint += FontHelper.Label_Paint;
             lblDescription.Visible = false;
         }
+
+        public void LinkTo(CheckBoxesControl control)
+            => linkedControl = control;
 
         public void SetLabelText(string text)
         {
@@ -52,15 +56,17 @@ namespace Chess.AF.ChessForm
         public Size CheckBoxSize
         {
             get => checkBoxes.Count() > 0 ? checkBoxes[0].Size : new Size(0, 0);
-            //set
-            //{
-            //    this.Size = new Size(CheckboxesWidth * 4, CheckBoxSize.Height * 4);
-            //    checkBoxes = checkBoxes.Select((c, i) => { c.Size = value; c.Location = GetLocationForIndex(i); return c; }).ToList();
-            //    //foreach (var c in checkBoxes)
-            //    //    c.Size = value;
-            //    this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
-            //}
+            set
+            {
+                this.SuspendLayout();
+                checkBoxes = checkBoxes.Select((c, i) => { c.Size = value; c.Location = GetLocationForIndex(i); return c; }).ToList();
+                this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
+                this.ResumeLayout(false);
+            }
         }
+
+        public void SetCheckedFor(int index)
+            => checkBoxes[index].Checked = true;
 
         private CheckBox CreateCheckBox(Image image, EventHandler clickEvent)
         {
@@ -92,6 +98,7 @@ namespace Chess.AF.ChessForm
         {
             var chkBox = sender as CheckBox;
             checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
+            linkedControl?.checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
         }
 
         private Point GetLocationForIndex(int index)
@@ -109,6 +116,6 @@ namespace Chess.AF.ChessForm
         }
 
         private string FormatName()
-            => $"chkName-{Count}";
+            => $"chkName-{Guid.NewGuid()}";
     }
 }
