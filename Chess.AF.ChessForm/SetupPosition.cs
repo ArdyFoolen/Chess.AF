@@ -1,6 +1,7 @@
 ﻿using Chess.AF.ChessForm.Factories;
 using Chess.AF.Controllers;
 using Chess.AF.Domain;
+using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,22 +40,22 @@ namespace Chess.AF.ChessForm
             this.boardControl.BorderStyle = BorderStyle.FixedSingle;
 
             this.chkBlackControl = new CheckBoxesControl();
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKing(), null);
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackQueen(), null);
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackRook(), null);
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackBishop(), null);
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKnight(), null);
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackPawn(), null);
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKing(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackKing));
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackQueen(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackQueen));
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackRook(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackRook));
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackBishop(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackBishop));
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKnight(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackKnight));
+            this.chkBlackControl.AddCheckBox(ImageHelper.BlackPawn(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackPawn));
             this.chkBlackControl.Location = new Point(0, 0);
             this.chkBlackControl.CheckBoxSize = new Size(SquareWidth, SquareWidth);
 
             this.chkWhiteControl = new CheckBoxesControl();
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKing(), null);
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteQueen(), null);
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteRook(), null);
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteBishop(), null);
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKnight(), null);
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhitePawn(), null);
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKing(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteKing));
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteQueen(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteQueen));
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteRook(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteRook));
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteBishop(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteBishop));
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKnight(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteKnight));
+            this.chkWhiteControl.AddCheckBox(ImageHelper.WhitePawn(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhitePawn));
             this.chkWhiteControl.Location = new Point(0, BoardWidth + SquareWidth);
             this.chkWhiteControl.CheckBoxSize = new Size(SquareWidth, SquareWidth);
 

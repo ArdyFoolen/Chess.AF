@@ -46,9 +46,12 @@ namespace Chess.AF.Controllers
 
         public PiecesEnum CurrentPiece { get => boardBuilder.CurrentPiece; }
 
+        public void WithPiece(PiecesEnum piece)
+            => boardBuilder.WithPiece(piece);
+
         public void Select(int square)
         {
-            boardBuilder.On((SquareEnum)square);
+            boardBuilder.Toggle((SquareEnum)square);
             NotifyViews();
         }
 
