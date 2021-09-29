@@ -56,6 +56,7 @@ namespace Chess.AF.ChessForm
             {
                 foreach (var c in checkBoxes)
                     c.Size = value;
+                this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
             }
         }
 
