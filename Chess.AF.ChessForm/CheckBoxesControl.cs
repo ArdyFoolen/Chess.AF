@@ -52,12 +52,14 @@ namespace Chess.AF.ChessForm
         public Size CheckBoxSize
         {
             get => checkBoxes.Count() > 0 ? checkBoxes[0].Size : new Size(0, 0);
-            set
-            {
-                foreach (var c in checkBoxes)
-                    c.Size = value;
-                this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
-            }
+            //set
+            //{
+            //    this.Size = new Size(CheckboxesWidth * 4, CheckBoxSize.Height * 4);
+            //    checkBoxes = checkBoxes.Select((c, i) => { c.Size = value; c.Location = GetLocationForIndex(i); return c; }).ToList();
+            //    //foreach (var c in checkBoxes)
+            //    //    c.Size = value;
+            //    this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
+            //}
         }
 
         private CheckBox CreateCheckBox(Image image, EventHandler clickEvent)
@@ -92,16 +94,18 @@ namespace Chess.AF.ChessForm
             checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
         }
 
+        private Point GetLocationForIndex(int index)
+            => new Point(WidthForIndex(index), 5);
+
         private Point GetNextLocation()
             => new Point(CheckboxesWidth, 5);
 
-        private int CheckboxesWidth
+        private int CheckboxesWidth { get => WidthForIndex(Count); }
+
+        private int WidthForIndex(int index)
         {
-            get
-            {
-                var start = lblDescription.Visible ? 100 : 0;
-                return start + CheckBoxSize.Width * Count;
-            }
+            var start = lblDescription.Visible ? 100 : 0;
+            return start + CheckBoxSize.Width * index;
         }
 
         private string FormatName()
