@@ -44,6 +44,10 @@ namespace Chess.AF.Domain
             #region IBoardBuilder
 
             public PiecesEnum CurrentPiece { get => boardMapBuilder.CurrentPiece; }
+            public Option<SquareEnum> CurrentEpSquare { get => board.EpSquare; }
+            public bool IsWhiteToMove { get => board.IsWhiteToMove; }
+            public RokadeEnum WhiteRokade { get => board.WhiteRokade; }
+            public RokadeEnum BlackRokade { get => board.BlackRokade; }
 
             public Option<PieceOnSquare<PiecesEnum>> GetPieceOn(SquareEnum square)
                 => boardMapBuilder.GetPieceOn(square);
@@ -82,6 +86,12 @@ namespace Chess.AF.Domain
             public IBoardBuilder WithEpSquare(SquareEnum epSquare)
             {
                 board.EpSquare = Some(epSquare);
+                return this;
+            }
+
+            public IBoardBuilder WithoutEpSquare()
+            {
+                board.EpSquare = None;
                 return this;
             }
 

@@ -1,4 +1,5 @@
 ﻿using Chess.AF.ChessForm.Factories;
+using Chess.AF.ChessForm.Helpers;
 using Chess.AF.Controllers;
 using Chess.AF.Domain;
 using Chess.AF.Enums;
@@ -40,34 +41,69 @@ namespace Chess.AF.ChessForm
             this.boardControl.BorderStyle = BorderStyle.FixedSingle;
 
             this.chkBlackControl = new CheckBoxesControl();
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKing(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackKing));
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackQueen(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackQueen));
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackRook(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackRook));
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackBishop(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackBishop));
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackKnight(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackKnight));
-            this.chkBlackControl.AddCheckBox(ImageHelper.BlackPawn(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.BlackPawn));
+            CheckBoxControlHelper.CreateBlackPieces(chkBlackControl, setupPositionController);
             this.chkBlackControl.Location = new Point(0, 0);
             this.chkBlackControl.CheckBoxSize = new Size(SquareWidth, SquareWidth);
+            this.chkBlackControl.RadioStyle = true;
 
             this.chkWhiteControl = new CheckBoxesControl();
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKing(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteKing));
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteQueen(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteQueen));
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteRook(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteRook));
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteBishop(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteBishop));
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhiteKnight(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhiteKnight));
-            this.chkWhiteControl.AddCheckBox(ImageHelper.WhitePawn(), (sender, e) => this.setupPositionController.WithPiece(PiecesEnum.WhitePawn));
+            CheckBoxControlHelper.CreateWhitePieces(chkWhiteControl, setupPositionController);
             this.chkWhiteControl.Location = new Point(0, BoardWidth + SquareWidth);
             this.chkWhiteControl.CheckBoxSize = new Size(SquareWidth, SquareWidth);
+            this.chkWhiteControl.RadioStyle = true;
 
             this.chkBlackControl.LinkTo(this.chkWhiteControl);
             this.chkWhiteControl.LinkTo(this.chkBlackControl);
-            this.chkWhiteControl.SetCheckedFor(0);
 
             this.StartPosition = FormStartPosition.CenterParent;
 
             this.Controls.Add(this.boardControl);
             this.Controls.Add(this.chkBlackControl);
             this.Controls.Add(this.chkWhiteControl);
+
+            rdWhiteToMove.Checked = setupPositionController.IsWhiteToMove;
+            rdBlackToMove.Checked = !setupPositionController.IsWhiteToMove;
+            AddEpSquaresToCombo();
+            AddRokadeToCombos();
+        }
+
+        private void AddRokadeToCombos()
+        {
+            AddRokadeToCombo(cmbWhiteRokade, setupPositionController.WhiteRokade);
+            AddRokadeToCombo(cmbBlackRokade, setupPositionController.BlackRokade);
+        }
+
+        private void AddRokadeToCombo(ComboBox box, RokadeEnum selected = RokadeEnum.KingAndQueenSide)
+        {
+            box.DisplayMember = "Description";
+            box.ValueMember = "Value";
+            box.DataSource = Enum.GetValues(typeof(RokadeEnum))
+                .Cast<Enum>()
+                .Select(value => new
+                {
+                    (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description,
+                    value
+                })
+                .OrderBy(item => item.value)
+                .ToList();
+
+            box.SelectedValue = selected;
+        }
+
+        private void AddEpSquaresToCombo()
+        {
+            cmbEpSquare.Items.Add("None");
+            cmbEpSquare.Items.AddRange(
+                Enum.GetValues(typeof(SquareEnum))
+                .Cast<SquareEnum>()
+                .Where(w => w.Row() == 2 || w.Row() == 5)
+                .Cast<object>()
+                .ToArray());
+
+            cmbEpSquare.SelectedItem = setupPositionController.CurrentEpSquare.Match<object>(
+                None: () => "None",
+                Some: s => s
+                );
         }
 
         private void btnSetup_Click(object sender, EventArgs e)
@@ -85,5 +121,25 @@ namespace Chess.AF.ChessForm
             Close();
         }
 
+        private void btnClear_Click(object sender, EventArgs e)
+            => setupPositionController.ClearBoard();
+
+        private void cmbEpSquare_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SquareEnum? square = cmbEpSquare.SelectedItem as SquareEnum?;
+            if (square.HasValue)
+                setupPositionController.WithEpSquare(square.Value);
+            else
+                setupPositionController.WithoutEpSquare();
+        }
+
+        private void rdWhiteToMove_CheckedChanged(object sender, EventArgs e)
+            => setupPositionController.WithWhiteToMove(rdWhiteToMove.Checked);
+
+        private void cmbWhiteRokade_SelectedIndexChanged(object sender, EventArgs e)
+            => setupPositionController.WithWhiteRokade((RokadeEnum)cmbWhiteRokade.SelectedValue);
+
+        private void cmbBlackRokade_SelectedIndexChanged(object sender, EventArgs e)
+            => setupPositionController.WithBlackRokade((RokadeEnum)cmbBlackRokade.SelectedValue);
     }
 }

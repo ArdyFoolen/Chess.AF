@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -89,12 +90,16 @@ namespace Chess.AF.Enums
     public enum RokadeEnum : byte
     {
         [EnumMember]
+        [Description("None")]
         None,
         [EnumMember]
+        [Description("Kingside")]
         KingSide,
         [EnumMember]
+        [Description("Queenside")]
         QueenSide,
         [EnumMember]
+        [Description("King- and  Queenside")]
         KingAndQueenSide
     }
 

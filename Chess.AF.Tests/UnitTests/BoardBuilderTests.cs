@@ -512,5 +512,32 @@ namespace Chess.AF.Tests.UnitTests
                 Some: p => false
                 ));
         }
+
+        [TestCase(PiecesEnum.WhitePawn, SquareEnum.e4, SquareEnum.e3, SquareEnum.e2, false)]
+        [TestCase(PiecesEnum.BlackPawn, SquareEnum.e5, SquareEnum.e6, SquareEnum.e7, true)]
+        public void Build_WithEpSquareAndPieceOnEmptySquare_ShouldReturnNone(PiecesEnum pawn, SquareEnum pawnSquare, SquareEnum epSquare, SquareEnum emptySquare, bool isWhiteToMove)
+        {
+            // Arrange
+            IBoardBuilder builder = Board.CreateBuilder();
+            var build = builder as IBoardBuild;
+            builder
+                .WithBlackRokade(RokadeEnum.None)
+                .WithWhiteRokade(RokadeEnum.None)
+                .WithWhiteToMove(isWhiteToMove)
+                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .WithPiece(pawn).On(pawnSquare)
+                .WithEpSquare(epSquare)
+                .WithPiece(PiecesEnum.BlackRook).On(emptySquare);
+
+            // Act
+            var board = build.Build();
+
+            // Assert
+            Assert.IsTrue(board.Match(
+                None: () => true,
+                Some: b => false
+                ));
+        }
     }
 }

@@ -45,9 +45,52 @@ namespace Chess.AF.Controllers
         }
 
         public PiecesEnum CurrentPiece { get => boardBuilder.CurrentPiece; }
+        public Option<SquareEnum> CurrentEpSquare { get => boardBuilder.CurrentEpSquare; }
+        public bool IsWhiteToMove { get => boardBuilder.IsWhiteToMove; }
+        public RokadeEnum WhiteRokade { get => boardBuilder.WhiteRokade; }
+        public RokadeEnum BlackRokade { get => boardBuilder.BlackRokade; }
+
+        public void WithWhiteToMove(bool whiteToMove)
+        {
+            boardBuilder.WithWhiteToMove(whiteToMove);
+            NotifyViews();
+        }
 
         public void WithPiece(PiecesEnum piece)
-            => boardBuilder.WithPiece(piece);
+        {
+            boardBuilder.WithPiece(piece);
+            NotifyViews();
+        }
+
+        public void WithEpSquare(SquareEnum epSquare)
+        {
+            boardBuilder.WithEpSquare(epSquare);
+            NotifyViews();
+        }
+
+        public void WithoutEpSquare()
+        {
+            boardBuilder.WithoutEpSquare();
+            NotifyViews();
+        }
+
+        public void WithWhiteRokade(RokadeEnum rokade)
+        {
+            boardBuilder.WithWhiteRokade(rokade);
+            NotifyViews();
+
+        }
+        public void WithBlackRokade(RokadeEnum rokade)
+        {
+            boardBuilder.WithBlackRokade(rokade);
+            NotifyViews();
+        }
+
+        public void ClearBoard()
+        {
+            boardBuilder.Clear();
+            NotifyViews();
+        }
 
         public void Select(int square)
         {

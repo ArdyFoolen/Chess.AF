@@ -31,6 +31,8 @@ namespace Chess.AF.ChessForm
             lblDescription.Visible = false;
         }
 
+        public bool RadioStyle { get; set; } = false;
+
         public void LinkTo(CheckBoxesControl control)
             => linkedControl = control;
 
@@ -45,9 +47,9 @@ namespace Chess.AF.ChessForm
             }
         }
 
-        public void AddCheckBox(Image image, EventHandler clickEvent)
+        public void AddCheckBox(Image image, EventHandler clickEvent, bool isChecked = false)
         {
-            checkBoxes.Add(CreateCheckBox(image, clickEvent));
+            checkBoxes.Add(CreateCheckBox(image, clickEvent, isChecked));
             this.Size = new Size(CheckboxesWidth, CheckBoxSize.Height);
         }
 
@@ -68,7 +70,7 @@ namespace Chess.AF.ChessForm
         public void SetCheckedFor(int index)
             => checkBoxes[index].Checked = true;
 
-        private CheckBox CreateCheckBox(Image image, EventHandler clickEvent)
+        private CheckBox CreateCheckBox(Image image, EventHandler clickEvent, bool isChecked = false)
         {
             CheckBox checkBox = new CheckBox();
             this.SuspendLayout();
@@ -86,6 +88,7 @@ namespace Chess.AF.ChessForm
             checkBox.Image = image;
             checkBox.Click += CheckBox_Click;
             checkBox.Click += clickEvent;
+            checkBox.Checked = isChecked;
 
             this.Controls.Add(checkBox);
             this.ResumeLayout(false);
@@ -97,8 +100,13 @@ namespace Chess.AF.ChessForm
         private void CheckBox_Click(object sender, EventArgs e)
         {
             var chkBox = sender as CheckBox;
-            checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
-            linkedControl?.checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
+            if (RadioStyle && !chkBox.Checked)
+                chkBox.Checked = true;
+            else
+            {
+                checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
+                linkedControl?.checkBoxes.Where(w => !w.Name.Equals(chkBox.Name)).ToList().ForEach(c => c.Checked = false);
+            }
         }
 
         private Point GetLocationForIndex(int index)

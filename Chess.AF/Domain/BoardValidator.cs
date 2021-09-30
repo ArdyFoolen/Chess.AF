@@ -95,6 +95,9 @@ namespace Chess.AF.Domain
             private bool IsPieceOnSquare(PiecesEnum piece, SquareEnum square)
                 => GetIteratorFor(piece).Any(a => square.Equals(a.Square));
 
+            private bool IsPieceOnSquare(SquareEnum square)
+                => boardMap.GetIteratorForAll<PiecesEnum>().Any(a => square.Equals(a.Square));
+
             #endregion
 
             #region ValidateEpSquare
@@ -109,7 +112,8 @@ namespace Chess.AF.Domain
                 => IsEpSquare(square) &&
                     ValidateWhiteToMoveEpSquare(square) &&
                     ValidateBlackToMoveEpSquare(square) &&
-                    (ValidateWhitePawnOnSquare(square) || ValidateBlackPawnOnSquare(square));
+                    (ValidateWhitePawnOnSquare(square) || ValidateBlackPawnOnSquare(square)) &&
+                    ValidateWhiteEmptySquare(square) && ValidateBlackEmptyquare(square);
 
             private bool ValidateWhitePawnOnSquare(SquareEnum square)
                 => !IsWhiteEpSquare(square) ||
@@ -118,6 +122,14 @@ namespace Chess.AF.Domain
             private bool ValidateBlackPawnOnSquare(SquareEnum square)
                 => !IsBlackEpSquare(square) ||
                     IsBlackEpSquare(square) && IsPieceOnSquare(PiecesEnum.BlackPawn, GetBlackPawnSquare(square));
+
+            private bool ValidateWhiteEmptySquare(SquareEnum square)
+                => !IsWhiteEpSquare(square) ||
+                    IsWhiteEpSquare(square) && !IsPieceOnSquare(GetWhiteEmptySquare(square));
+
+            private bool ValidateBlackEmptyquare(SquareEnum square)
+                => !IsBlackEpSquare(square) ||
+                    IsBlackEpSquare(square) && !IsPieceOnSquare(GetBlackEmptySquare(square));
 
             private bool ValidateWhiteToMoveEpSquare(SquareEnum square)
                 => !(IsWhiteEpSquare(square) && board.IsWhiteToMove);
@@ -139,6 +151,12 @@ namespace Chess.AF.Domain
 
             private SquareEnum GetBlackPawnSquare(SquareEnum square)
                 => (SquareEnum)((int)square) + 8;
+
+            private SquareEnum GetWhiteEmptySquare(SquareEnum square)
+                => (SquareEnum)((int)square) + 8;
+
+            private SquareEnum GetBlackEmptySquare(SquareEnum square)
+                => (SquareEnum)((int)square) - 8;
 
             #endregion
 

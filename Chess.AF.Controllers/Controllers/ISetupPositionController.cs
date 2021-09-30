@@ -1,4 +1,5 @@
-﻿using Chess.AF.Domain;
+﻿using AF.Functional;
+using Chess.AF.Domain;
 using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,19 @@ namespace Chess.AF.Controllers
     {
         IBoard Board { get; }
         PiecesEnum CurrentPiece { get; }
+        Option<SquareEnum> CurrentEpSquare { get; }
+        bool IsWhiteToMove { get; }
+        RokadeEnum WhiteRokade { get; }
+        RokadeEnum BlackRokade { get; }
 
+        void ClearBoard();
+        void WithWhiteToMove(bool whiteToMove);
         void WithPiece(PiecesEnum piece);
+        void WithEpSquare(SquareEnum epSquare);
+        void WithoutEpSquare();
+        void WithWhiteRokade(RokadeEnum rokade);
+        void WithBlackRokade(RokadeEnum rokade);
+
         bool TryBuild();
     }
 }
