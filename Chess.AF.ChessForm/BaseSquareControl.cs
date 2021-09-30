@@ -127,10 +127,7 @@ namespace Chess.AF.ChessForm
         }
 
         private void btnImage_Paint(object sender, PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            PaintButtonImage(sender, e);
-        }
+            => PaintButtonImage(sender, e);
 
         private void btnImage_MouseLeave(object sender, EventArgs e)
            => MouseLeaveImage(sender, e);
