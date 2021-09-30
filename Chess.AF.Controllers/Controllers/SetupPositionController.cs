@@ -100,14 +100,6 @@ namespace Chess.AF.Controllers
 
         public bool TryBuild()
         {
-            //boardBuilder
-            //    .WithPiece(PiecesEnum.BlackKing);
-            //Select(5);
-            //boardBuilder
-            //    .WithWhiteRokade(RokadeEnum.None)
-            //    .WithBlackRokade(RokadeEnum.None)
-            //    .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-            //    .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8);
             var board = (boardBuilder as IBoardBuild).Build();
 
             return board.Match(
