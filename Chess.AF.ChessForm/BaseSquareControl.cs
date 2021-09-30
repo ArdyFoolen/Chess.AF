@@ -143,11 +143,11 @@ namespace Chess.AF.ChessForm
 
         protected void SetImage()
         {
-            this.Invalidate(true);
             squareController[Id].Match(
                 None: () => { btnImage.Image = null; SetBackColorToImage(); },
                 Some: s => SetImage(s)
                 );
+            this.Invalidate(true);
         }
 
         protected void SetBackColorToImage(Color? backColor = null)
