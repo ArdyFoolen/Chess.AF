@@ -113,6 +113,9 @@ namespace Chess.AF.ChessForm
                 this.DialogResult = DialogResult.OK;
                 Close();
             }
+            else
+                MessageBox.Show(setupPositionController.Error, "Error Setting up Position",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

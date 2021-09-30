@@ -16,7 +16,7 @@ namespace Chess.AF.Controllers
     {
         private IBoardBuilder boardBuilder;
         private List<IBoardView> views = new List<IBoardView>();
-        private string error = "";
+        public string Error { get; private set; } = "";
         public IBoard Board { get; private set; }
 
         public Option<PieceOnSquare<PiecesEnum>> this[int index] { get => boardBuilder.GetPieceOn((SquareEnum)index); }
@@ -110,14 +110,14 @@ namespace Chess.AF.Controllers
 
         private bool SetError(string error)
         {
-            this.error = error;
+            this.Error = error;
             NotifyViews();
             return false;
         }
 
         private bool SetBoard(IBoard board)
         {
-            error = "";
+            Error = "";
             this.Board = board;
             return true;
         }
