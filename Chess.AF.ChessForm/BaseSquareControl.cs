@@ -171,7 +171,7 @@ namespace Chess.AF.ChessForm
             SetBackColorToImage();
         }
 
-        protected virtual void PaintButtonImage(object sender, PaintEventArgs e) { }
+        protected virtual void PaintButtonImage(object sender, PaintEventArgs e) { lblFileAorH?.Invalidate(); lblRow8or1?.Invalidate(); }
 
         public virtual void UpdateView()
             => SetImage();

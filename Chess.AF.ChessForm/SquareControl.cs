@@ -16,7 +16,7 @@ using static AF.Functional.F;
 
 namespace Chess.AF.ChessForm
 {
-    public partial class SquareControl : BaseSquareControl
+    public class SquareControl : BaseSquareControl
     {
         private bool isSelected;
         private PromoteControl promoteControl;
@@ -32,8 +32,6 @@ namespace Chess.AF.ChessForm
 
         public SquareControl(int id, IGameController gameController) : base(id, gameController)
         {
-            InitializeComponent();
-
             // No need to register here, base will do this
             this.gameController = gameController;
 

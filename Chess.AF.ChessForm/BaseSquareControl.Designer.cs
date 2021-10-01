@@ -48,13 +48,13 @@ namespace Chess.AF.ChessForm
             this.btnImage.MouseEnter += new System.EventHandler(this.btnImage_MouseEnter);
             this.btnImage.MouseLeave += new System.EventHandler(this.btnImage_MouseLeave);
             // 
-            // SquareControl
+            // BaseSquareControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnImage);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "SquareControl";
+            this.Name = "BaseSquareControl";
             this.Size = new System.Drawing.Size(62, 60);
             this.ResumeLayout(false);
 
