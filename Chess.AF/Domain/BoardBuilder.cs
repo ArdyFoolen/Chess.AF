@@ -26,7 +26,6 @@ namespace Chess.AF.Domain
             private Board board;
             private BoardMapBuilder boardMapBuilder;
             private IBoardValidator validator;
-            public IEnumerable<Error> Errors { get; private set; }
 
             #endregion
 
@@ -129,15 +128,11 @@ namespace Chess.AF.Domain
 
             #region Validation
 
-            private Validation<IBoard> IsValid()
+            private Validation<IBoard> Validate()
             {
                 validator.SetBoard(board);
                 validator.SetBoardMap(board.Implementor);
-                var res = validator.Validate();
-
-                res.MapErrors(ie => Errors = ie);
-
-                return res.Map(m => (IBoard)m); ;
+                return validator.Validate().Map(m => (IBoard)m);
             }
 
             #endregion
@@ -149,11 +144,7 @@ namespace Chess.AF.Domain
                 boardMapBuilder.WithBoard(board);
                 board.Implementor = boardMapBuilder.Build();
 
-                return IsValid();
-                //if (!IsValid())
-                //    return None;
-
-                //return board;
+                return Validate();
             }
 
             #endregion

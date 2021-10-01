@@ -102,11 +102,6 @@ namespace Chess.AF.Controllers
         {
             var board = (boardBuilder as IBoardBuild).Build();
 
-            //return board.Match(
-            //    None: () => SetError("Failed to build Board"),
-            //    Some: b => SetBoard(b)
-            //    );
-
             return board.Match(
                 Invalid: ie => SetErrors(ie),
                 Valid: b => SetBoard(b)
