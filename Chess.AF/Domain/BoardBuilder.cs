@@ -55,8 +55,8 @@ namespace Chess.AF.Domain
             public IBoardBuilder Default()
             {
                 board.IsWhiteToMove = true;
-                board.WhiteRokade = RokadeEnum.KingAndQueenSide;
-                board.BlackRokade = RokadeEnum.KingAndQueenSide;
+                board.WhiteRokade = RokadeEnum.None;
+                board.BlackRokade = RokadeEnum.None;
                 board.EpSquare = None;
                 board.PlyCount = 0;
                 board.MoveNumber = 1;
