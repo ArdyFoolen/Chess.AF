@@ -16,7 +16,7 @@ namespace Chess.AF.Controllers
     {
         private IBoardBuilder boardBuilder;
         private List<IBoardView> views = new List<IBoardView>();
-        public string Error { get; private set; } = "";
+        public IEnumerable<Error> Errors { get; private set; } = Enumerable.Empty<Error>();
         public IBoard Board { get; private set; }
 
         public Option<PieceOnSquare<PiecesEnum>> this[int index] { get => boardBuilder.GetPieceOn((SquareEnum)index); }
@@ -102,22 +102,27 @@ namespace Chess.AF.Controllers
         {
             var board = (boardBuilder as IBoardBuild).Build();
 
+            //return board.Match(
+            //    None: () => SetError("Failed to build Board"),
+            //    Some: b => SetBoard(b)
+            //    );
+
             return board.Match(
-                None: () => SetError("Failed to build Board"),
-                Some: b => SetBoard(b)
+                Invalid: ie => SetErrors(ie),
+                Valid: b => SetBoard(b)
                 );
         }
 
-        private bool SetError(string error)
+        private bool SetErrors(IEnumerable<Error> errors)
         {
-            this.Error = error;
+            this.Errors = errors;
             NotifyViews();
             return false;
         }
 
         private bool SetBoard(IBoard board)
         {
-            Error = "";
+            Errors = Enumerable.Empty<Error>(); ;
             this.Board = board;
             return true;
         }

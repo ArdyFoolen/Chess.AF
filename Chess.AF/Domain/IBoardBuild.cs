@@ -9,6 +9,6 @@ namespace Chess.AF.Domain
 {
     public interface IBoardBuild
     {
-        Option<IBoard> Build();
+        Validation<IBoard> Build();
     }
 }

@@ -26,8 +26,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => true,
-                Some: b => false
+                Invalid: ie => true,
+                Valid: b => false
                 ));
         }
 
@@ -47,8 +47,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => true,
-                Some: b => false
+                Invalid: ie => true,
+                Valid: b => false
                 ));
         }
 
@@ -68,8 +68,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => true,
-                Some: b => false
+                Invalid: ie => true,
+                Valid: b => false
                 ));
         }
 
@@ -90,8 +90,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -114,12 +114,12 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => b.IterateForAllMoves()
+                Invalid: ie => false,
+                Valid: b => b.IterateForAllMoves()
                             .Where(t => PieceEnum.King.Is(t.Piece) && (SquareEnum.e8.Equals(t.Square) || SquareEnum.e6.Equals(t.Square)))
                             .All(a => SquareEnum.e6.Equals(a.Square))
                 ));
@@ -144,12 +144,12 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => b.IterateForAllMoves()
+                Invalid: ie => false,
+                Valid: b => b.IterateForAllMoves()
                             .Where(t => PieceEnum.King.Is(t.Piece) && (SquareEnum.e1.Equals(t.Square) || SquareEnum.e3.Equals(t.Square)))
                             .All(a => SquareEnum.e3.Equals(a.Square))
                 ));
@@ -172,8 +172,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -199,8 +199,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -226,8 +226,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -253,8 +253,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -280,8 +280,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -320,8 +320,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -346,8 +346,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => true,
-                Some: b => false
+                Invalid: ie => true,
+                Valid: b => false
                 ));
         }
 
@@ -384,8 +384,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
         }
 
@@ -439,12 +439,12 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => true
+                Invalid: ie => false,
+                Valid: b => true
                 ));
             Assert.IsTrue(board.Match(
-                None: () => false,
-                Some: b => !b.IterateForAllMoves()
+                Invalid: ie => false,
+                Valid: b => !b.IterateForAllMoves()
                             .Where(t => PieceEnum.Pawn.Is(t.Piece) && (pawnSquare.Equals(t.Square)))
                             .Any()
                 ));
@@ -535,8 +535,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Assert
             Assert.IsTrue(board.Match(
-                None: () => true,
-                Some: b => false
+                Invalid: ie => true,
+                Valid: b => false
                 ));
         }
     }

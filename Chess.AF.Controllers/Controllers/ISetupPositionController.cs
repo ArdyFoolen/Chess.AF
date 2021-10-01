@@ -12,7 +12,7 @@ namespace Chess.AF.Controllers
     public interface ISetupPositionController : ISquareController
     {
         IBoard Board { get; }
-        string Error { get; }
+        IEnumerable<Error> Errors { get; }
         PiecesEnum CurrentPiece { get; }
         Option<SquareEnum> CurrentEpSquare { get; }
         bool IsWhiteToMove { get; }

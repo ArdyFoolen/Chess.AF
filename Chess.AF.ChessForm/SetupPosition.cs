@@ -114,7 +114,7 @@ namespace Chess.AF.ChessForm
                 Close();
             }
             else
-                MessageBox.Show(setupPositionController.Error, "Error Setting up Position",
+                MessageBox.Show(string.Join(Environment.NewLine, setupPositionController.Errors.Select(e => e.Message)), "Error Setting up Position",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
         }
 

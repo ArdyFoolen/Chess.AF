@@ -26,12 +26,13 @@ namespace Chess.AF.Domain
             private Board board;
             private BoardMapBuilder boardMapBuilder;
             private IBoardValidator validator;
+            public IEnumerable<Error> Errors { get; private set; }
 
             #endregion
 
             #region ctor
 
-            public BoardBuilder(IBoardValidator validator)
+            internal BoardBuilder(IBoardValidator validator)
             {
                 this.validator = validator;
                 boardMapBuilder = new BoardMapBuilder();
@@ -128,26 +129,31 @@ namespace Chess.AF.Domain
 
             #region Validation
 
-            private bool IsValid()
+            private Validation<IBoard> IsValid()
             {
                 validator.SetBoard(board);
                 validator.SetBoardMap(board.Implementor);
-                return validator.Validate();
+                var res = validator.Validate();
+
+                res.MapErrors(ie => Errors = ie);
+
+                return res.Map(m => (IBoard)m); ;
             }
 
             #endregion
 
             #region Build
 
-            public Option<IBoard> Build()
+            public Validation<IBoard> Build()
             {
                 boardMapBuilder.WithBoard(board);
                 board.Implementor = boardMapBuilder.Build();
 
-                if (!IsValid())
-                    return None;
+                return IsValid();
+                //if (!IsValid())
+                //    return None;
 
-                return board;
+                //return board;
             }
 
             #endregion

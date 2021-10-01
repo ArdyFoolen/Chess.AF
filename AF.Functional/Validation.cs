@@ -10,6 +10,13 @@ namespace AF.Functional
 
     public static partial class F
     {
+        public delegate Validation<T> Validator<T>(T t);
+        public static Validator<T> HarvestErrorsTr<T>(params Validator<T>[] validators)
+            => t
+            => validators
+                .Traverse(validate => validate(t))
+                .Map(_ => t);
+
         public static Validation<T> Valid<T>(T value) => new Validation<T>(value);
 
         // create a Validation in the Invalid state
@@ -126,6 +133,12 @@ namespace AF.Functional
            => @this.IsValid
               ? Valid(f(@this.Value))
               : Invalid(@this.Errors);
+
+        public static Validation<Unit> MapErrors<R, Unit>
+           (this Validation<R> @this, Func<IEnumerable<Error>, Unit> f)
+           => @this.IsValid
+              ? Valid(default(Unit))
+              : Valid(f(@this.Errors));
 
         public static Validation<Func<T2, R>> Map<T1, T2, R>(this Validation<T1> @this
            , Func<T1, T2, R> func)

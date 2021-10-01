@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AF.Functional;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace Chess.AF.Domain
         void SetBoard(IBoard board);
         void SetBoardMap(IBoardMap boardMap);
 
-        bool Validate();
+        Validation<Board> Validate();
     }
 }

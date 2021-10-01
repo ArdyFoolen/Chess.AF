@@ -1,10 +1,12 @@
-﻿using Chess.AF.Dto;
+﻿using AF.Functional;
+using Chess.AF.Dto;
 using Chess.AF.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AF.Functional.F;
 using static Chess.AF.Domain.Board;
 
 namespace Chess.AF.Domain
@@ -28,145 +30,146 @@ namespace Chess.AF.Domain
             public void SetBoardMap(IBoardMap boardMap)
                 => this.boardMap = boardMap as BoardMap;
 
-            public bool Validate()
-                => ValidateKings() && ValidateRokade() && ValidateEpSquare() && ValidatePawns();
+            public Validation<Board> Validate()
+                => ValidateAll()(board);
+
+            private Validator<Board> ValidateAll()
+                => HarvestErrorsTr(ValidateKings(boardMap), ValidateRokade(board, boardMap), ValidateEpSquare(board, boardMap), ValidatePawns(boardMap));
 
             #endregion
 
             #region ValidateKings
 
-            private bool ValidateKings()
-                => ValidateKing(PiecesEnum.BlackKing) && ValidateKing(PiecesEnum.WhiteKing);
+            private static Validator<Board> ValidateKings(BoardMap boardMap)
+               => HarvestErrorsTr(ShouldBe1King(boardMap, PiecesEnum.BlackKing), ShouldBe1King(boardMap, PiecesEnum.WhiteKing));
 
-            private bool ValidateKing(PiecesEnum piece)
-                => GetIteratorFor(piece).ToArray().Length == 1;
+            private static Validator<Board> ShouldBe1King(BoardMap boardMap, PiecesEnum piece)
+              => b
+              => GetIteratorFor(boardMap, piece).ToArray().Length == 1 ? Valid(b) : Error($"{piece} should be one King");
 
-            private PiecesIterator<PiecesEnum> GetIteratorFor(PiecesEnum piece)
+            #endregion
+
+            #region ValidateRokade
+
+            private static Validator<Board> ValidateRokade(Board board, BoardMap boardMap)
+               => HarvestErrorsTr(
+                   ShouldBeKingOnKingSquareForRokade(boardMap, PiecesEnum.BlackKing, SquareEnum.e8, board.BlackRokade),
+                   ShouldBeKingOnKingSquareForRokade(boardMap, PiecesEnum.WhiteKing, SquareEnum.e1, board.WhiteRokade),
+                   ShouldBeRookOnRookSquareForRokade(boardMap, PiecesEnum.BlackRook, SquareEnum.h8, board.BlackRokade, r => r.IsKingsideRokade()),
+                   ShouldBeRookOnRookSquareForRokade(boardMap, PiecesEnum.WhiteRook, SquareEnum.h1, board.WhiteRokade, r => r.IsKingsideRokade()),
+                   ShouldBeRookOnRookSquareForRokade(boardMap, PiecesEnum.BlackRook, SquareEnum.a8, board.BlackRokade, r => r.IsQueensideRokade()),
+                   ShouldBeRookOnRookSquareForRokade(boardMap, PiecesEnum.WhiteRook, SquareEnum.a1, board.WhiteRokade, r => r.IsQueensideRokade()));
+
+            private static Validator<Board> ShouldBeKingOnKingSquareForRokade(BoardMap boardMap, PiecesEnum king, SquareEnum kingSquare, RokadeEnum rokade)
+              => b
+              => !IsRokadePossible(rokade) || kingSquare.Equals(GetSquare(boardMap, king)) ? Valid(b) : Error($"{king} should be on square {kingSquare} for rokade {rokade}");
+
+            private static Validator<Board> ShouldBeRookOnRookSquareForRokade(BoardMap boardMap, PiecesEnum rook, SquareEnum rookSquare, RokadeEnum rokade, Func<RokadeEnum, bool> IsSideRokade)
+              => b
+              => !IsRokadePossible(rokade) || !IsSideRokade(rokade) || IsPieceOnSquare(boardMap, rook, rookSquare)
+              ? Valid(b)
+              : Error($"{rook} should be on square {rookSquare} for rokade {rokade}");
+
+            #endregion
+
+            #region ValidateEpSquare
+
+            private static Validator<Board> ValidateEpSquare(Board board, BoardMap boardMap)
+                => HarvestErrorsTr(
+                    ShouldBeEpSquareOnRow(board.IsWhiteToMove, board.EpSquare),
+                    ShouldBePawnForEpSquareOnNextRow(boardMap, board.IsWhiteToMove, board.EpSquare),
+                    ShouldBeEmptyForEpSquareOnPreviousRow(boardMap, board.IsWhiteToMove, board.EpSquare));
+
+            private static Validator<Board> ShouldBeEpSquareOnRow(bool isWhiteToMove, Option<SquareEnum> epSquare)
+              => b
+              => epSquare.Match(
+                  None: () => Valid(b),
+                  Some: s => isWhiteToMove && s.Row() == 2 || !isWhiteToMove && s.Row() == 5 ? Valid(b) : Error(getEpRowError(isWhiteToMove, s))
+                  );
+
+            private static Validator<Board> ShouldBePawnForEpSquareOnNextRow(BoardMap boardMap, bool isWhiteToMove, Option<SquareEnum> epSquare)
+              => b
+              => epSquare.Match(
+                  None: () => Valid(b),
+                  Some: s => isWhiteToMove && IsPieceOnSquare(boardMap, PiecesEnum.BlackPawn, WhiteEpPawnSquare(s)) ||
+                            !isWhiteToMove && IsPieceOnSquare(boardMap, PiecesEnum.WhitePawn, BlackEpPawnSquare(s))
+                                ? Valid(b) : Error(getEpPawnNotPresentError(isWhiteToMove, s))
+                  );
+
+            private static Validator<Board> ShouldBeEmptyForEpSquareOnPreviousRow(BoardMap boardMap, bool isWhiteToMove, Option<SquareEnum> epSquare)
+              => b
+              => epSquare.Match(
+                  None: () => Valid(b),
+                  Some: s => isWhiteToMove && !IsPieceOnSquare(boardMap, WhiteEpEmptySquare(s)) ||
+                            !isWhiteToMove && !IsPieceOnSquare(boardMap, BlackEpEmptySquare(s))
+                                ? Valid(b) : Error(getEpNotEmptyError(isWhiteToMove, s))
+                  );
+
+            private static string getEpNotEmptyError(bool isWhiteToMove, SquareEnum epSquare)
+                => isWhiteToMove
+                ? $"En-Passant square {epSquare}, White to move square {WhiteEpEmptySquare(epSquare)} not empty"
+                : $"En-Passant square {epSquare}, Black to move square {BlackEpEmptySquare(epSquare)} not empty";
+
+            private static string getEpPawnNotPresentError(bool isWhiteToMove, SquareEnum epSquare)
+                => isWhiteToMove
+                ? $"En-Passant square {epSquare}, White to move no pawn present on square {WhiteEpPawnSquare(epSquare)}"
+                : $"En-Passant square {epSquare}, Black to move no pawn present on square {BlackEpPawnSquare(epSquare)}";
+
+            private static string getEpRowError(bool isWhiteToMove, SquareEnum epSquare)
+                => isWhiteToMove
+                ? $"En-Passant square {epSquare}, White to move En-Passant square should be on row 6"
+                : $"En-Passant square {epSquare}, Black to move En-Passant square should be on row 3";
+
+            #endregion
+
+            #region ValidatePawn
+
+            private static Validator<Board> ValidatePawns(BoardMap boardMap)
+                => HarvestErrorsTr(ShouldBeNoPawnOnRow1Or8(boardMap));
+
+            private static Validator<Board> ShouldBeNoPawnOnRow1Or8(BoardMap boardMap)
+              => b
+              => !IsPawnOnRow1Or8(boardMap, PiecesEnum.BlackPawn) && !IsPawnOnRow1Or8(boardMap, PiecesEnum.WhitePawn)
+              ? Valid(b)
+              : Error($"No pawn should be on row 1 or 8");
+
+            #endregion
+
+            #region Private Methods
+
+            private static SquareEnum GetSquare(BoardMap boardMap, PiecesEnum piece)
+                => GetIteratorFor(boardMap, piece).First().Square;
+
+            private static bool IsPieceOnSquare(BoardMap boardMap, PiecesEnum piece, SquareEnum square)
+                => GetIteratorFor(boardMap, piece).Any(a => square.Equals(a.Square));
+
+            private static bool IsPieceOnSquare(BoardMap boardMap, SquareEnum square)
+                => boardMap.GetIteratorForAll<PiecesEnum>().Any(a => square.Equals(a.Square));
+
+            private static bool IsPawnOnRow1Or8(BoardMap board, PiecesEnum piece)
+                => GetIteratorFor(board, piece).Any(ps => ps.Square.Row() == 0 || ps.Square.Row() == 7);
+
+            private static PiecesIterator<PiecesEnum> GetIteratorFor(BoardMap boardMap, PiecesEnum piece)
             {
                 var map = boardMap.Maps[(int)piece];
                 var pieceMap = new PieceMap<PiecesEnum>(piece, map);
                 return new PiecesIterator<PiecesEnum>(pieceMap);
             }
 
-            #endregion
+            private static bool IsRokadePossible(RokadeEnum rokade)
+                => !RokadeEnum.None.Equals(rokade);
 
-            #region ValidateRokade
+            private static SquareEnum WhiteEpPawnSquare(SquareEnum epSquare)
+                => (SquareEnum)((int)epSquare + 8);
 
-            private bool ValidateRokade()
-                => NoRokadePossible() || ValidateWhiteRokade() && ValidateBlackRokade();
+            private static SquareEnum BlackEpPawnSquare(SquareEnum epSquare)
+                => (SquareEnum)((int)epSquare - 8);
 
-            private bool ValidateWhiteRokade()
-                => NoWhiteRokadePossible() || ValidateWhiteKingsideRokade() && ValidateWhiteQueensideRokade();
+            private static SquareEnum WhiteEpEmptySquare(SquareEnum epSquare)
+                => (SquareEnum)((int)epSquare - 8);
 
-            private bool ValidateWhiteKingsideRokade()
-                => !board.WhiteRokade.IsKingsideRokade() ||
-                    board.WhiteRokade.IsKingsideRokade() && SquareEnum.e1.Equals(GetWhiteKingSquare()) && IsPieceOnSquare(PiecesEnum.WhiteRook, SquareEnum.h1);
-
-            private bool ValidateWhiteQueensideRokade()
-                => !board.WhiteRokade.IsQueensideRokade() ||
-                    board.WhiteRokade.IsQueensideRokade() && SquareEnum.e1.Equals(GetWhiteKingSquare()) && IsPieceOnSquare(PiecesEnum.WhiteRook, SquareEnum.a1);
-
-            private bool ValidateBlackRokade()
-                => noBlackRokadePossible() || ValidateBlackKingsideRokade() && ValidateBlackQueensideRokade();
-
-            private bool ValidateBlackKingsideRokade()
-                => !board.BlackRokade.IsKingsideRokade() ||
-                    board.BlackRokade.IsKingsideRokade() && SquareEnum.e8.Equals(GetBlackKingSquare()) && IsPieceOnSquare(PiecesEnum.BlackRook, SquareEnum.h8);
-
-            private bool ValidateBlackQueensideRokade()
-                => !board.BlackRokade.IsQueensideRokade() ||
-                    board.BlackRokade.IsQueensideRokade() && SquareEnum.e8.Equals(GetBlackKingSquare()) && IsPieceOnSquare(PiecesEnum.BlackRook, SquareEnum.a8);
-
-            private bool NoRokadePossible()
-                => NoWhiteRokadePossible() && noBlackRokadePossible();
-
-            private bool NoWhiteRokadePossible()
-                => RokadeEnum.None.Equals(board.WhiteRokade);
-
-            private bool noBlackRokadePossible()
-                => RokadeEnum.None.Equals(board.BlackRokade);
-
-            private SquareEnum GetWhiteKingSquare()
-                => GetIteratorFor(PiecesEnum.WhiteKing).First().Square;
-
-            private SquareEnum GetBlackKingSquare()
-                => GetIteratorFor(PiecesEnum.BlackKing).First().Square;
-
-            private bool IsPieceOnSquare(PiecesEnum piece, SquareEnum square)
-                => GetIteratorFor(piece).Any(a => square.Equals(a.Square));
-
-            private bool IsPieceOnSquare(SquareEnum square)
-                => boardMap.GetIteratorForAll<PiecesEnum>().Any(a => square.Equals(a.Square));
-
-            #endregion
-
-            #region ValidateEpSquare
-
-            private bool ValidateEpSquare()
-                => board.EpSquare.Match(
-                    None: () => true,
-                    Some: s => ValidateEpSquare(s)
-                    );
-
-            private bool ValidateEpSquare(SquareEnum square)
-                => IsEpSquare(square) &&
-                    ValidateWhiteToMoveEpSquare(square) &&
-                    ValidateBlackToMoveEpSquare(square) &&
-                    (ValidateWhitePawnOnSquare(square) || ValidateBlackPawnOnSquare(square)) &&
-                    ValidateWhiteEmptySquare(square) && ValidateBlackEmptyquare(square);
-
-            private bool ValidateWhitePawnOnSquare(SquareEnum square)
-                => !IsWhiteEpSquare(square) ||
-                    IsWhiteEpSquare(square) && IsPieceOnSquare(PiecesEnum.WhitePawn, GetWhitePawnSquare(square));
-
-            private bool ValidateBlackPawnOnSquare(SquareEnum square)
-                => !IsBlackEpSquare(square) ||
-                    IsBlackEpSquare(square) && IsPieceOnSquare(PiecesEnum.BlackPawn, GetBlackPawnSquare(square));
-
-            private bool ValidateWhiteEmptySquare(SquareEnum square)
-                => !IsWhiteEpSquare(square) ||
-                    IsWhiteEpSquare(square) && !IsPieceOnSquare(GetWhiteEmptySquare(square));
-
-            private bool ValidateBlackEmptyquare(SquareEnum square)
-                => !IsBlackEpSquare(square) ||
-                    IsBlackEpSquare(square) && !IsPieceOnSquare(GetBlackEmptySquare(square));
-
-            private bool ValidateWhiteToMoveEpSquare(SquareEnum square)
-                => !(IsWhiteEpSquare(square) && board.IsWhiteToMove);
-
-            private bool ValidateBlackToMoveEpSquare(SquareEnum square)
-                => !(IsBlackEpSquare(square) && !board.IsWhiteToMove);
-
-            private bool IsEpSquare(SquareEnum square)
-                => IsWhiteEpSquare(square) || IsBlackEpSquare(square);
-
-            private bool IsWhiteEpSquare(SquareEnum square)
-                => square.Row() == 5;
-
-            private bool IsBlackEpSquare(SquareEnum square)
-                => square.Row() == 2;
-
-            private SquareEnum GetWhitePawnSquare(SquareEnum square)
-                => (SquareEnum)((int)square) - 8;
-
-            private SquareEnum GetBlackPawnSquare(SquareEnum square)
-                => (SquareEnum)((int)square) + 8;
-
-            private SquareEnum GetWhiteEmptySquare(SquareEnum square)
-                => (SquareEnum)((int)square) + 8;
-
-            private SquareEnum GetBlackEmptySquare(SquareEnum square)
-                => (SquareEnum)((int)square) - 8;
-
-            #endregion
-
-            #region ValidatePawn
-
-            private bool ValidatePawns()
-                => !IsPawnOnRow1Or8(PiecesEnum.BlackPawn) && !IsPawnOnRow1Or8(PiecesEnum.WhitePawn);
-
-            private bool IsPawnOnRow1Or8(PiecesEnum piece)
-                => GetIteratorFor(piece).Any(ps => ps.Square.Row() == 0 || ps.Square.Row() == 7);
+            private static SquareEnum BlackEpEmptySquare(SquareEnum epSquare)
+                => (SquareEnum)((int)epSquare + 8);
 
             #endregion
         }
