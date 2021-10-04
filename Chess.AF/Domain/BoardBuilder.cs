@@ -65,31 +65,31 @@ namespace Chess.AF.Domain
                 return this;
             }
 
-            public IBoardBuilder WithWhiteToMove(bool whiteToMove)
+            public IBoardBuilder With(bool whiteToMove)
             {
                 board.IsWhiteToMove = whiteToMove;
                 return this;
             }
 
-            public IBoardBuilder WithWhiteRokade(RokadeEnum rokade)
+            public IBoardBuilder WithWhite(RokadeEnum rokade)
             {
                 board.WhiteRokade = rokade;
                 return this;
             }
 
-            public IBoardBuilder WithBlackRokade(RokadeEnum rokade)
+            public IBoardBuilder WithBlack(RokadeEnum rokade)
             {
                 board.BlackRokade = rokade;
                 return this;
             }
 
-            public IBoardBuilder WithEpSquare(SquareEnum epSquare)
+            public IBoardBuilder WithEnPassant(SquareEnum epSquare)
             {
                 board.EpSquare = Some(epSquare);
                 return this;
             }
 
-            public IBoardBuilder WithoutEpSquare()
+            public IBoardBuilder WithoutEnPassant()
             {
                 board.EpSquare = None;
                 return this;
@@ -100,7 +100,7 @@ namespace Chess.AF.Domain
                 boardMapBuilder.Clear();
                 return this;
             }
-            public IBoardBuilder WithPiece(PiecesEnum piece)
+            public IBoardBuilder With(PiecesEnum piece)
             {
                 boardMapBuilder.WithPiece(piece);
                 return this;

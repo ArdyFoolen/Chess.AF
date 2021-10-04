@@ -52,37 +52,37 @@ namespace Chess.AF.Controllers
 
         public void WithWhiteToMove(bool whiteToMove)
         {
-            boardBuilder.WithWhiteToMove(whiteToMove);
+            boardBuilder.With(whiteToMove);
             NotifyViews();
         }
 
         public void WithPiece(PiecesEnum piece)
         {
-            boardBuilder.WithPiece(piece);
+            boardBuilder.With(piece);
             NotifyViews();
         }
 
         public void WithEpSquare(SquareEnum epSquare)
         {
-            boardBuilder.WithEpSquare(epSquare);
+            boardBuilder.WithEnPassant(epSquare);
             NotifyViews();
         }
 
         public void WithoutEpSquare()
         {
-            boardBuilder.WithoutEpSquare();
+            boardBuilder.WithoutEnPassant();
             NotifyViews();
         }
 
         public void WithWhiteRokade(RokadeEnum rokade)
         {
-            boardBuilder.WithWhiteRokade(rokade);
+            boardBuilder.WithWhite(rokade);
             NotifyViews();
 
         }
         public void WithBlackRokade(RokadeEnum rokade)
         {
-            boardBuilder.WithBlackRokade(rokade);
+            boardBuilder.WithBlack(rokade);
             NotifyViews();
         }
 

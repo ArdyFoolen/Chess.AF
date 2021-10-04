@@ -18,8 +18,8 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None);
 
             // Act
             var board = build.Build();
@@ -37,10 +37,10 @@ namespace Chess.AF.Tests.UnitTests
             // Arrange
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
-            builder.WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1);
+            builder.With(PiecesEnum.WhiteKing).On(SquareEnum.e1);
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None);
 
             // Act
             var board = build.Build();
@@ -59,9 +59,9 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8);
 
             // Act
             var board = build.Build();
@@ -80,10 +80,10 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8);
 
             // Act
             var board = build.Build();
@@ -102,12 +102,12 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithWhiteToMove(false)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e6);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(false)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e6);
 
             // Act
             var board = build.Build();
@@ -132,12 +132,12 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithWhiteToMove(true)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e3);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(true)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e3);
 
             // Act
             var board = build.Build();
@@ -162,10 +162,10 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8);
 
             // Act
             var board = build.Build();
@@ -185,14 +185,14 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithWhiteRokade(rokade)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.WhiteRook).On(SquareEnum.h1);
+                .WithBlack(RokadeEnum.None)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .WithWhite(rokade)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.WhiteRook).On(SquareEnum.h1);
 
             if (rokade.IsQueensideRokade())
-                builder.WithPiece(PiecesEnum.WhiteRook).On(SquareEnum.a1);
+                builder.With(PiecesEnum.WhiteRook).On(SquareEnum.a1);
 
             // Act
             var board = build.Build();
@@ -212,14 +212,14 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(rokade)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(PiecesEnum.BlackRook).On(SquareEnum.h8)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1);
+                .WithBlack(rokade)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(PiecesEnum.BlackRook).On(SquareEnum.h8)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1);
 
             if (rokade.IsQueensideRokade())
-                builder.WithPiece(PiecesEnum.BlackRook).On(SquareEnum.a8);
+                builder.With(PiecesEnum.BlackRook).On(SquareEnum.a8);
 
             // Act
             var board = build.Build();
@@ -239,14 +239,14 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithWhiteRokade(rokade)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.WhiteRook).On(SquareEnum.a1);
+                .WithBlack(RokadeEnum.None)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .WithWhite(rokade)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.WhiteRook).On(SquareEnum.a1);
 
             if (rokade.IsKingsideRokade())
-                builder.WithPiece(PiecesEnum.WhiteRook).On(SquareEnum.h1);
+                builder.With(PiecesEnum.WhiteRook).On(SquareEnum.h1);
 
             // Act
             var board = build.Build();
@@ -266,14 +266,14 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(rokade)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(PiecesEnum.BlackRook).On(SquareEnum.a8)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1);
+                .WithBlack(rokade)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(PiecesEnum.BlackRook).On(SquareEnum.a8)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1);
 
             if (rokade.IsKingsideRokade())
-                builder.WithPiece(PiecesEnum.BlackRook).On(SquareEnum.h8);
+                builder.With(PiecesEnum.BlackRook).On(SquareEnum.h8);
 
             // Act
             var board = build.Build();
@@ -307,13 +307,13 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithWhiteToMove(isWhiteToMove)
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithEpSquare(epSquare)
-                .WithPiece(pawn).On(pawnSquare);
+                .With(isWhiteToMove)
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .WithEnPassant(epSquare)
+                .With(pawn).On(pawnSquare);
 
             // Act
             var board = build.Build();
@@ -333,13 +333,13 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithWhiteToMove(isWhiteToMove)
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithEpSquare(epSquare)
-                .WithPiece(pawn).On(pawnSquare);
+                .With(isWhiteToMove)
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .WithEnPassant(epSquare)
+                .With(pawn).On(pawnSquare);
 
             // Act
             var board = build.Build();
@@ -358,26 +358,26 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.a2)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.b3)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.c4)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.d5)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.e6)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.f7)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.g6)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.h5)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.a7)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.b6)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.c5)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.d4)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e3)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.f2)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.g3)
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.h4);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.a2)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.b3)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.c4)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.d5)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.e6)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.f7)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.g6)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.h5)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.a7)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.b6)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.c5)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.d4)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.e3)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.f2)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.g3)
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.h4);
 
             // Act
             var board = build.Build();
@@ -427,12 +427,12 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithWhiteToMove(isWhiteToMove)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(pawn).On(pawnSquare);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(isWhiteToMove)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(pawn).On(pawnSquare);
 
             // Act
             var board = build.Build();
@@ -459,8 +459,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Act
             builder
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
-                .WithPiece(PiecesEnum.WhitePawn).On(SquareEnum.e4);
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .With(PiecesEnum.WhitePawn).On(SquareEnum.e4);
 
             // Assert
             var piece = builder.GetPieceOn(SquareEnum.e4);
@@ -480,8 +480,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Act
             builder
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
-                .WithPiece(PiecesEnum.BlackRook).On(SquareEnum.e4);
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .With(PiecesEnum.BlackRook).On(SquareEnum.e4);
 
             // Assert
             var piece = builder.GetPieceOn(SquareEnum.e4);
@@ -501,8 +501,8 @@ namespace Chess.AF.Tests.UnitTests
 
             // Act
             builder
-                .WithPiece(PiecesEnum.BlackPawn).On(SquareEnum.e4)
-                .WithPiece(PiecesEnum.BlackRook).Off(SquareEnum.e4);
+                .With(PiecesEnum.BlackPawn).On(SquareEnum.e4)
+                .With(PiecesEnum.BlackRook).Off(SquareEnum.e4);
 
             // Assert
             var piece = builder.GetPieceOn(SquareEnum.e4);
@@ -521,14 +521,14 @@ namespace Chess.AF.Tests.UnitTests
             IBoardBuilder builder = Board.CreateBuilder();
             var build = builder as IBoardBuild;
             builder
-                .WithBlackRokade(RokadeEnum.None)
-                .WithWhiteRokade(RokadeEnum.None)
-                .WithWhiteToMove(isWhiteToMove)
-                .WithPiece(PiecesEnum.WhiteKing).On(SquareEnum.e1)
-                .WithPiece(PiecesEnum.BlackKing).On(SquareEnum.e8)
-                .WithPiece(pawn).On(pawnSquare)
-                .WithEpSquare(epSquare)
-                .WithPiece(PiecesEnum.BlackRook).On(emptySquare);
+                .WithBlack(RokadeEnum.None)
+                .WithWhite(RokadeEnum.None)
+                .With(isWhiteToMove)
+                .With(PiecesEnum.WhiteKing).On(SquareEnum.e1)
+                .With(PiecesEnum.BlackKing).On(SquareEnum.e8)
+                .With(pawn).On(pawnSquare)
+                .WithEnPassant(epSquare)
+                .With(PiecesEnum.BlackRook).On(emptySquare);
 
             // Act
             var board = build.Build();
