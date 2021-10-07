@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess.AF.ImportExport
 {
-    internal interface IPgnTagStateContext
+    public interface IPgnTagStateContext
     {
         PgnTagState State { get; set; }
     }

@@ -224,6 +224,9 @@ namespace Chess.AF
             return rokadeString;
         }
 
+        public static RokadeEnum ToRokade(this string value)
+            => value.Equals("O-O-O") ? RokadeEnum.QueenSide : value.Equals("O-O") ? RokadeEnum.KingSide : RokadeEnum.None;
+
         public static string ConvertEPToString(Option<SquareEnum> epSquare)
             => epSquare.Match(
                 None: () => "-",
@@ -257,8 +260,8 @@ namespace Chess.AF
 
         public static Option<SquareEnum> ToSquare(this string square)
         {
-            if (Enum.TryParse(square, out SquareEnum newSquare))
-                return newSquare;
+            if (Enum.IsDefined(typeof(SquareEnum), square))
+                return (SquareEnum)Enum.Parse(typeof(SquareEnum), square);
             return None;
         }
 
@@ -301,6 +304,13 @@ namespace Chess.AF
             if (pieceDict.ContainsKey(str.FirstOrDefault().ToString()))
                 return str.FirstOrDefault().ToString().ToPiece();
             else return Some(PieceEnum.Pawn);
+        }
+
+        public static Option<PieceEnum> FromSanToPromoted(this string str)
+        {
+            if (promoteDict.ContainsKey(str.FirstOrDefault().ToString()))
+                return str.FirstOrDefault().ToString().ToPiece();
+            else return None;
         }
 
         public static PieceEnum FromSanToPromoted(this string str, Option<PieceEnum> piece)

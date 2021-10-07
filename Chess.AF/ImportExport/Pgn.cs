@@ -26,6 +26,18 @@ namespace Chess.AF.ImportExport
         FEN
     }
 
+    public enum StatesEnum
+    {
+        Event,
+        Site,
+        Date,
+        Round,
+        White,
+        Black,
+        Result,
+        Optional
+    }
+
     public partial class Pgn
     {
         public string PgnString { get; private set; }
@@ -39,8 +51,9 @@ namespace Chess.AF.ImportExport
             => Import(string.Join(Environment.NewLine, lines.ToArray()));
         public static Option<Pgn> Import(string pgnString)
         {
-            PgnBuilder builder = new PgnImportBuilder(pgnString);
-            return Build(builder);
+            var reader = new PgnReader(pgnString);
+            reader.Read();
+            return reader.Pgn;
         }
 
         public static Option<Pgn> Export(IGame game, IList<Command> commands)
