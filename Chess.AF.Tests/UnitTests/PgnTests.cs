@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static AF.Functional.F;
+using static Chess.AF.ImportExport.Pgn;
 using Unit = System.ValueTuple;
 
 namespace Chess.AF.Tests.UnitTests
@@ -24,9 +25,10 @@ namespace Chess.AF.Tests.UnitTests
         {
             // Arrange
             string lines = ResourceHelper.ReadEmbeddedRessource(pgnFile);
+            var reader = new PgnReader(new GameBuilder(new Game()));
 
             // Act
-            Option<Pgn> expected = Pgn.Import(lines);
+            Option<Pgn> expected = Pgn.Import(reader, lines);
 
             // Assert
             expected.Match(

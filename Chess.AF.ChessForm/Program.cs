@@ -3,9 +3,11 @@ using AF.Factories;
 using Chess.AF.Controllers;
 using Chess.AF.Controllers.Interfaces;
 using Chess.AF.Domain;
+using Chess.AF.ImportExport;
 using System;
 using System.Windows.Forms;
 using static Chess.AF.Domain.Board;
+using static Chess.AF.ImportExport.Pgn;
 
 namespace Chess.AF.ChessForm
 {
@@ -21,6 +23,8 @@ namespace Chess.AF.ChessForm
             Container.Instance.Register<IGameController, GameController>();
             Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
             Container.Instance.Register(() => Board.CreateBuilder());
+            Container.Instance.Register<IGameBuilder, GameBuilder>();
+            Container.Instance.Register<IPgnReader, PgnReader>();
 
             Container.Instance.Register<IPgnController, PgnController>();
             Container.Instance.Register<ISetupPositionController, SetupPositionController>();

@@ -63,6 +63,7 @@
     <Compile Include="IGame.cs" />
     <Compile Include="ImportExport\ICommandVisitor.cs" />
     <Compile Include="ImportExport\IGameBuilder.cs" />
+    <Compile Include="ImportExport\IPgnReader.cs" />
     <Compile Include="ImportExport\IPgnTagStateContext.cs" />
     <Compile Include="ImportExport\GameBuilder.cs" />
     <Compile Include="ImportExport\PgnCommandVisitor.cs" />

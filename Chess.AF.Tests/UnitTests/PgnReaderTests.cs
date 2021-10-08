@@ -17,11 +17,11 @@ namespace Chess.AF.Tests.UnitTests
         {
             // Arrange
             string lines = ResourceHelper.ReadEmbeddedRessource(pgnFile);
-            var reader = new PgnReader(lines);
+            var reader = new PgnReader(new GameBuilder(new Game()));
 
             // Act
             //Option<Pgn> expected = Pgn.Import(lines);
-            reader.Read();
+            reader.Read(lines);
 
             // Assert
             //expected.Match(

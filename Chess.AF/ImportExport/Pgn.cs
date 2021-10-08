@@ -47,12 +47,9 @@ namespace Chess.AF.ImportExport
         public IGame Game { get; private set; }
         public Dictionary<string, string> TagPairDictionary { get; private set; } = new Dictionary<string, string>();
 
-        public static Option<Pgn> Import(IEnumerable<string> lines)
-            => Import(string.Join(Environment.NewLine, lines.ToArray()));
-        public static Option<Pgn> Import(string pgnString)
+        public static Option<Pgn> Import(IPgnReader reader, string pgnString)
         {
-            var reader = new PgnReader(pgnString);
-            reader.Read();
+            reader.Read(pgnString);
             return reader.Pgn;
         }
 

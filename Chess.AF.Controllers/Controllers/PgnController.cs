@@ -16,6 +16,12 @@ namespace Chess.AF.Controllers
         private PgnFile pgnFile;
         private List<IPgnView> views = new List<IPgnView>();
         public Dictionary<string, string> TagPairDictionary { get; private set; } = new Dictionary<string, string>();
+        private IPgnReader Reader { get; set; }
+
+        public PgnController(IPgnReader reader)
+        {
+            Reader = reader;
+        }
 
         public void Register(IPgnView view)
         {
@@ -53,7 +59,7 @@ namespace Chess.AF.Controllers
             pgnFile.Read();
             if (pgnFile.Count() > 0)
             {
-                pgn = Pgn.Import(pgnFile[0]);
+                pgn = Pgn.Import(Reader, pgnFile[0]);
                 SetTagPairDictionary(pgn);
             }
             else
@@ -75,7 +81,7 @@ namespace Chess.AF.Controllers
             if (index >= pgnFile.Count())
                 return None;
 
-            var pgn = Pgn.Import(pgnFile[index]);
+            var pgn = Pgn.Import(Reader, pgnFile[index]);
             SetTagPairDictionary(pgn);
 
             return pgn;

@@ -14,9 +14,9 @@ namespace Chess.AF.ImportExport
 {
     public partial class Pgn
     {
-        public class PgnReader : IPgnTagStateContext
+        public class PgnReader : IPgnReader, IPgnTagStateContext
         {
-            private IGameBuilder Builder = new GameBuilder(new Game());
+            private IGameBuilder Builder;
             public IEnumerable<string> Lines { get; private set; }
             public PgnTagState State { get; set; }
             public List<Error> Errors { get; private set; } = new List<Error>();
@@ -32,17 +32,18 @@ namespace Chess.AF.ImportExport
             private const string movePattern = @"([NBRQK])?([a-h])?([1-8])?([-x])?([a-h][1-8])(=)?([NBRQ])?|O-O-O|O-O";
             private static Regex moveRegex = new Regex(movePattern, RegexOptions.Compiled);
 
-            public PgnReader(string pgnFile)
+            public PgnReader(IGameBuilder builder)
             {
-                Pgn = new Pgn(pgnFile);
-
-                Lines = pgnFile.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                this.Builder = builder;
                 TagReadAction = line => State.TryAddTagPair(line).Match(Invalid: ie => { Errors.AddRange(ie); return Unit(); }, Valid: kv => { return Unit(); });
                 MoveReadAction = line => ReadMoves(line);
             }
 
-            public void Read()
+            public void Read(string pgnFile)
             {
+                Pgn = new Pgn(pgnFile);
+                Lines = pgnFile.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
                 EventTags = new Dictionary<string, string>();
                 State = PgnTagState.CreateInitialState(this, EventTags);
                 ReadAction = TagReadAction;
