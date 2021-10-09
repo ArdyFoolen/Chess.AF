@@ -333,5 +333,8 @@ namespace Chess.AF
 
         public static string ToRowString(this SquareEnum square)
             => (8 - square.Row()).ToString();
+
+        public static IEnumerable<string> SplitLines(this string str, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
+            => str.Split(new string[] { "\r\n", "\r", "\n" }, options);
     }
 }

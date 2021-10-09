@@ -12,31 +12,62 @@ namespace Chess.AF.ImportExport
 {
     public class GameBuilder : IGameBuilder
     {
-        public IGame Game { get; private set; }
+        #region Filters
+
+        private readonly Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> DefaultFunc = t => true;
+
         private Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> fileFilter;
         private Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> rowFilter;
-        private Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> promote;
-        private readonly Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> DefaultFunc = t => true;
+        private Func<(PieceEnum Piece, SquareEnum Square, PieceEnum Promoted, SquareEnum MoveSquare), bool> promoteFilter;
+
+        #endregion
+
+        #region Public properties
+
         public PieceEnum Piece { get; private set; }
+        public IGame Game { get; private set; }
+
+
+        #endregion
 
         public GameBuilder(IGame game)
         {
             Game = game;
         }
 
+        #region Load
+
         public GameBuilder WithDefault()
         {
-            fileFilter = rowFilter = promote = DefaultFunc;
+            fileFilter = rowFilter = promoteFilter = DefaultFunc;
             Game.Load();
             return this;
         }
 
         public GameBuilder WithFen(string fen)
         {
-            fileFilter = rowFilter = promote = DefaultFunc;
+            fileFilter = rowFilter = promoteFilter = DefaultFunc;
             Game.Load(fen);
             return this;
         }
+
+        #endregion
+
+        #region Result
+
+        public GameBuilder With(GameResult result)
+        {
+            if (!Game.IsMate && !Game.IsStaleMate && !GameResult.Ongoing.Equals(result))
+                if (GameResult.Draw.Equals(result))
+                    Game.Draw();
+                else if (GameResult.BlackWins.Equals(result) || GameResult.WhiteWins.Equals(result))
+                    Game.Resign();
+            return this;
+        }
+
+        #endregion
+
+        #region Move
 
         public GameBuilder With(PieceEnum piece)
         {
@@ -58,7 +89,7 @@ namespace Chess.AF.ImportExport
 
         public GameBuilder WithPromote(PieceEnum piece)
         {
-            promote = t => t.Promoted.Is(piece);
+            promoteFilter = t => t.Promoted.Is(piece);
             return this;
         }
 
@@ -75,22 +106,14 @@ namespace Chess.AF.ImportExport
                 .Where(w => w.Piece.Is(Piece))
                 .Where(fileFilter)
                 .Where(rowFilter)
-                .Where(promote)
+                .Where(promoteFilter)
                 .Where(t => t.MoveSquare.Equals(square))
                 .FirstOrDefault();
-            var move = Dto.Move.Of(Piece, moves.Square, moves.MoveSquare, moves.Promoted);
-            move.Map(m => Move(m));
-            fileFilter = rowFilter = promote = DefaultFunc;
-            return this;
-        }
 
-        public GameBuilder With(GameResult result)
-        {
-            if (!Game.IsMate && !Game.IsStaleMate && !GameResult.Ongoing.Equals(result))
-                if (GameResult.Draw.Equals(result))
-                    Game.Draw();
-                else if (GameResult.BlackWins.Equals(result) || GameResult.WhiteWins.Equals(result))
-                    Game.Resign();
+            Dto.Move.Of(Piece, moves.Square, moves.MoveSquare, moves.Promoted)
+                .Map(m => Move(m));
+
+            fileFilter = rowFilter = promoteFilter = DefaultFunc;
             return this;
         }
 
@@ -100,5 +123,6 @@ namespace Chess.AF.ImportExport
             return Unit();
         }
 
+        #endregion
     }
 }

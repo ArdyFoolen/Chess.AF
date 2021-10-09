@@ -16,58 +16,113 @@ namespace Chess.AF.ImportExport
     {
         public class PgnReader : IPgnReader, IPgnTagStateContext
         {
-            private IGameBuilder Builder;
-            public IEnumerable<string> Lines { get; private set; }
-            public PgnTagState State { get; set; }
-            public List<Error> Errors { get; private set; } = new List<Error>();
-
-            private Dictionary<string, string> EventTags;
-            public Pgn Pgn { get; private set; }
-
-            private readonly Action<string> TagReadAction;
-            private readonly Action<string> MoveReadAction;
-            private Action<string> ReadAction;
-            private bool commentShouldBeclosed = true;
+            #region Private
 
             private const string movePattern = @"([NBRQK])?([a-h])?([1-8])?([-x])?([a-h][1-8])(=)?([NBRQ])?|O-O-O|O-O";
             private static Regex moveRegex = new Regex(movePattern, RegexOptions.Compiled);
 
+            private Dictionary<string, string> EventTags;
+            private bool commentShouldBeclosed = true;
+            private IGameBuilder Builder;
+
+            #endregion
+
+            #region Public Properties
+
+            public IEnumerable<string> TagLines { get; private set; }
+            public IEnumerable<string> MoveTextLines { get; private set; }
+            public PgnTagState State { get; set; }
+            public List<Error> Errors { get; private set; } = new List<Error>();
+            public Pgn Pgn { get; private set; }
+
+            #endregion
+
             public PgnReader(IGameBuilder builder)
             {
                 this.Builder = builder;
-                TagReadAction = line => State.TryAddTagPair(line).Match(Invalid: ie => { Errors.AddRange(ie); return Unit(); }, Valid: kv => { return Unit(); });
-                MoveReadAction = line => ReadMoves(line);
             }
 
             public void Read(string pgnFile)
             {
                 Pgn = new Pgn(pgnFile);
-                Lines = pgnFile.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                SetTagAndMoveText(pgnFile);
 
-                EventTags = new Dictionary<string, string>();
-                State = PgnTagState.CreateInitialState(this, EventTags);
-                ReadAction = TagReadAction;
-                bool isReadingMoveText = false;
-
-                foreach (string line in Lines)
-                {
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        if (isReadingMoveText)
-                            break;
-                        validateSevenTagRoster();
-                        commentShouldBeclosed = true;
-                        WithLoad();
-                        ReadAction = MoveReadAction;
-                        isReadingMoveText = true;
-                    }
-                    else
-                        ReadAction(line);
-                }
-                WithResult();
+                ReadTags();
+                ReadMoveText();
 
                 Pgn.Game = Builder.Game;
                 Pgn.TagPairDictionary = EventTags;
+            }
+
+            #region Set Tag and MoveText
+
+            private void SetTagAndMoveText(string pgnFile)
+            {
+                var iter = EnumerableTagAndMoveText(pgnFile).GetEnumerator();
+                if (iter.MoveNext())
+                {
+                    TagLines = iter.Current.SplitLines();
+                    iter.MoveNext();
+                    MoveTextLines = iter.Current.SplitLines();
+                }
+            }
+
+            private IEnumerable<string> EnumerableTagAndMoveText(string pgnFile)
+            {
+                var parts = pgnFile.Split(new string[] { "\r\n\r\n", "\r\r", "\n\n" }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length != 2)
+                    Errors.Add(Error($"Wrong Pgn file format"));
+                else
+                {
+                    yield return parts[0];
+                    yield return parts[1];
+                }
+            }
+
+            #endregion
+
+            #region TagText
+
+            private void ReadTags()
+            {
+                EventTags = new Dictionary<string, string>();
+                State = PgnTagState.CreateInitialState(this, EventTags);
+
+                foreach (string line in TagLines)
+                    State.TryAddTagPair(line).Match(
+                        Invalid: ie => { Errors.AddRange(ie); return Unit(); },
+                        Valid: kv => { return Unit(); });
+
+                validateSevenTagRoster();
+            }
+
+            private void validateSevenTagRoster()
+            {
+                if (EventTags.Keys.Count() < 7)
+                    Errors.Add(Error($"Seven Tag Roster count {EventTags.Keys.Count()} not valid"));
+            }
+
+            #endregion
+
+            #region MoveText
+
+            private void ReadMoveText()
+            {
+                commentShouldBeclosed = true;
+                WithLoad();
+
+                foreach (string line in MoveTextLines)
+                    ReadMoves(line);
+
+                WithResult();
+            }
+
+            private void WithLoad()
+            {
+                if (EventTags.ContainsKey(nameof(FenSetupEnum.Setup).ToLowerInvariant()) && EventTags[nameof(FenSetupEnum.Setup).ToLowerInvariant()].Equals("1") && EventTags.ContainsKey(nameof(FenSetupEnum.FEN).ToLowerInvariant()))
+                    Builder.WithFen(EventTags[nameof(FenSetupEnum.FEN).ToLowerInvariant()]);
+                else
+                    Builder.WithDefault();
             }
 
             private void ReadMoves(string line)
@@ -81,18 +136,22 @@ namespace Chess.AF.ImportExport
                         WithMove(matches[count]);
             }
 
-            private void validateSevenTagRoster()
-            {
-                if (EventTags.Keys.Count() < 7)
-                    Errors.Add(Error($"Seven Tag Roster count {EventTags.Keys.Count()} not valid"));
-            }
+            private void WithResult()
+                => Builder.With(EventTags[nameof(SevenTagRosterEnum.Result).ToLowerInvariant()].ToGameResult());
 
-            private void WithLoad()
+            #region Move
+
+            private bool tryWithRokade(Match match)
             {
-                if (EventTags.ContainsKey(nameof(FenSetupEnum.Setup).ToLowerInvariant()) && EventTags[nameof(FenSetupEnum.Setup).ToLowerInvariant()].Equals("1") && EventTags.ContainsKey(nameof(FenSetupEnum.FEN).ToLowerInvariant()))
-                    Builder.WithFen(EventTags[nameof(FenSetupEnum.FEN).ToLowerInvariant()]);
-                else
-                    Builder.WithDefault();
+                var group = match.Groups[0];
+                var rokade = group.Value.ToRokade();
+                if (!RokadeEnum.None.Equals(rokade))
+                {
+                    Builder.With(rokade);
+                    return true;
+                }
+
+                return false;
             }
 
             private void WithMove(Match match)
@@ -144,21 +203,9 @@ namespace Chess.AF.ImportExport
                     Some: s => Builder.WithMoveTo(s));
             }
 
-            private bool tryWithRokade(Match match)
-            {
-                var group = match.Groups[0];
-                var rokade = group.Value.ToRokade();
-                if (!RokadeEnum.None.Equals(rokade))
-                {
-                    Builder.With(rokade);
-                    return true;
-                }
+            #endregion
 
-                return false;
-            }
-
-            private void WithResult()
-                => Builder.With(EventTags[nameof(SevenTagRosterEnum.Result).ToLowerInvariant()].ToGameResult());
+            #region remove comments
 
             private string removeComments(string line)
             {
@@ -166,8 +213,17 @@ namespace Chess.AF.ImportExport
                 return removeMultilineComments(line);
             }
 
+            private string removeCommentEndOfLine(string line)
+                => line.Substring(0, indexEndOfLineComment(line));
+
             private string removeMultilineComments(string line)
                 => string.Join(" ", excludeMultilineComments(line));
+
+            private int indexEndOfLineComment(string line)
+            {
+                int index = line.IndexOf(';');
+                return (index >= 0) ? index : line.Length;
+            }
 
             private IEnumerable<string> excludeMultilineComments(string line)
             {
@@ -206,14 +262,9 @@ namespace Chess.AF.ImportExport
                 .Select((c, i) => (Character: c, Index: i))
                 .Where(w => w.Character.Equals('{') || w.Character.Equals('}'));
 
-            private string removeCommentEndOfLine(string line)
-                => line.Substring(0, indexEndOfLineComment(line));
+            #endregion
 
-            private int indexEndOfLineComment(string line)
-            {
-                int index = line.IndexOf(';');
-                return (index >= 0) ? index : line.Length;
-            }
+            #endregion
         }
     }
 }
