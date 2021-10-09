@@ -1,0 +1,80 @@
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nf3 f5 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nf3 f5 3. Nxe5 Qf6 4. Nc4 xe4 5. Nc3 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nf3 f5 3. Bc4 xe4 4. Nxe5 d5 5. Qh5+ g6 6. Nxg6 xg6 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nf3 f5 3. Bc4 xe4 4. Nxe5 Qg5 5. d4 Qxg2 6. Qh5+ g6 7. Bf7+ Kd8 8. Bxg6 Qxh1+ 
+9. Ke2 *
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 f5 3. Nxe5 Qf6 4. Nc4 xe4 5. Nc3 Qf7 6. Ne3 c6 7. Nxe4 d5 8. Ng3 h5 
+9. d4 h4 10. Ne2 Bd6 11. Ng1 Nf6 12. Nf3 Ne4 13. Be2 Nd7 14. h3 Ndf6 15. O-O Qc7 16. c4 g5 
+17. Ne5 Bxe5 18. xe5 Qxe5 19. xd5 xd5 20. Bf3 Be6 21. Re1 Kf7 22. Ng4 Nxg4 23. Bxg4 Bxg4 24. Qxg4 Qd6 
+25. Bxg5 Rag8 26. Qf5+ Ke8 27. Rac1 Rxg5 28. Rc8+ 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 f5 3. Bc4 xe4 4. Nxe5 Qg5 5. d4 Qxg2 6. Qh5+ g6 7. Bf7+ Kd8 8. Bxg6 Qxh1+ 
+9. Ke2 c6 10. Nc3 Nf6 11. Qh4 Be7 12. Bg5 Qxa1 13. Bxf6 Bxf6 14. Qxf6+ Kc7 15. Nc4 Rg8 16. Qe5+ Kd8 
+17. Nd6 Rf8 18. Qg5+ Kc7 19. Ndb5+ 1-0
+
+[Event "Chess.AF Game"]
+[Site ""]
+[Date "2021.10.09"]
+[Round ""]
+[White ""]
+[Black ""]
+[Result "*"]
+
+1. e4 e5 2. Nf3 f5 3. Bc4 xe4 4. Nxe5 d5 5. Qh5+ g6 6. Nxg6 xg6 7. Qxg6+ Kd7 8. Bxd5 Nf6 
+9. Nc3 Qe7 10. d4 xd3+ 11. Be3 xc2 12. Qxc2 Qh7 13. Qa4+ Kd8 14. Bg5 Be7 15. Bf3 Nfd7 16. Bf4 Nc5 
+17. O-O-O Bd7 18. Qc4 Rf8 19. Nd5 Bd6 20. Be3 Nba6 21. Rhe1 b5 22. Qc3 b4 23. Qc4 b3 24. xb3 Rb8 
+25. Bg5+ Kc8 26. Re3 Qxh2 27. Ne7+ Bxe7 28. Bxe7 Qf4 29. Rd4 Nxb3+ 30. Kd1 Qxd4+ 31. Qxd4 Nxd4 32. Bxf8 Nxf3 
+33. xf3 Rxb2 *
+
