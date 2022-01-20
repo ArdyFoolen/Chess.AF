@@ -29,7 +29,6 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.btnImport = new System.Windows.Forms.Button();
             this.btnExportNew = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();

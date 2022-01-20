@@ -129,8 +129,9 @@ namespace Chess.AF.ChessForm
 
         private void setHistoryFromTextIfNotSet()
         {
-            if (cmbHistory.SelectedItem == null)
-                cmbHistory.SelectedItem = cmbHistory.Text;
+            if (cmbHistory.SelectedItem == null &&
+                ValidatePath(cmbHistory.Text))
+                AddToHistory(cmbHistory.Text);
         }
 
         private void cmbHistory_KeyUp(object sender, KeyEventArgs e)
