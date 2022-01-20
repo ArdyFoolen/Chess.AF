@@ -18,6 +18,7 @@ namespace Chess.AF.Controllers
         void SetTagPairDictionary(Dictionary<string, string> tagPairDictionary);
         void Clear();
 
+        int Current { get; }
         int Count();
         Option<Pgn> Read(string pgnFilePath);
         void Write(Option<Pgn> pgn, string pgnFilePath);

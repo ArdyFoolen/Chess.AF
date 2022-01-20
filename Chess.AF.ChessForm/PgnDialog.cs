@@ -144,10 +144,13 @@ namespace Chess.AF.ChessForm
         }
         private void AddToHistory(string path)
         {
-            if (!cmbHistory.Items.Contains(path) && ValidatePath(path))
+            if (ValidatePath(path))
             {
-                cmbHistory.Items.Add(path);
-                SaveHistory();
+                if (!cmbHistory.Items.Contains(path))
+                {
+                    cmbHistory.Items.Add(path);
+                    SaveHistory();
+                }
                 cmbHistory.SelectedItem = path;
             }
         }

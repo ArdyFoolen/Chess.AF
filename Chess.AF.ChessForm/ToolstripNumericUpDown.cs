@@ -74,6 +74,7 @@ namespace Chess.AF.ChessForm
             {
                 this.Minimum = 1;
                 this.Maximum = pgnController.Count();
+                this.Value = pgnController.Current;
                 this.Visible = true;
             }
         }

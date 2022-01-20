@@ -60,6 +60,7 @@ namespace Chess.AF.Controllers
             if (pgnFile.Count() > 0)
             {
                 pgn = Pgn.Import(Reader, pgnFile[0]);
+                Current = 1;
                 SetTagPairDictionary(pgn);
             }
             else
@@ -73,6 +74,7 @@ namespace Chess.AF.Controllers
         public void WriteAndAdd(Option<Pgn> pgn, string pgnFilePath)
             => pgn.Map(p => WriteAndAdd(p, pgnFilePath));
 
+        public int Current { get; private set; }
         public int Count()
             => pgnFile?.Count() ?? 0;
 
@@ -83,6 +85,7 @@ namespace Chess.AF.Controllers
 
             var pgn = Pgn.Import(Reader, pgnFile[index]);
             SetTagPairDictionary(pgn);
+            Current = index + 1;
 
             return pgn;
         }
@@ -101,6 +104,7 @@ namespace Chess.AF.Controllers
             if (this.pgnFile == null)
                 this.pgnFile = new PgnFile(pgnFilePath);
             this.pgnFile.WriteAndAdd(pgn);
+            this.Current = this.pgnFile.Count();
             SetTagPairDictionary(pgn);
 
             return Unit();
