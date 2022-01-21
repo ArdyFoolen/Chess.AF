@@ -169,6 +169,13 @@ namespace Chess.AF
                 Some: s => s.MoveNumber);
         }
 
+        public int PlyCount
+        {
+            get => Board.Match(
+                None: () => 0,
+                Some: s => s.PlyCount);
+        }
+
         public int MaterialCount
         {
             get => Board.Match(

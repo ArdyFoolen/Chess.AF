@@ -30,6 +30,8 @@ namespace Chess.AF.Controllers
         public bool IsStaleMate { get => game.IsStaleMate; }
 
         public GameResult Result { get => game.Result; }
+        public int MoveNumber { get => game.MoveNumber; }
+        public int PlyCount { get => game.PlyCount; }
         public Option<Move> LastMove { get => game.LastMove; }
         public int MaterialCount { get => game.MaterialCount; }
 

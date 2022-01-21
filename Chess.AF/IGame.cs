@@ -24,6 +24,7 @@ namespace Chess.AF
         int MaterialCount { get; }
 
         int MoveNumber { get; }
+        int PlyCount { get; }
 
         void Load();
         void Load(string fenString);

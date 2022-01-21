@@ -27,6 +27,8 @@ namespace Chess.AF.ChessForm
 
         private Label lblResult = new Label();
         private Label lblCount = new Label();
+        private Label lblMoveNumber = new Label();
+        private Label lblPlyCount = new Label();
 
         private LoadFen loadFen = new LoadFen();
         private PgnDialog pgnDialog;
@@ -80,17 +82,29 @@ namespace Chess.AF.ChessForm
             lblResult.Size = new Size(200, 23);
             lblResult.Paint += FontHelper.Label_Paint;
 
+            lblMoveNumber.Text = string.Empty;
+            lblMoveNumber.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblMoveNumber.Location = new Point(570, 76);
+            lblMoveNumber.Size = new Size(200, 23);
+            lblMoveNumber.Paint += FontHelper.Label_Paint;
+
+            lblPlyCount.Text = string.Empty;
+            lblPlyCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblPlyCount.Location = new Point(570, 109);
+            lblPlyCount.Size = new Size(200, 23);
+            lblPlyCount.Paint += FontHelper.Label_Paint;
+
             lblCount.Text = string.Empty;
             lblCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            lblCount.Location = new Point(570, 76);
+            lblCount.Location = new Point(570, 142);
             lblCount.Size = new Size(200, 23);
             lblCount.Paint += FontHelper.Label_Paint;
 
-            chkLooseControl.Location = new Point(570, 99);
+            chkLooseControl.Location = new Point(570, 166);
 
             pgnControl = new PgnControl(pgnController)
             {
-                Location = new Point(570, 149),
+                Location = new Point(570, 216),
                 Size = new Size(200, 400)
             };
 
@@ -99,6 +113,8 @@ namespace Chess.AF.ChessForm
             this.Controls.Add(this.boardControl);
             this.Controls.Add(chkLooseControl);
             this.Controls.Add(lblResult);
+            this.Controls.Add(lblMoveNumber);
+            this.Controls.Add(lblPlyCount);
             this.Controls.Add(lblCount);
             this.Controls.Add(this.pgnControl);
 
@@ -173,6 +189,8 @@ namespace Chess.AF.ChessForm
         public void UpdateView()
         {
             lblResult.Text = whoToMove();
+            lblMoveNumber.Text = $"Move: {gameController.MoveNumber.ToString("0;-#")}";
+            lblPlyCount.Text = $"Ply count: {gameController.PlyCount.ToString("0;-#")}";
             lblCount.Text = $"Material: {gameController.MaterialCount.ToString("+0;-#")}";
         }
 

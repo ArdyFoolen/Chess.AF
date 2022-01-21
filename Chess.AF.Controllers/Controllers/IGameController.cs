@@ -27,6 +27,8 @@ namespace Chess.AF.Controllers
         bool IsStaleMate { get; }
 
         GameResult Result { get; }
+        int MoveNumber { get; }
+        int PlyCount { get; }
         Option<Move> LastMove { get; }
         int MaterialCount { get; }
 

@@ -31,6 +31,7 @@ namespace Chess.AF.Domain
         PiecesIterator<T> GetIteratorForAll<T>() where T : Enum;
 
         int MoveNumber { get; }
+        int PlyCount { get; }
         bool IsTake { get; }
 
         string ToFenString();
