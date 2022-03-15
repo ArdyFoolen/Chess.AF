@@ -106,7 +106,7 @@ namespace Chess.AF.ChessForm
         private void PaintRectangles(PaintEventArgs e)
         {
             if (gameController.LoosePieceSquares.Any(a => (int)a == Id))
-                DrawRectangle(e);
+                DrawRectangle(e, Color.FromArgb(192, 255, 0));
         }
 
         private Unit DrawLastMove(PaintEventArgs e, Move move)
@@ -116,11 +116,11 @@ namespace Chess.AF.ChessForm
             return Unit();
         }
 
-        private void DrawRectangle(PaintEventArgs e)
+        private void DrawRectangle(PaintEventArgs e, Color? color = null)
         {
-            var color = Color.FromArgb(255, 192, 0);
-            var alpha = Color.FromArgb(125, color);
-            e.Graphics.DrawRectangle(new Pen(color, 5), this.DisplayRectangle);
+            color = color == null ? Color.FromArgb(255, 192, 0) : color;
+            var alpha = Color.FromArgb(125, color.Value);
+            e.Graphics.DrawRectangle(new Pen(color.Value, 5), this.DisplayRectangle);
             Brush brush = new SolidBrush(alpha);
             e.Graphics.FillRectangle(brush, this.DisplayRectangle);
         }
