@@ -57,7 +57,7 @@ namespace Chess.AF.ChessForm
         {
             base.SetImage(pieceOnSquare);
             isSelected = pieceOnSquare.IsSelected;
-            SetBackColorToImage(pieceOnSquare.IsSelected);
+            SetBackColorToImage();
         }
 
         private void DrawCircle(Graphics graphics)
@@ -67,19 +67,22 @@ namespace Chess.AF.ChessForm
         }
 
         protected override void MouseLeaveImage(object sender, EventArgs e)
-            => SetBackColorToImage(isSelected);
+            => SetBackColorToImage();
 
         protected override void MouseEnterImage(object sender, EventArgs e)
-            => SetBackColorToImage(true);
+            => SetImageBackColorTo(GetBrightBackColor());
 
         protected override void MouseClickImage(object sender, EventArgs e)
             => gameController.Select(Id);
 
-        private void SetBackColorToImage(bool isSelected)
-            => SetImageBackColorTo(GetBrightBackColorIfSelected(isSelected));
+        private void SetBackColorToImage()
+            => SetImageBackColorTo(GetBrightBackColorIfSelected());
 
-        private Color GetBrightBackColorIfSelected(bool isSelected)
-            => isSelected ? this.BackColor.ChangeColorBrightness(GetBrightFactor()) : this.BackColor;
+        private Color GetBrightBackColorIfSelected()
+            => isSelected ? GetBrightBackColor() : this.BackColor;
+
+        private Color GetBrightBackColor()
+            => this.BackColor.ChangeColorBrightness(GetBrightFactor());
 
         private float GetBrightFactor()
             => this.BackColor == Color.White ? 0.8f : 1.5f;
