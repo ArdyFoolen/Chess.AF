@@ -121,8 +121,7 @@ namespace Chess.AF.ChessForm
             color = color == null ? Color.FromArgb(255, 192, 0) : color;
             var alpha = Color.FromArgb(125, color.Value);
             e.Graphics.DrawRectangle(new Pen(color.Value, 5), this.DisplayRectangle);
-            Brush brush = new SolidBrush(alpha);
-            e.Graphics.FillRectangle(brush, this.DisplayRectangle);
+            SetBackColorToImage(alpha);
         }
 
         private void SetEnableVisible(bool value)
