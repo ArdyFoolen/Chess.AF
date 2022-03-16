@@ -70,9 +70,9 @@ namespace Chess.AF.ChessForm
 
             this.chkLooseControl = new CheckBoxesControl();
             this.chkLooseControl.SetLabelText("Loose pieces");
-            this.chkLooseControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true));
-            this.chkLooseControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true, FilterFlags.White));
-            this.chkLooseControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(true, FilterFlags.Black));
+            this.chkLooseControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender)));
+            this.chkLooseControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender), FilterFlags.White));
+            this.chkLooseControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender), FilterFlags.Black));
 
             this.BackColor = Color.Wheat;
 
@@ -141,6 +141,12 @@ namespace Chess.AF.ChessForm
             this.btnResign.Image = ResignFlag();
             this.btnDraw.Image = Draw50();
             UpdateView();
+        }
+
+        private bool IsCheckBoxChecked(object sender)
+        {
+            CheckBox chk = sender as CheckBox;
+            return chk.Checked;
         }
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
