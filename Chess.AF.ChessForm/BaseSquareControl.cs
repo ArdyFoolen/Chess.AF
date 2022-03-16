@@ -141,13 +141,13 @@ namespace Chess.AF.ChessForm
         protected void SetImage()
         {
             squareController[Id].Match(
-                None: () => { btnImage.Image = null; SetBackColorToImage(); },
+                None: () => { btnImage.Image = null; SetImageBackColorTo(); },
                 Some: s => SetImage(s)
                 );
             this.Invalidate(true);
         }
 
-        protected void SetBackColorToImage(Color? backColor = null)
+        protected void SetImageBackColorTo(Color? backColor = null)
         {
             btnImage.BackColor = backColor.HasValue ? backColor.Value : this.BackColor;
             if (lblFileAorH != null)
@@ -168,7 +168,7 @@ namespace Chess.AF.ChessForm
         protected virtual void SetImage(PieceOnSquare<PiecesEnum> pieceOnSquare)
         {
             btnImage.Image = GetPieceDict[(int)pieceOnSquare.Piece]();
-            SetBackColorToImage();
+            SetImageBackColorTo();
         }
 
         protected virtual void PaintButtonImage(object sender, PaintEventArgs e) { lblFileAorH?.Invalidate(); lblRow8or1?.Invalidate(); }

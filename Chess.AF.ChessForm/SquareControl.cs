@@ -76,7 +76,10 @@ namespace Chess.AF.ChessForm
             => gameController.Select(Id);
 
         private void SetBackColorToImage(bool isSelected)
-            => SetBackColorToImage(isSelected ? this.BackColor.ChangeColorBrightness(GetBrightFactor()) : this.BackColor);
+            => SetImageBackColorTo(GetBrightBackColorIfSelected(isSelected));
+
+        private Color GetBrightBackColorIfSelected(bool isSelected)
+            => isSelected ? this.BackColor.ChangeColorBrightness(GetBrightFactor()) : this.BackColor;
 
         private float GetBrightFactor()
             => this.BackColor == Color.White ? 0.8f : 1.5f;
@@ -121,7 +124,7 @@ namespace Chess.AF.ChessForm
             color = color == null ? Color.FromArgb(255, 192, 0) : color;
             var alpha = Color.FromArgb(125, color.Value);
             e.Graphics.DrawRectangle(new Pen(color.Value, 5), this.DisplayRectangle);
-            SetBackColorToImage(alpha);
+            SetImageBackColorTo(alpha);
         }
 
         private void SetEnableVisible(bool value)
