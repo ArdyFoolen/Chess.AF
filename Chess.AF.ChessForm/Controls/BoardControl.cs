@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
     public partial class BoardControl : UserControl
     {

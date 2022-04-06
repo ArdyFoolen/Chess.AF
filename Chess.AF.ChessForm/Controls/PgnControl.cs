@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using static AF.Functional.F;
 using Unit = System.ValueTuple;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
     public partial class PgnControl : UserControl, IPgnView
     {

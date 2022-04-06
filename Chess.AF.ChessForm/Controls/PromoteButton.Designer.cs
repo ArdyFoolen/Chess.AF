@@ -1,7 +1,7 @@
 ﻿
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
-    partial class PromoteControl
+    partial class PromoteButton
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,16 +29,7 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
-            // PromoteControl
-            // 
-            this.BackColor = System.Drawing.Color.Transparent;
-            this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "PromoteControl";
-            this.Size = new System.Drawing.Size(70, 80);
-            this.ResumeLayout(false);
-
+            components = new System.ComponentModel.Container();
         }
 
         #endregion

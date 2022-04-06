@@ -1,5 +1,6 @@
 using AF.Bootstrapper;
 using AF.Factories;
+using Chess.AF.ChessForm.Forms;
 using Chess.AF.Controllers;
 using Chess.AF.Controllers.Interfaces;
 using Chess.AF.Domain;
@@ -19,7 +20,8 @@ namespace Chess.AF.ChessForm
         [STAThread]
         static void Main()
         {
-            Container.Instance.Register<IGameFactory, GameFactory>();
+            Helpers.ConfigurationHelper.RegisterInterfaces();
+
             Container.Instance.Register<IGameController, GameController>();
             Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
             Container.Instance.Register(() => Board.CreateBuilder());

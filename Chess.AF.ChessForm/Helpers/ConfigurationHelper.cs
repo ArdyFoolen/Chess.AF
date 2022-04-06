@@ -21,17 +21,17 @@ namespace Chess.AF.ChessForm.Helpers
             config = builder.Build();
         }
 
-        public static void LoadFactoryTypes()
+        public static void RegisterInterfaces()
         {
             var loadAssembliesSection = config.GetSection("LoadAssemblies");
             var loadAssemblies = config.GetInstance<List<LoadAssembly>>(loadAssembliesSection.Key);
             foreach (var loadAssembly in loadAssemblies)
             {
                 Assembly assembly = Assembly.LoadFile(loadAssembly.AssemblyPath);
-                var type = Type.GetType(loadAssembly.InterfaceType);
-                var factoryType = assembly.GetTypes().Where(p => p.GetInterfaces().Any(t => t == type)).FirstOrDefault();
+                var interfaceType = Type.GetType(loadAssembly.InterfaceType);
+                var implementationType = assembly.GetTypes().Where(p => p.GetInterfaces().Any(t => t.FullName.Equals(interfaceType.FullName))).FirstOrDefault();
 
-                Container.Instance.Register(type, factoryType);
+                Container.Instance.Register(interfaceType, implementationType);
             }
         }
     }

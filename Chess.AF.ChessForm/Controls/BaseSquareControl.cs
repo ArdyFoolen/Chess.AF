@@ -12,10 +12,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
-using static Chess.AF.ChessForm.ImageHelper;
+using static Chess.AF.ChessForm.Helpers.ImageHelper;
 using AF.Functional;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
     public partial class BaseSquareControl : UserControl, IBoardView
     {

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static AF.Functional.F;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     public partial class PgnDialog : Form
     {

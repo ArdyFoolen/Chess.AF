@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
     public partial class PromoteButton : PictureBox
     {

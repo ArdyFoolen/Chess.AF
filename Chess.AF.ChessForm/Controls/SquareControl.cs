@@ -6,15 +6,16 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
-using static Chess.AF.ChessForm.ImageHelper;
+using static Chess.AF.ChessForm.Helpers.ImageHelper;
 using System.Linq;
 using Chess.AF.Enums;
 using Chess.AF.Dto;
 using Chess.AF.ChessForm.Helpers;
 using Unit = System.ValueTuple;
 using static AF.Functional.F;
+using Chess.AF.ChessForm.Controls;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
     public class SquareControl : BaseSquareControl
     {

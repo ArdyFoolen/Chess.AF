@@ -1,4 +1,5 @@
-﻿using Chess.AF.Controllers;
+﻿using Chess.AF.ChessForm.Controls;
+using Chess.AF.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

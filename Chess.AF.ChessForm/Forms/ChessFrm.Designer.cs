@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     partial class ChessFrm
     {

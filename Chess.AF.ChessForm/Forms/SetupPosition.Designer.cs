@@ -1,5 +1,5 @@
 ﻿
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     partial class SetupPosition
     {

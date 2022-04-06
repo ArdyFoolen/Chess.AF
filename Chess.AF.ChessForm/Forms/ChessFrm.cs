@@ -11,15 +11,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
-using static Chess.AF.ChessForm.ImageHelper;
+using static Chess.AF.ChessForm.Helpers.ImageHelper;
 using static AF.Functional.F;
 using Chess.AF.Enums;
 using Chess.AF.ChessForm.Helpers;
 using Chess.AF.ImportExport;
 using Chess.AF.Domain;
 using Chess.AF.ChessForm.Factories;
+using Chess.AF.ChessForm.Controls;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     public partial class ChessFrm : Form, IBoardView
     {

@@ -13,9 +13,9 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Chess.AF.ChessForm.ResourceHelper;
+using static Chess.AF.ChessForm.Helpers.ResourceHelper;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     public partial class LoadFen : Form
     {

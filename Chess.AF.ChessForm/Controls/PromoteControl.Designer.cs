@@ -1,7 +1,7 @@
 ﻿
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
-    partial class BoardControl
+    partial class PromoteControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,13 +31,12 @@ namespace Chess.AF.ChessForm
         {
             this.SuspendLayout();
             // 
-            // BoardControl
+            // PromoteControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.Name = "BoardControl";
-            this.Size = new System.Drawing.Size(640, 640);
+            this.BackColor = System.Drawing.Color.Transparent;
+            this.Margin = new System.Windows.Forms.Padding(0);
+            this.Name = "PromoteControl";
+            this.Size = new System.Drawing.Size(70, 80);
             this.ResumeLayout(false);
 
         }

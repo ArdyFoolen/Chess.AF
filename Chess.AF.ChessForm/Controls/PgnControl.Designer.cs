@@ -1,7 +1,7 @@
 ﻿
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
-    partial class PromoteButton
+    partial class PgnControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,16 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // PgnControl
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.Name = "PgnControl";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

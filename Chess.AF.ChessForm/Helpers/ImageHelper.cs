@@ -11,7 +11,7 @@ using static Chess.AF.ChessForm.ChessConstants;
 using static AF.Functional.F;
 using System.IO;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Helpers
 {
     public static class ImageHelper
     {

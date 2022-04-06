@@ -1,4 +1,5 @@
-﻿using Chess.AF.ChessForm.Factories;
+﻿using Chess.AF.ChessForm.Controls;
+using Chess.AF.ChessForm.Factories;
 using Chess.AF.ChessForm.Helpers;
 using Chess.AF.Controllers;
 using Chess.AF.Domain;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Chess.AF.ChessForm.ChessConstants;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Forms
 {
     public partial class SetupPosition : Form
     {

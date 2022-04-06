@@ -1,7 +1,7 @@
 ﻿
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Controls
 {
-    partial class PgnControl
+    partial class CheckBoxesControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,18 +29,32 @@ namespace Chess.AF.ChessForm
         /// </summary>
         private void InitializeComponent()
         {
+            this.lblDescription = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // PgnControl
+            // lblDescription
+            // 
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Location = new System.Drawing.Point(0, 0);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(38, 15);
+            this.lblDescription.TabIndex = 0;
+            this.lblDescription.Text = "label1";
+            // 
+            // CheckBoxControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.Name = "PgnControl";
+            this.Controls.Add(this.lblDescription);
+            this.Name = "CheckBoxesControl";
+            this.Size = new System.Drawing.Size(228, 33);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Label lblDescription;
     }
 }

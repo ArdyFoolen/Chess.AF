@@ -6,7 +6,7 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.AF.ChessForm
+namespace Chess.AF.ChessForm.Helpers
 {
     public static class ResourceHelper
     {
