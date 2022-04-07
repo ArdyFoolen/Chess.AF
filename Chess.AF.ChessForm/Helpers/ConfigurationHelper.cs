@@ -27,7 +27,7 @@ namespace Chess.AF.ChessForm.Helpers
             var loadAssemblies = config.GetInstance<List<LoadAssembly>>(loadAssembliesSection.Key);
             foreach (var loadAssembly in loadAssemblies)
             {
-                Assembly assembly = Assembly.LoadFile(loadAssembly.AssemblyPath);
+                Assembly assembly = Assembly.LoadFrom(loadAssembly.AssemblyPath);
                 var interfaceType = Type.GetType(loadAssembly.InterfaceType);
                 var implementationType = assembly.GetTypes().Where(p => p.GetInterfaces().Any(t => t.FullName.Equals(interfaceType.FullName))).FirstOrDefault();
 
