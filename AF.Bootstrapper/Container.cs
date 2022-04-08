@@ -58,11 +58,11 @@ namespace AF.Bootstrapper
                 new ContainerBinder(), null, pObjs);
         }
 
-        private TInterface CreateInstance<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
-            where TFactory : class
+        private TInterface CreateInstance<TInterface, TInstance>(Func<TInstance, TInterface> factoryMethod)
+            where TInstance : class
         {
-            TFactory factory = GetInstanceOf<TFactory>();
-            return factoryMethod(factory);
+            TInstance instance = GetInstanceOf<TInstance>();
+            return factoryMethod(instance);
         }
 
         private TInterface CreateInstance<TInterface>(Func<TInterface> factoryMethod)
@@ -89,22 +89,63 @@ namespace AF.Bootstrapper
 
         #region public methods
 
-        public T GetInstanceOf<T>()
-            => dict.ContainsKey(typeof(T).FullName) ? (T)dict[typeof(T).FullName].Value : default(T);
+        /// <summary>
+        /// Get Instance of TInterface
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <returns></returns>
+        public TInterface GetInstanceOf<TInterface>()
+            => dict.ContainsKey(typeof(TInterface).FullName) ? (TInterface)dict[typeof(TInterface).FullName].Value : default(TInterface);
 
-        public void Register(Type interfaceType, Type factoryType)
-            => dict.Add(interfaceType.FullName, new Lazy<object>(() => CreateInstance(interfaceType, factoryType)));
-
+        /// <summary>
+        /// Register TInterface with a factory method
+        /// TFactory is an interface to a factory, which has to be registered first
+        /// Eq:
+        /// Register<IGameFactory, GameFactory>();
+        /// Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <typeparam name="TFactory"></typeparam>
+        /// <param name="factoryMethod"></param>
         public void Register<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
             where TFactory : class
             => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance(factoryMethod)));
 
+        /// <summary>
+        /// Register TInterface with a factory method
+        /// Eq:
+        /// Register(() => Board.CreateBuilder());
+        /// Return type of factory determines generic type
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="factoryMethod"></param>
         public void Register<TInterface>(Func<TInterface> factoryMethod)
             => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance(factoryMethod)));
 
+        /// <summary>
+        /// Register interface type with an instance type
+        /// Eq:
+        /// Register(interfaceType, implementationType);
+        /// This can be used from appsettings.json configuration files,
+        /// where the types are written as strings and not known as generic type
+        /// </summary>
+        /// <param name="interfaceType"></param>
+        /// <param name="instanceType"></param>
+        public void Register(Type interfaceType, Type instanceType)
+            => dict.Add(interfaceType.FullName, new Lazy<object>(() => CreateInstance(interfaceType, instanceType)));
+
+
+        /// <summary>
+        /// Register TInterface with a generic TInstance type
+        /// Eq:
+        /// Register<IGameBuilder, GameBuilder>();
+        /// Recommended use of Register, however not possible when there are multiple constructors
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <typeparam name="TInstance"></typeparam>
         public void Register<TInterface, TInstance>()
             where TInstance : class
-            => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => (TInterface)CreateInstance<TInterface, TInstance>()));
+            => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance<TInterface, TInstance>()));
 
         #endregion
     }
