@@ -22,7 +22,7 @@ namespace Chess.AF.ChessForm
         {
             Helpers.ConfigurationHelper.RegisterInterfaces();
 
-            //Container.Instance.Register<IGameController, GameController>();
+            Container.Instance.Register<IGameController, GameController>();
             Container.Instance.Register<IGame, IGameFactory>(f => f.MakeGame("Chess Game"));
             Container.Instance.Register(() => Board.CreateBuilder());
             Container.Instance.Register<IGameBuilder, GameBuilder>();

@@ -30,6 +30,12 @@ namespace AF.Bootstrapper
 
         #region private methods
 
+        private void Add(string interfaceName, Func<object> valueFactory)
+        {
+            if (!dict.ContainsKey(interfaceName))
+                dict.Add(interfaceName, new Lazy<object>(valueFactory));
+        }
+
         private ConstructorInfo GetFirstConstructor(Type type)
             => type.GetConstructors(BindingFlags.Public | BindingFlags.Instance)[0];
 
@@ -109,7 +115,7 @@ namespace AF.Bootstrapper
         /// <param name="factoryMethod"></param>
         public void Register<TInterface, TFactory>(Func<TFactory, TInterface> factoryMethod)
             where TFactory : class
-            => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance(factoryMethod)));
+            => Add(typeof(TInterface).FullName, () => CreateInstance(factoryMethod));
 
         /// <summary>
         /// Register TInterface with a factory method
@@ -120,7 +126,7 @@ namespace AF.Bootstrapper
         /// <typeparam name="TInterface"></typeparam>
         /// <param name="factoryMethod"></param>
         public void Register<TInterface>(Func<TInterface> factoryMethod)
-            => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance(factoryMethod)));
+            => Add(typeof(TInterface).FullName, () => CreateInstance(factoryMethod));
 
         /// <summary>
         /// Register interface type with an instance type
@@ -132,7 +138,7 @@ namespace AF.Bootstrapper
         /// <param name="interfaceType"></param>
         /// <param name="instanceType"></param>
         public void Register(Type interfaceType, Type instanceType)
-            => dict.Add(interfaceType.FullName, new Lazy<object>(() => CreateInstance(interfaceType, instanceType)));
+            => Add(interfaceType.FullName, () => CreateInstance(interfaceType, instanceType));
 
 
         /// <summary>
@@ -145,7 +151,7 @@ namespace AF.Bootstrapper
         /// <typeparam name="TInstance"></typeparam>
         public void Register<TInterface, TInstance>()
             where TInstance : class
-            => dict.Add(typeof(TInterface).FullName, new Lazy<object>(() => CreateInstance<TInterface, TInstance>()));
+            => Add(typeof(TInterface).FullName, () => CreateInstance<TInterface, TInstance>());
 
         #endregion
     }
