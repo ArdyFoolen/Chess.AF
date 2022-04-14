@@ -148,11 +148,6 @@ namespace Chess.AF.Controllers
             NotifyViews();
         }
 
-        private void RefreshIterators()
-        {
-            RefreshLoosePiecesIterator();
-        }
-
         public Option<Pgn> Export()
             => game.Export();
 
@@ -216,6 +211,11 @@ namespace Chess.AF.Controllers
         {
             game.GotoLastMove();
             ResetController();
+        }
+
+        private void RefreshIterators()
+        {
+            RefreshLoosePiecesIterator();
         }
 
         public void UseLoosePiecesIterator(bool on, FilterFlags flags = FilterFlags.Both)

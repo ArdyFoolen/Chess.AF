@@ -24,8 +24,6 @@ namespace Chess.AF.ChessForm.Forms
 {
     public partial class ChessFrm : Form, IBoardView
     {
-        private CheckBoxesControl chkLooseControl;
-
         private Label lblResult = new Label();
         private Label lblCount = new Label();
         private Label lblMoveNumber = new Label();
@@ -69,11 +67,7 @@ namespace Chess.AF.ChessForm.Forms
             this.pgnDialog = new PgnDialog(gameController, pgnController);
             this.setupPosition = new SetupPosition(setupPositionController);
 
-            this.chkLooseControl = new CheckBoxesControl();
-            this.chkLooseControl.SetLabelText("Loose pieces");
-            this.chkLooseControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender)));
-            this.chkLooseControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender), FilterFlags.White));
-            this.chkLooseControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseLoosePiecesIterator(IsCheckBoxChecked(sender), FilterFlags.Black));
+            var checkBoxControls = VisitorFactory.CreateCheckboxControls(gameController);
 
             this.BackColor = Color.Wheat;
 
@@ -101,8 +95,6 @@ namespace Chess.AF.ChessForm.Forms
             lblCount.Size = new Size(200, 23);
             lblCount.Paint += FontHelper.Label_Paint;
 
-            chkLooseControl.Location = new Point(570, 166);
-
             pgnControl = new PgnControl(pgnController)
             {
                 Location = new Point(570, 216),
@@ -112,7 +104,7 @@ namespace Chess.AF.ChessForm.Forms
             //MessageBox.Show($"X: {this.boardControl.Location.X} Y: {this.boardControl.Location.Y} W: {this.boardControl.Size.Width} H: {this.boardControl.Size.Height}");
 
             this.Controls.Add(this.boardControl);
-            this.Controls.Add(chkLooseControl);
+            this.Controls.AddRange(checkBoxControls.ToArray());
             this.Controls.Add(lblResult);
             this.Controls.Add(lblMoveNumber);
             this.Controls.Add(lblPlyCount);
@@ -142,12 +134,6 @@ namespace Chess.AF.ChessForm.Forms
             this.btnResign.Image = ResignFlag();
             this.btnDraw.Image = Draw50();
             UpdateView();
-        }
-
-        private bool IsCheckBoxChecked(object sender)
-        {
-            CheckBox chk = sender as CheckBox;
-            return chk.Checked;
         }
 
         private void BtnLoadFen_Click(object sender, EventArgs e)
