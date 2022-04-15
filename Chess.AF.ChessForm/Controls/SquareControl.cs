@@ -114,6 +114,8 @@ namespace Chess.AF.ChessForm.Controls
         {
             if (gameController.LoosePieceSquares.Any(a => (int)a == Id))
                 DrawRectangle(e, Color.FromArgb(192, 255, 0));
+            if (gameController.NotAttackedSquares.Any(a => (int)a == Id))
+                DrawRectangle(e, Color.FromArgb(192, 255, 0));
         }
 
         private Unit DrawLastMove(PaintEventArgs e, Move move)

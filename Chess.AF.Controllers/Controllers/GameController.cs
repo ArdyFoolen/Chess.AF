@@ -216,7 +216,10 @@ namespace Chess.AF.Controllers
         private void RefreshIterators()
         {
             RefreshLoosePiecesIterator();
+            RefreshNotAttackedIterator();
         }
+
+        #region LoosePiecesIterator
 
         public void UseLoosePiecesIterator(bool on, FilterFlags flags = FilterFlags.Both)
         {
@@ -260,6 +263,55 @@ namespace Chess.AF.Controllers
                 return Enumerable.Empty<SquareEnum>();
             }
         }
+
+        #endregion
+
+        #region NotAttackedIterator
+
+        public void UseNotAttackedIterator(bool on, FilterFlags flags = FilterFlags.Both)
+        {
+            IsSetNotAttackedSquares = on;
+            notAttackedFlags = flags;
+            NotifyViews();
+        }
+
+        private void RefreshNotAttackedIterator()
+        {
+            if (IsSetNotAttackedSquares)
+                game.Map(SetNotAttackedIterator);
+        }
+
+        private IBoard SetNotAttackedIterator(IBoard board)
+        {
+            board.Accept(NotAttackedVisitor);
+            return board;
+        }
+
+        private ISquareNotAttackedVisitor notAttackedVisitor = null;
+        private ISquareNotAttackedVisitor NotAttackedVisitor
+        {
+            get
+            {
+                if (notAttackedVisitor == null)
+                    notAttackedVisitor = BoardMap.GetSquareNotAttackedVisitor();
+                notAttackedVisitor.Flags = notAttackedFlags;
+                return notAttackedVisitor;
+            }
+        }
+        private bool IsSetNotAttackedSquares { get; set; } = false;
+        private FilterFlags notAttackedFlags { get; set; } = FilterFlags.Both;
+        public IEnumerable<SquareEnum> NotAttackedSquares
+        {
+            get
+            {
+                if (IsSetNotAttackedSquares)
+                    return notAttackedVisitor.Iterator;
+
+                return Enumerable.Empty<SquareEnum>();
+            }
+        }
+
+        #endregion
 
         private void SetSelectedSquare(int square)
         {

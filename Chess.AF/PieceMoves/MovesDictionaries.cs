@@ -74,7 +74,7 @@ namespace Chess.AF.PieceMoves
                 ulong cpTakeMap = pawnB7Map;
 
                 if (file == 0 || file == 7)
-                    cpTakeMap = cpTakeMap.BitOffForFile(file);
+                    cpTakeMap = cpTakeMap.BitOffForFile(file == 0 ? 0 : 2);
 
                 if (file == 0)
                     cpTakeMap <<= 1;

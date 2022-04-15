@@ -97,7 +97,7 @@ namespace Chess.AF.ChessForm.Forms
 
             pgnControl = new PgnControl(pgnController)
             {
-                Location = new Point(570, 216),
+                Location = new Point(570, 246),
                 Size = new Size(200, 400)
             };
 

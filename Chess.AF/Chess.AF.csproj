@@ -55,8 +55,10 @@
     <Compile Include="Domain\IBoardMapVisitor.cs" />
     <Compile Include="Domain\IBoardValidator.cs" />
     <Compile Include="Domain\LoosePiecesVisitor.cs" />
+    <Compile Include="Domain\SquareNotAttackedVisitor.cs" />
     <Compile Include="Dto\PieceMap.cs" />
     <Compile Include="Dto\PieceOnSquare.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="Enums\PositionPiecesEnums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Helpers\Material.cs" />
