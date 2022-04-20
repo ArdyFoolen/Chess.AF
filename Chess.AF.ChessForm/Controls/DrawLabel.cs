@@ -38,9 +38,7 @@ namespace Chess.AF.ChessForm.Controls
 
         private void DrawString(Graphics g)
         {
-            Font font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            float fontSize = FontHelper.NewFontSize(g, new Size(16, 16), font, DrawText);
-            font = new Font(font.Name, fontSize, FontStyle.Regular);
+            Font font = new Font(FontFamily.Families[0], 9.5f, FontStyle.Regular);
             SolidBrush brush = GetSolidBrush();
             float x = 0.0F;
             float y = 0.0F;

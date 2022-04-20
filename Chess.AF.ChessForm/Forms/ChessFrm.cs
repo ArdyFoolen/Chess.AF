@@ -72,28 +72,24 @@ namespace Chess.AF.ChessForm.Forms
             this.BackColor = Color.Wheat;
 
             lblResult.Text = string.Empty;
-            lblResult.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblResult.Font = new Font(FontFamily.Families[0], 13.5f, FontStyle.Regular);
             lblResult.Location = new Point(570, 43);
             lblResult.Size = new Size(200, 23);
-            lblResult.Paint += FontHelper.Label_Paint;
 
             lblMoveNumber.Text = string.Empty;
-            lblMoveNumber.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblMoveNumber.Font = new Font(FontFamily.Families[0], 13.5f, FontStyle.Regular);
             lblMoveNumber.Location = new Point(570, 76);
             lblMoveNumber.Size = new Size(200, 23);
-            lblMoveNumber.Paint += FontHelper.Label_Paint;
 
             lblPlyCount.Text = string.Empty;
-            lblPlyCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblPlyCount.Font = new Font(FontFamily.Families[0], 13.5f, FontStyle.Regular);
             lblPlyCount.Location = new Point(570, 109);
             lblPlyCount.Size = new Size(200, 23);
-            lblPlyCount.Paint += FontHelper.Label_Paint;
 
             lblCount.Text = string.Empty;
-            lblCount.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
+            lblCount.Font = new Font(FontFamily.Families[0], 13.5f, FontStyle.Regular);
             lblCount.Location = new Point(570, 142);
             lblCount.Size = new Size(200, 23);
-            lblCount.Paint += FontHelper.Label_Paint;
 
             pgnControl = new PgnControl(pgnController)
             {

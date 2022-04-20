@@ -26,8 +26,7 @@ namespace Chess.AF.ChessForm.Controls
 
             lblDescription.Size = new Size(100, 23);
             lblDescription.Location = new Point(0, 5);
-            lblDescription.Font = new Font(FontFamily.Families[0], 16, FontStyle.Regular);
-            lblDescription.Paint += FontHelper.Label_Paint;
+            lblDescription.Font = new Font(FontFamily.Families[0], 15.5f, FontStyle.Regular);
             lblDescription.Visible = false;
         }
 

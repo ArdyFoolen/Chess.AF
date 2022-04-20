@@ -34,7 +34,7 @@ namespace Chess.AF.ChessForm.Controls
         private static IEnumerable<Control> SquareNotAttackedControl(IGameController gameController)
         {
             CheckBoxesControl chkControl = new CheckBoxesControl();
-            chkControl.SetLabelText("Not attacked s");
+            chkControl.SetLabelText("Not attacked");
             chkControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseNotAttackedIterator(IsCheckBoxChecked(sender)));
             chkControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseNotAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.White));
             chkControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseNotAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.Black));
