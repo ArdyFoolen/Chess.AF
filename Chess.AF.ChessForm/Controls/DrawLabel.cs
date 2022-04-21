@@ -18,9 +18,18 @@ namespace Chess.AF.ChessForm.Controls
         public bool IsFile { get; set; } = false;
         public string DrawText { get; set; }
 
+        const int GWL_EXSTYLE = -20;
+        const int WS_EX_TRANSPARENT = 0x20;
+
         public DrawLabel(int id)
         {
             InitializeComponent();
+
+            this.BorderStyle = BorderStyle.None;
+
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                 ControlStyles.SupportsTransparentBackColor, true);
+            //base.BackColor = Color.FromArgb(0, 0, 0, 0);//Added this because image wasnt redrawn when resizing form
 
             Opacity = 100;
             Id = id;
@@ -63,12 +72,15 @@ namespace Chess.AF.ChessForm.Controls
                     Id % 2 == 1 && (Id / 8) % 2 == 1)
                    ? Color.White : Color.Brown;
 
+        /// <summary>
+        /// Tranparent
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x00000020;
+                cp.ExStyle |= WS_EX_TRANSPARENT;
                 return cp;
             }
         }
@@ -87,6 +99,10 @@ namespace Chess.AF.ChessForm.Controls
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             Color bk = Color.FromArgb(Opacity, this.BackColor);
+            //Color bk = this.BackColor;
+            //label.Parent = newParent;
+            //label.BackColor = Color.Transparent;
+            //Color bk = Color.Transparent;
             e.Graphics.FillRectangle(new SolidBrush(bk), e.ClipRectangle);
         }
 
