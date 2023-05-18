@@ -67,5 +67,33 @@ namespace Chess.AF.ChessForm.Extensions
                 graphics.FillPath(brush, path);
             }
         }
+
+        public static void DrawCircle(this Graphics g, Pen pen,
+                                        float centerX, float centerY, float radius)
+        {
+            g.DrawEllipse(pen, centerX - radius, centerY - radius,
+                            radius + radius, radius + radius);
+        }
+
+        public static void FillCircle(this Graphics g, Brush brush,
+                                        float centerX, float centerY, float radius)
+        {
+            g.FillEllipse(brush, centerX - radius, centerY - radius,
+                            radius + radius, radius + radius);
+        }
+
+        public static void DrawCircle(this Graphics g, Pen pen,
+                                        Rectangle rectangle, float radius)
+        {
+            g.DrawEllipse(pen, rectangle.X, rectangle.Y,
+                            radius + radius, radius + radius);
+        }
+
+        public static void FillCircle(this Graphics g, Brush brush,
+                                        Rectangle rectangle, float radius)
+        {
+            g.FillEllipse(brush, rectangle.X, rectangle.Y,
+                            radius + radius, radius + radius);
+        }
     }
 }

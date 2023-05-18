@@ -55,7 +55,9 @@
     <Compile Include="Domain\IBoardMapVisitor.cs" />
     <Compile Include="Domain\IBoardValidator.cs" />
     <Compile Include="Domain\LoosePiecesVisitor.cs" />
+    <Compile Include="Domain\SquareNumberAttackedVisitor.cs" />
     <Compile Include="Domain\SquareNotAttackedVisitor.cs" />
+    <Compile Include="Dto\AttackSquare.cs" />
     <Compile Include="Dto\PieceMap.cs" />
     <Compile Include="Dto\PieceOnSquare.cs" />
     <Compile Include="EnumExtensions.cs" />

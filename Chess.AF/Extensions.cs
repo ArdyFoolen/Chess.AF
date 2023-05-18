@@ -109,6 +109,9 @@ namespace Chess.AF
         public static ulong SquareToMap(this SquareEnum square)
             => 1ul << (63 - ((int)square));
 
+        public static SquareEnum ToSquare(this ulong value)
+            => (SquareEnum)value;
+
         // A8: 0 / 8 = 0
         // H8: 7 / 8 = 0;
         // A1: 56 / 8 = 7;
@@ -336,5 +339,17 @@ namespace Chess.AF
 
         public static IEnumerable<string> SplitLines(this string str, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
             => str.Split(new string[] { "\r\n", "\r", "\n" }, options);
+
+        public static IEnumerable<SquareEnum> IterateMap(this ulong map)
+        {
+            ulong value = 64ul;
+            while (value > 0)
+            {
+                value -= 1;
+                if ((map & 0x01ul) != 0x0ul)
+                    yield return value.ToSquare();
+                map >>= 1;
+            }
+        }
     }
 }

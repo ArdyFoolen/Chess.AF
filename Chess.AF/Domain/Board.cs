@@ -29,7 +29,7 @@ namespace Chess.AF.Domain
 
         #region Properties
 
-        private IBoardMap Implementor { get; set; }
+        internal IBoardMap Implementor { get; private set; }
 
         [DataMember]
         public bool IsWhiteToMove { get; private set; }
@@ -82,6 +82,14 @@ namespace Chess.AF.Domain
 
         private IBoard CreateCopy()
             => new Board(this, Implementor);
+
+        internal IBoard CreateOpponent(bool isWhiteToMove)
+        {
+            var board = new Board(this, Implementor);
+            board.Implementor = new BoardMap(board, (BoardMap)Implementor);
+            board.IsWhiteToMove = isWhiteToMove;
+            return board;
+        }
 
         #endregion
 

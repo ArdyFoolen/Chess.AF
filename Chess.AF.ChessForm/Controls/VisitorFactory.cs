@@ -16,7 +16,8 @@ namespace Chess.AF.ChessForm.Controls
         internal static IEnumerable<Control> CreateCheckboxControls(IGameController gameController)
         {
             return LoosePiecesControl(gameController)
-                .Concat(SquareNotAttackedControl(gameController));
+                .Concat(SquareNotAttackedControl(gameController))
+                .Concat(SquareNumberAttackedControl(gameController));
         }
 
         private static IEnumerable<Control> LoosePiecesControl(IGameController gameController)
@@ -39,6 +40,18 @@ namespace Chess.AF.ChessForm.Controls
             chkControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseNotAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.White));
             chkControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseNotAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.Black));
             chkControl.Location = new Point(570, 196);
+
+            yield return chkControl;
+        }
+
+        private static IEnumerable<Control> SquareNumberAttackedControl(IGameController gameController)
+        {
+            CheckBoxesControl chkControl = new CheckBoxesControl();
+            chkControl.SetLabelText("Nbr attacks");
+            chkControl.AddCheckBox(ImageHelper.BlackWhiteQueenSmall(), (sender, e) => gameController.UseNumberAttackedIterator(IsCheckBoxChecked(sender)));
+            chkControl.AddCheckBox(ImageHelper.WhiteQueenSmall(), (sender, e) => gameController.UseNumberAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.White));
+            chkControl.AddCheckBox(ImageHelper.BlackQueenSmall(), (sender, e) => gameController.UseNumberAttackedIterator(IsCheckBoxChecked(sender), FilterFlags.Black));
+            chkControl.Location = new Point(570, 226);
 
             yield return chkControl;
         }

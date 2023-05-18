@@ -14,6 +14,7 @@ using Chess.AF.ChessForm.Helpers;
 using Unit = System.ValueTuple;
 using static AF.Functional.F;
 using Chess.AF.ChessForm.Controls;
+using static System.Windows.Forms.DataFormats;
 
 namespace Chess.AF.ChessForm.Controls
 {
@@ -116,6 +117,24 @@ namespace Chess.AF.ChessForm.Controls
                 DrawRectangle(e, Color.FromArgb(192, 255, 0));
             if (gameController.NotAttackedSquares.Any(a => (int)a == Id))
                 DrawRectangle(e, Color.FromArgb(192, 255, 0));
+
+            if (gameController.NumberAttackedSquares.Any(a => (int)a.Square == Id && a.Count != 0))
+                DrawCircleWithValue(e, gameController.NumberAttackedSquares.FirstOrDefault(a => (int)a.Square == Id).Count.ToString());
+        }
+
+        private void DrawCircleWithValue(PaintEventArgs e, string value)
+        {
+            var radius = 10;
+            Font font = new Font(FontFamily.Families[0], 9.5f, FontStyle.Regular);
+
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            Rectangle rectangle = new Rectangle(SquareWidth - (2 * radius + 2), 0, 2 * radius, 2 * radius);
+            e.Graphics.DrawCircle(Pens.Blue, rectangle, radius);
+            e.Graphics.FillCircle(new SolidBrush(Color.Blue), rectangle, radius);
+            e.Graphics.DrawString(value, font, Brushes.White, rectangle, stringFormat);
         }
 
         private Unit DrawLastMove(PaintEventArgs e, Move move)

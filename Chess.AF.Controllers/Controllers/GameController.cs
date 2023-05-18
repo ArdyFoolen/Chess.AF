@@ -217,6 +217,7 @@ namespace Chess.AF.Controllers
         {
             RefreshLoosePiecesIterator();
             RefreshNotAttackedIterator();
+            RefreshNumberAttackedIterator();
         }
 
         #region LoosePiecesIterator
@@ -308,6 +309,53 @@ namespace Chess.AF.Controllers
                     return notAttackedVisitor.Iterator;
 
                 return Enumerable.Empty<SquareEnum>();
+            }
+        }
+
+        #endregion
+
+        #region NumberAttackedIterator
+
+        public void UseNumberAttackedIterator(bool on, FilterFlags flags = FilterFlags.Both)
+        {
+            IsSetNumberAttackedSquares = on;
+            numberAttackedFlags = flags;
+            NotifyViews();
+        }
+
+        private void RefreshNumberAttackedIterator()
+        {
+            if (IsSetNumberAttackedSquares)
+                game.Map(SetNumberAttackedIterator);
+        }
+
+        private IBoard SetNumberAttackedIterator(IBoard board)
+        {
+            board.Accept(NumberAttackedVisitor);
+            return board;
+        }
+
+        private ISquareNumberAttackedVisitor numberAttackedVisitor = null;
+        private ISquareNumberAttackedVisitor NumberAttackedVisitor
+        {
+            get
+            {
+                if (numberAttackedVisitor == null)
+                    numberAttackedVisitor = BoardMap.GetSquareNumberAttackedVisitor();
+                numberAttackedVisitor.Flags = numberAttackedFlags;
+                return numberAttackedVisitor;
+            }
+        }
+        private bool IsSetNumberAttackedSquares { get; set; } = false;
+        private FilterFlags numberAttackedFlags { get; set; } = FilterFlags.Both;
+        public IEnumerable<AttackSquare> NumberAttackedSquares
+        {
+            get
+            {
+                if (IsSetNumberAttackedSquares)
+                    return numberAttackedVisitor.Iterator;
+
+                return Enumerable.Empty<AttackSquare>();
             }
         }
 

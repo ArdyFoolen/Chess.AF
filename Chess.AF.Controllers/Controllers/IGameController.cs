@@ -51,6 +51,8 @@ namespace Chess.AF.Controllers
         IEnumerable<SquareEnum> LoosePieceSquares { get; }
         void UseNotAttackedIterator(bool on, FilterFlags flags = FilterFlags.Both);
         IEnumerable<SquareEnum> NotAttackedSquares { get; }
+        void UseNumberAttackedIterator(bool on, FilterFlags flags = FilterFlags.Both);
+        IEnumerable<AttackSquare> NumberAttackedSquares { get; }
 
         string ToFenString();
     }
