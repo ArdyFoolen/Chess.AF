@@ -11,6 +11,7 @@ using AF.Functional;
 using Chess.AF.Dto;
 using Chess.AF.PieceMoves;
 using Chess.AF.Exceptions;
+using Chess.AF.Domain;
 
 namespace Chess.AF.Domain
 {
@@ -142,6 +143,10 @@ namespace Chess.AF.Domain
                 .Cast<T>()
                 .Select(piece => new PieceMap<T>(piece, GetMapFor(piece)))
                 .ToArray());
+
+        private PieceOnSquare<PiecesEnum> GetPieceOnSquare(SquareEnum square)
+            => this.GetIteratorForAll<PiecesEnum>()
+                .FirstOrDefault(f => f.Square == square);
 
         public ulong ExcludeOwnPieces(ulong map)
             => IsWhiteToMove ? map & ~Maps[(int)PositionEnum.WhitePieces] : map & ~Maps[(int)PositionEnum.BlackPieces];
@@ -426,49 +431,6 @@ namespace Chess.AF.Domain
 
             return knightAttacks || bishopAttacks || rookAttacks || pawnAttacks || kingAttacks;
         }
-
-        private int CountAttacks(SquareEnum square, bool shouldFilterWhite, bool shouldFilterBlack)
-        {
-            if (!shouldFilterWhite && !shouldFilterBlack)
-                return 0;
-
-            var pieceOnSquare = GetPieceOnSquare(square);
-            if (pieceOnSquare == null)
-                return 0;
-
-            int count = 0;
-            if (ShouldCountOpponentMoves(pieceOnSquare, shouldFilterWhite, shouldFilterBlack))
-                count = CountOpponentMoves(square);
-            else if (ShouldCountCurrentMoves(pieceOnSquare, shouldFilterWhite, shouldFilterBlack))
-                count = CountMoves(square);
-
-            return count;
-        }
-
-        private bool ShouldCountCurrentMoves(PieceOnSquare<PiecesEnum> pieceOnSquare, bool shouldFilterWhite, bool shouldFilterBlack)
-            => shouldFilterWhite && pieceOnSquare.Piece.IsWhitePiece() && !IsWhiteToMove ||
-                shouldFilterBlack && pieceOnSquare.Piece.IsBlackPiece() && IsWhiteToMove;
-
-        private bool ShouldCountOpponentMoves(PieceOnSquare<PiecesEnum> pieceOnSquare, bool shouldFilterWhite, bool shouldFilterBlack)
-            => shouldFilterWhite && pieceOnSquare.Piece.IsWhitePiece() && IsWhiteToMove ||
-                shouldFilterBlack && pieceOnSquare.Piece.IsBlackPiece() && !IsWhiteToMove;
-
-        private int CountMoves(SquareEnum square)
-            => GetIteratorForAll<PieceEnum>()
-                .SelectMany(p => MovesFactory.Create(p.Piece, p.Square, this))
-                .Count(f => f.Square == square);
-
-        private int CountOpponentMoves(SquareEnum square)
-        {
-            var opponent = (Board)CreateOpponent();
-            return opponent.GetIteratorForAll<PieceEnum>()
-                .SelectMany(p => MovesFactory.Create(p.Piece, p.Square, opponent.Implementor))
-                .Count(f => f.Square == square);
-        }
-
-        private PieceOnSquare<PiecesEnum> GetPieceOnSquare(SquareEnum square)
-            => this.GetIteratorForAll<PiecesEnum>()
-                .FirstOrDefault(f => f.Square == square);
 
         private IBoard CreateOpponent()
             => ((Board)Abstraction).CreateOpponent(!IsWhiteToMove);
